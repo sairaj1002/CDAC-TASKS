@@ -1,0 +1,109 @@
+.scopes-page {
+  display: grid;
+  gap: 20px;
+  padding: 8px 0 28px;
+  color: #12406b;
+}
+
+.page-heading h1,
+.records-section h2,
+.scope-heading h2 {
+  margin: 0;
+}
+
+.page-heading p {
+  margin: 6px 0 0;
+  color: #536b80;
+}
+
+.form-card,
+.record-card {
+  border: 1px solid #dce6ef;
+}
+
+.form-card mat-card-content {
+  padding-top: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.scope-heading,
+.scope-card-heading,
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.scope-heading {
+  margin: 12px 0;
+}
+
+.scope-heading h2,
+.scope-card-heading h3 {
+  font-size: 1rem;
+}
+
+.scope-list,
+.record-list {
+  display: grid;
+  gap: 12px;
+}
+
+.scope-card {
+  padding: 16px;
+  border: 1px solid #dce6ef;
+  border-radius: 8px;
+  background: #f8fbff;
+}
+
+.scope-card-heading {
+  margin-bottom: 12px;
+}
+
+.scope-card-heading h3 {
+  margin: 0;
+}
+
+.scope-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 16px;
+}
+
+.form-actions {
+  justify-content: flex-start;
+  margin-top: 12px;
+}
+
+.record-card mat-card-content {
+  display: grid;
+  gap: 10px;
+  padding-top: 16px;
+}
+
+.record-scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding: 10px 0;
+  border-top: 1px solid #e6edf4;
+  color: #536b80;
+}
+
+.record-scope strong {
+  color: #12406b;
+}
+
+.empty-state {
+  color: #536b80;
+}
+
+@media (max-width: 760px) {
+  .scope-fields {
+    grid-template-columns: 1fr;
+  }
+}

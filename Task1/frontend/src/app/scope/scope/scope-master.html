@@ -1,0 +1,36 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Sub-Work Scopes</mat-card-title>
+    <hr />
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-tab-group
+      aria-label="Component actions"
+      animationDuration="0ms"
+      [(selectedIndex)]="selectedTabIndex"
+    >
+      <mat-tab label="Add">
+        <app-bridge-add
+          [componentToEdit]="componentToEdit"
+          [serialNumber]="serialNumber"
+          [components]="bridgeComponents"
+          [bridgeActivities]="bridgeActivities"
+          [saving]="saving"
+          (saveComponent)="saveComponent($event)"
+          (cancelEdit)="cancelEdit()"
+          (editComponent)="editComponent($event)"
+          (deleteComponent)="deleteComponent($event)"
+        />
+      </mat-tab>
+
+      <mat-tab label="View">
+        <app-bridge-view
+          [components]="bridgeComponents"
+          (editComponent)="editComponent($event)"
+          (deleteComponent)="deleteComponent($event)"
+        />
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

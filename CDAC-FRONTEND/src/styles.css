@@ -1,0 +1,12 @@
+.toast-success .mdc-snackbar__surface {
+  background-color: #166534;
+}
+
+.toast-error .mdc-snackbar__surface {
+  background-color: #991b1b;
+}
+
+.toast-success .mdc-snackbar__label,
+.toast-error .mdc-snackbar__label {
+  color: #fff;
+}

@@ -1,0 +1,110 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: #2c6eb9;
+  transition: width 0.2s ease;
+}
+
+:host(.expanded) {
+  width: 100px;
+}
+
+.drawer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.drawer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 68px;
+  padding: 8px 4px;
+  box-sizing: border-box;
+  color: #e3f0fd;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.drawer-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-size: 24px;
+}
+
+.label {
+  display: block;
+  max-width: 90px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.drawer-divider {
+  width: 80%;
+  height: 1px;
+  margin: 0 auto;
+  border: 0;
+  background-color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.drawer-item:hover {
+  background-color: #2f74c0;
+}
+
+.drawer-item:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -2px;
+}
+
+.drawer-item.active {
+  color: #ffffff;
+  background-color: #5aa0e6;
+  font-weight: 600;
+}
+
+:host(:not(.expanded)) .label {
+  display: none;
+}
+
+:host(:not(.expanded)) .drawer-item {
+  min-height: 52px;
+  padding: 8px 0;
+}
+
+.drawer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.drawer::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #b8c5d1;
+}
+
+.drawer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    transition: none;
+  }
+}

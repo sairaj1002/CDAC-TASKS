@@ -1,0 +1,49 @@
+.audit-table-container {
+  max-height: 65vh;
+  overflow: auto;
+  border: 1px solid #000000;
+  border-radius: 8px;
+}
+
+.audit-table {
+  width: 100%;
+  min-width: 1900px;
+  border-collapse: collapse;
+}
+
+.audit-table th,
+.audit-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #000000;
+  text-align: left;
+  vertical-align: top;
+}
+
+.audit-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: #24364b;
+  background: #f7f9fc;
+  white-space: nowrap;
+}
+
+.audit-table td {
+  white-space: nowrap;
+}
+
+.audit-details-cell {
+  min-width: 220px;
+  max-width: 360px;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+
+.integration-notice {
+  padding: 14px 16px;
+  border: 1px solid #9cc5ed;
+  border-radius: 8px;
+  color: #16436b;
+  background: #eff7ff;
+  line-height: 1.5;
+}

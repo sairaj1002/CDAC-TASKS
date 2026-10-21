@@ -1,0 +1,143 @@
+<section class="scopes-page">
+  <header class="page-heading">
+    <div>
+      <h1>Scopes</h1>
+      <p>Capture work details and the associated river, nallah, barrier, or bridge scopes.</p>
+    </div>
+  </header>
+
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ editingWork() ? 'Update work details' : 'Add work details' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Sub-work details</mat-label>
+          <textarea matInput rows="2" formControlName="subWorkDetails"></textarea>
+          @if (form.controls.subWorkDetails.hasError('required') && (form.controls.subWorkDetails.touched || submitted())) {
+            <mat-error>Sub-work details are required.</mat-error>
+          }
+          @if (form.controls.subWorkDetails.hasError('maxlength')) {
+            <mat-error>Use 500 characters or fewer.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="scope-heading">
+          <h2>Work scopes</h2>
+          <button mat-stroked-button type="button" (click)="addScope()">
+            <mat-icon>add</mat-icon>
+            Add scope
+          </button>
+        </div>
+
+        <div formArrayName="workScopes" class="scope-list">
+          @for (scopeForm of workScopes.controls; track $index; let index = $index) {
+            <section class="scope-card" [formGroupName]="index">
+              <div class="scope-card-heading">
+                <h3>Scope {{ index + 1 }}</h3>
+                <button
+                  mat-icon-button
+                  type="button"
+                  aria-label="Remove scope"
+                  [disabled]="workScopes.length === 1"
+                  (click)="removeScope(index)"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+
+              <div class="scope-fields">
+                <mat-form-field appearance="outline">
+                  <mat-label>Name of river / nallah / barrier</mat-label>
+                  <input matInput formControlName="nameOfRiverNallahBarrier" />
+                  @if (scopeForm.hasError('required', 'nameOfRiverNallahBarrier') && (scopeForm.get('nameOfRiverNallahBarrier')?.touched || submitted())) {
+                    <mat-error>This name is required.</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Width</mat-label>
+                  <input matInput type="number" min="0.001" step="0.001" formControlName="width" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Length</mat-label>
+                  <input matInput type="number" min="0.001" step="0.001" formControlName="length" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Approach road</mat-label>
+                  <input matInput formControlName="approachRoad" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>No. of spans</mat-label>
+                  <input matInput type="number" min="1" step="1" formControlName="numberOfSpans" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Span length</mat-label>
+                  <input matInput type="number" min="0.001" step="0.001" formControlName="spanLength" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Bridge activity</mat-label>
+                  <mat-select formControlName="bridgeActivity">
+                    @for (activity of bridgeActivities; track activity.value) {
+                      <mat-option [value]="activity.value">{{ activity.label }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </section>
+          }
+        </div>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+            {{ saving() ? 'Saving…' : editingWork() ? 'Save changes' : 'Create work' }}
+          </button>
+          @if (editingWork()) {
+            <button mat-button type="button" (click)="cancelEdit()">Cancel</button>
+          }
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <section class="records-section" aria-labelledby="records-heading">
+    <h2 id="records-heading">Saved work details</h2>
+    @if (loading()) {
+      <p role="status">Loading work details…</p>
+    } @else if (workDetails().length === 0) {
+      <p class="empty-state">No work details have been added yet.</p>
+    } @else {
+      <div class="record-list">
+        @for (work of workDetails(); track work.workId) {
+          <mat-card class="record-card">
+            <mat-card-header>
+              <mat-card-title>Work #{{ work.workId }}</mat-card-title>
+              <mat-card-subtitle>{{ work.subWorkDetails }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              @for (scope of work.workScopes; track scope.scopeId) {
+                <div class="record-scope">
+                  <strong>{{ scope.nameOfRiverNallahBarrier }}</strong>
+                  <span>{{ scope.width }} wide × {{ scope.length }} long</span>
+                  <span>{{ scope.approachRoad }}</span>
+                  <span>{{ scope.numberOfSpans }} spans × {{ scope.spanLength }} span length</span>
+                  <span>{{ activityLabel(scope.bridgeActivity) }}</span>
+                </div>
+              }
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-button type="button" (click)="edit(work)">Edit</button>
+              <button mat-button color="warn" type="button" (click)="delete(work)">Delete</button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+  </section>
+</section>

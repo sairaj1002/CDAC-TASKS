@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>Work Records · {{ data.contractor }}</h2>
+<mat-dialog-content>
+  @if (loading()) {
+    <p role="status">Loading work records…</p>
+  } @else if (loadFailed()) {
+    <p class="report-details-notice" role="alert">
+      Work records could not be loaded. Close this dialog and try again.
+    </p>
+  } @else if (works().length === 0) {
+    <p class="report-details-notice" role="status">
+      No work records were found for this contractor and date range.
+    </p>
+  } @else {
+    <div class="report-details-table-container">
+      <table class="report-details-table" aria-label="Work records by contractor">
+        <thead>
+          <tr>
+            <th scope="col">Work no.</th>
+            <th scope="col">Contractor</th>
+            <th scope="col">Work details</th>
+            <th scope="col">Actual start</th>
+            <th scope="col">Stipulated start</th>
+            <th scope="col">Stipulated end</th>
+            <th scope="col">Created at</th>
+            <th scope="col">Updated at</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (work of works(); track work.workRegNo) {
+            <tr>
+              <td>{{ work.workRegNo }}</td>
+              <td>{{ work.contractorName }}</td>
+              <td class="report-details-work-cell">{{ work.workDetails }}</td>
+              <td>{{ work.actualStartDate || '—' }}</td>
+              <td>{{ work.stipulatedStartDate }}</td>
+              <td>{{ work.stipulatedEndDate }}</td>
+              <td>{{ work.createdAt || '—' }}</td>
+              <td>{{ work.updatedAt || '—' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="close()">Close</button>
+</mat-dialog-actions>

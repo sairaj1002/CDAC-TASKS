@@ -1,0 +1,121 @@
+<h2 mat-dialog-title>Audit history</h2>
+
+<mat-dialog-content>
+  <p class="audit-subtitle">{{ data.riverNallahBarrier }}</p>
+
+  <div class="audit-loading" *ngIf="loading()" role="status" aria-label="Loading audit history">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <mat-card *ngIf="errorMessage()" appearance="outlined" role="alert">
+    <mat-card-content>{{ errorMessage() }}</mat-card-content>
+  </mat-card>
+
+  <p *ngIf="!loading() && !errorMessage() && revisions().length === 0">
+    No audit revisions are available.
+  </p>
+
+  <mat-card *ngFor="let revision of revisions()" class="audit-revision" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>
+        Revision {{ revision.revisionNumber }} · {{ revision.revisionType }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ revision.revisionDate | date: 'medium' }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="bridge-form-table-wrapper">
+        <table class="bridge-form-table bridge-details-table audit-details-table">
+          <thead>
+            <tr>
+              <th scope="col">Sr No.</th>
+              <th scope="col">Name of River/Nallah/Barrier</th>
+              <th scope="col">Approval Road</th>
+              <th scope="col">Width</th>
+              <th scope="col">Length</th>
+              <th scope="col">No. Of Spans</th>
+              <th scope="col">Span Length</th>
+              <th scope="col">Bridge Activity</th>
+              <th *ngIf="revision.snapshot.bridgeActivity === 'Other Activity'" scope="col">
+                Other Activity Description
+              </th>
+              <th scope="col">Created At</th>
+              <th scope="col">Updated At</th>
+              <th scope="col">Revision Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>
+                <app-bridge-readonly-field
+                  label="Name of River/Nallah/Barrier"
+                  [value]="revision.snapshot.riverNallahBarrier"
+                />
+              </td>
+              <td>
+                <app-bridge-readonly-field
+                  label="Approval Road"
+                  [value]="revision.snapshot.approvalRoad"
+                />
+              </td>
+              <td>
+                <app-bridge-readonly-field label="Width" [value]="revision.snapshot.width" />
+              </td>
+              <td>
+                <app-bridge-readonly-field label="Length" [value]="revision.snapshot.length" />
+              </td>
+              <td>
+                <app-bridge-readonly-field
+                  label="No. Of Spans"
+                  [value]="revision.snapshot.numberOfSpans"
+                />
+              </td>
+              <td>
+                <app-bridge-readonly-field
+                  label="Span Length"
+                  [value]="revision.snapshot.spanLength"
+                />
+              </td>
+              <td>
+                <app-bridge-readonly-field
+                  label="Bridge Activity"
+                  [value]="revision.snapshot.bridgeActivity"
+                />
+              </td>
+              <td *ngIf="revision.snapshot.bridgeActivity === 'Other Activity'">
+                <app-bridge-readonly-field
+                  label="Other Activity Description"
+                  [value]="revision.snapshot.otherActivityDescription"
+                />
+              </td>
+              <td>
+                <app-bridge-readonly-field
+                  label="Created At"
+                  [value]="revision.snapshot.createdAt | date: 'medium'"
+                />
+              </td>
+              <td>
+                <app-bridge-readonly-field
+                  label="Updated At"
+                  [value]="revision.snapshot.updatedAt | date: 'medium'"
+                />
+              </td>
+              <td>
+                <app-bridge-readonly-field
+                  label="Revision Timestamp"
+                  [value]="
+                    (revision.snapshot.revisionTimestamp || revision.revisionDate) | date: 'medium'
+                  "
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Close</button>
+</mat-dialog-actions>

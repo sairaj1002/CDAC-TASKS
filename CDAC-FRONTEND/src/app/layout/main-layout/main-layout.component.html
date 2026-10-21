@@ -1,0 +1,11 @@
+<app-header [expanded]="expanded()" (toggleNavigation)="toggleDrawer()" />
+
+<div class="body">
+  <app-sidebar [expanded]="expanded()" />
+
+  <main class="page">
+    <router-outlet />
+  </main>
+</div>
+
+<app-footer />

@@ -1,0 +1,189 @@
+<section class="ams-page">
+  <header class="page-header">
+    <div>
+      <h1>Asset Management System</h1>
+      <p>Register and manage organizational assets.</p>
+    </div>
+    <button mat-stroked-button type="button" (click)="loadAssets()" [disabled]="loading()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </header>
+
+  <mat-tab-group
+    [selectedIndex]="activeTab()"
+    (selectedIndexChange)="activeTab.set($event)"
+    animationDuration="0ms"
+  >
+    <mat-tab [label]="editingAsset() ? 'Edit Asset' : 'Add Asset'">
+      <section class="tab-content" aria-label="Asset form">
+        <form [formGroup]="amsForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Asset Code</mat-label>
+              <input matInput formControlName="assetCode" placeholder="Enter asset code" />
+              @if (amsForm.controls.assetCode.touched && amsForm.controls.assetCode.hasError('required')) {
+                <mat-error>Asset code is required.</mat-error>
+              }
+              @if (amsForm.controls.assetCode.touched && amsForm.controls.assetCode.hasError('maxlength')) {
+                <mat-error>Asset code must be 50 characters or fewer.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Asset Name</mat-label>
+              <input matInput formControlName="assetName" placeholder="Enter asset name" />
+              @if (amsForm.controls.assetName.touched && amsForm.controls.assetName.hasError('required')) {
+                <mat-error>Asset name is required.</mat-error>
+              }
+              @if (amsForm.controls.assetName.touched && amsForm.controls.assetName.hasError('maxlength')) {
+                <mat-error>Asset name must be 100 characters or fewer.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Asset Type</mat-label>
+              <mat-select formControlName="assetType">
+                <mat-option value="EQUIPMENT">Equipment</mat-option>
+                <mat-option value="VEHICLE">Vehicle</mat-option>
+                <mat-option value="BUILDING">Building</mat-option>
+                <mat-option value="LAND">Land</mat-option>
+                <mat-option value="OTHER">Other</mat-option>
+              </mat-select>
+              @if (amsForm.controls.assetType.touched && amsForm.controls.assetType.hasError('required')) {
+                <mat-error>Asset type is required.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <input matInput formControlName="description" placeholder="Enter description" />
+              @if (amsForm.controls.description.touched && amsForm.controls.description.hasError('maxlength')) {
+                <mat-error>Description must be 500 characters or fewer.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" placeholder="Enter location" />
+              @if (amsForm.controls.location.touched && amsForm.controls.location.hasError('required')) {
+                <mat-error>Location is required.</mat-error>
+              }
+              @if (amsForm.controls.location.touched && amsForm.controls.location.hasError('maxlength')) {
+                <mat-error>Location must be 150 characters or fewer.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value="ACTIVE">Active</mat-option>
+                <mat-option value="INACTIVE">Inactive</mat-option>
+                <mat-option value="MAINTENANCE">Maintenance</mat-option>
+              </mat-select>
+              @if (amsForm.controls.status.touched && amsForm.controls.status.hasError('required')) {
+                <mat-error>Status is required.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            @if (editingAsset()) {
+              <button mat-stroked-button type="button" (click)="cancelEdit()" [disabled]="saving()">
+                Cancel
+              </button>
+            } @else {
+              <button mat-stroked-button type="button" (click)="resetForm()" [disabled]="saving()">
+                Reset
+              </button>
+            }
+            <button mat-raised-button color="primary" type="submit" [disabled]="saving()">
+              @if (saving()) {
+                Saving...
+              } @else {
+                {{ editingAsset() ? 'Update Asset' : 'Save Asset' }}
+              }
+            </button>
+          </div>
+        </form>
+      </section>
+    </mat-tab>
+
+    <mat-tab label="View Assets">
+      <section class="tab-content" aria-label="Assets list">
+        @if (loading() && assets().length === 0) {
+          <p class="state-message" role="status">Loading assets...</p>
+        } @else if (!loading() && assets().length === 0) {
+          <p class="state-message">No assets found. Add an asset to get started.</p>
+        } @else {
+          <div class="table-container">
+            <table mat-table [dataSource]="pagedAssets()" class="assets-table">
+              <ng-container matColumnDef="assetCode">
+                <th mat-header-cell *matHeaderCellDef>Asset Code</th>
+                <td mat-cell *matCellDef="let asset">{{ asset.assetCode }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="assetName">
+                <th mat-header-cell *matHeaderCellDef>Asset Name</th>
+                <td mat-cell *matCellDef="let asset">{{ asset.assetName }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="assetType">
+                <th mat-header-cell *matHeaderCellDef>Type</th>
+                <td mat-cell *matCellDef="let asset">{{ asset.assetType }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="location">
+                <th mat-header-cell *matHeaderCellDef>Location</th>
+                <td mat-cell *matCellDef="let asset">{{ asset.location }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let asset">{{ asset.status }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let asset" class="actions-cell">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'Edit asset ' + asset.assetCode"
+                    title="Edit asset"
+                    (click)="editAsset(asset)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    color="warn"
+                    [attr.aria-label]="'Delete asset ' + asset.assetCode"
+                    title="Delete asset"
+                    [disabled]="loading()"
+                    (click)="deleteAsset(asset)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+
+          <mat-paginator
+            [length]="assets().length"
+            [pageIndex]="pageIndex()"
+            [pageSize]="pageSize()"
+            [pageSizeOptions]="[5, 10, 25]"
+            aria-label="Assets table pagination"
+            (page)="onPageChange($event)"
+          />
+        }
+      </section>
+    </mat-tab>
+  </mat-tab-group>
+</section>

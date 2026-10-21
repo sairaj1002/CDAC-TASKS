@@ -1,0 +1,536 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Work Management System</h1>
+      <p style="color: #12406b">Create, review, and manage work records.</p>
+    </div>
+    <button mat-stroked-button type="button" (click)="loadWorks()" [disabled]="loading()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </header>
+  <hr />
+  <mat-card class="wms-card">
+    <mat-tab-group
+      [(selectedIndex)]="selectedTab"
+      (selectedTabChange)="onTabChange($event.index)"
+      animationDuration="0ms"
+    >
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>{{ isEditing() ? 'edit' : 'add_circle' }}</mat-icon>
+          <span>{{ isEditing() ? 'Edit Work' : 'Add Work' }}</span>
+        </ng-template>
+
+        <section class="tab-content" aria-labelledby="work-form-title">
+          <h2 id="work-form-title">{{ isEditing() ? 'Edit Work' : 'Add Work' }}</h2>
+          @if (isEditing()) {
+            <p class="form-context">Editing work record #{{ editingWorkId() }}</p>
+          }
+
+          <form [formGroup]="workForm" (ngSubmit)="submitWork()" novalidate>
+            <div class="form-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>Work Details</mat-label>
+                <textarea
+                  matInput
+                  rows="3"
+                  formControlName="workDetails"
+                  maxlength="500"
+                ></textarea>
+                @if (
+                  workForm.controls.workDetails.touched &&
+                  workForm.controls.workDetails.hasError('required')
+                ) {
+                  <mat-error>Work details are required.</mat-error>
+                } @else if (
+                  workForm.controls.workDetails.touched &&
+                  workForm.controls.workDetails.hasError('minlength')
+                ) {
+                  <mat-error>Enter at least 3 characters.</mat-error>
+                } @else if (
+                  workForm.controls.workDetails.touched &&
+                  workForm.controls.workDetails.hasError('maxlength')
+                ) {
+                  <mat-error>Work details cannot exceed 500 characters.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Contractor Name</mat-label>
+                <input
+                  matInput
+                  formControlName="contractorName"
+                  maxlength="150"
+                  autocomplete="organization"
+                />
+                @if (
+                  workForm.controls.contractorName.touched &&
+                  workForm.controls.contractorName.hasError('required')
+                ) {
+                  <mat-error>Contractor name is required.</mat-error>
+                } @else if (
+                  workForm.controls.contractorName.touched &&
+                  workForm.controls.contractorName.hasError('minlength')
+                ) {
+                  <mat-error>Enter at least 2 characters.</mat-error>
+                } @else if (
+                  workForm.controls.contractorName.touched &&
+                  workForm.controls.contractorName.hasError('maxlength')
+                ) {
+                  <mat-error>Contractor name cannot exceed 150 characters.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Actual Start Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="actualStartPicker"
+                  formControlName="actualStartDate"
+                  aria-label="Actual start date"
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="actualStartPicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #actualStartPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Stipulated Start Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="stipulatedStartPicker"
+                  formControlName="stipulatedStartDate"
+                  aria-label="Stipulated start date"
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="stipulatedStartPicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #stipulatedStartPicker></mat-datepicker>
+                @if (
+                  workForm.controls.stipulatedStartDate.touched &&
+                  workForm.controls.stipulatedStartDate.hasError('required')
+                ) {
+                  <mat-error>Stipulated start date is required.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Stipulated End Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="stipulatedEndPicker"
+                  formControlName="stipulatedEndDate"
+                  aria-label="Stipulated end date"
+                  [min]="workForm.controls.stipulatedStartDate.value"
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="stipulatedEndPicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #stipulatedEndPicker></mat-datepicker>
+                @if (
+                  workForm.controls.stipulatedEndDate.touched &&
+                  workForm.controls.stipulatedEndDate.hasError('required')
+                ) {
+                  <mat-error>Stipulated end date is required.</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            @if (
+              workForm.hasError('dateOrder') &&
+              (workForm.controls.stipulatedStartDate.touched ||
+                workForm.controls.stipulatedEndDate.touched)
+            ) {
+              <p class="field-error" role="alert">
+                Stipulated end date must be on or after the start date.
+              </p>
+            }
+
+            <div class="form-actions">
+              @if (isEditing()) {
+                <button
+                  type="button"
+                  mat-stroked-button
+                  (click)="resetForm()"
+                  [disabled]="loading()"
+                >
+                  Cancel edit
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  mat-stroked-button
+                  (click)="resetForm()"
+                  [disabled]="loading()"
+                >
+                  Reset
+                </button>
+              }
+              <button type="submit" mat-raised-button color="primary" [disabled]="loading()">
+                <mat-icon>{{ isEditing() ? 'save_as' : 'save' }}</mat-icon>
+                {{ isEditing() ? 'Update Work' : 'Save Work' }}
+              </button>
+            </div>
+          </form>
+        </section>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>visibility</mat-icon>
+          <span>View Works</span>
+        </ng-template>
+
+        <section class="tab-content" aria-labelledby="work-list-title">
+          <div class="table-header">
+            <div>
+              <h2 id="work-list-title">Work Records</h2>
+              <p>Showing {{ filteredWorks().length }} of {{ works().length }} records</p>
+            </div>
+            <button mat-stroked-button type="button" (click)="loadWorks()" [disabled]="loading()">
+              <mat-icon>refresh</mat-icon>
+              Refresh
+            </button>
+          </div>
+          <mat-form-field appearance="outline" class="work-search">
+            <mat-label>Search work records</mat-label>
+            <input
+              matInput
+              [value]="workSearch()"
+              (input)="onWorkSearchChange($event)"
+              placeholder="Search work no., details, contractor, or dates"
+              aria-label="Search work records"
+            />
+            @if (workSearch()) {
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                aria-label="Clear work record search"
+                (click)="workSearch.set(''); pageIndex.set(0)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+
+          @if (loading() && works().length === 0) {
+            <div class="loading" role="status">Loading work records…</div>
+          } @else if (!loading() && works().length === 0) {
+            <div class="empty-state">
+              <mat-icon aria-hidden="true">inbox</mat-icon>
+              <h3>No work records found</h3>
+              <p>Add a work record to get started.</p>
+            </div>
+          } @else if (filteredWorks().length === 0) {
+            <div class="empty-state">
+              <mat-icon aria-hidden="true">search_off</mat-icon>
+              <h3>No matching work records</h3>
+              <p>Try a different search term.</p>
+            </div>
+          } @else {
+            <div class="table-container">
+              <table mat-table [dataSource]="visibleWorks()" aria-label="Work records">
+                <ng-container matColumnDef="workRegNo">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Work No.</th>
+                  <td mat-cell *matCellDef="let work">{{ work.workRegNo }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="workDetails">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Work Details</th>
+                  <td mat-cell *matCellDef="let work" class="details-cell">
+                    {{ work.workDetails }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="contractorName">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Contractor</th>
+                  <td mat-cell *matCellDef="let work">{{ work.contractorName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actualStartDate">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Actual Start</th>
+                  <td mat-cell *matCellDef="let work">{{ work.actualStartDate || '—' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="stipulatedStartDate">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Stipulated Start</th>
+                  <td mat-cell *matCellDef="let work">{{ work.stipulatedStartDate }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="stipulatedEndDate">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Stipulated End</th>
+                  <td mat-cell *matCellDef="let work">{{ work.stipulatedEndDate }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="createdAt">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Created</th>
+                  <td mat-cell *matCellDef="let work">{{ work.createdAt }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="updatedAt">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Updated</th>
+                  <td mat-cell *matCellDef="let work">{{ work.updatedAt }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="audit">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Audit</th>
+                  <td mat-cell *matCellDef="let work">
+                    <button
+                      mat-icon-button
+                      type="button"
+                      [attr.aria-label]="'View audit history for work ' + work.workRegNo"
+                      (click)="openAuditHistory(work)"
+                    >
+                      <mat-icon>history</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef scope="col">Actions</th>
+                  <td mat-cell *matCellDef="let work" class="actions-cell">
+                    <button
+                      mat-icon-button
+                      type="button"
+                      [disabled]="loading()"
+                      [attr.aria-label]="'Edit work ' + work.workRegNo"
+                      (click)="editWork(work)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      type="button"
+                      color="warn"
+                      [disabled]="loading()"
+                      [attr.aria-label]="'Delete work ' + work.workRegNo"
+                      (click)="deleteWork(work)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </div>
+            <mat-paginator
+              aria-label="Work records pagination"
+              [length]="filteredWorks().length"
+              [pageIndex]="pageIndex()"
+              [pageSize]="pageSize()"
+              [pageSizeOptions]="[5, 10, 25, 50]"
+              (page)="onPageChange($event)"
+            ></mat-paginator>
+          }
+        </section>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>summarize</mat-icon>
+          <span>Reports</span>
+        </ng-template>
+
+        <section class="tab-content reports-content" aria-labelledby="reports-title">
+          <h2 id="reports-title">Work Reports</h2>
+          <p>Filter records by stipulated start date and contractor.</p>
+          <form [formGroup]="reportFilters" (ngSubmit)="downloadReport()">
+            <div class="form-grid report-filters">
+              <mat-form-field appearance="outline">
+                <mat-label>From date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="reportFromPicker"
+                  formControlName="fromDate"
+                  aria-label="Report from date"
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="reportFromPicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #reportFromPicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>To date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="reportToPicker"
+                  formControlName="toDate"
+                  aria-label="Report to date"
+                  readonly
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="reportToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #reportToPicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Contractor</mat-label>
+                <input matInput formControlName="contractor" maxlength="150" />
+              </mat-form-field>
+            </div>
+            <div class="report-actions">
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="refreshReport()"
+                [disabled]="reportLoading()"
+              >
+                <mat-icon>bar_chart</mat-icon>
+                Refresh chart
+              </button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="reportLoading()">
+                <mat-icon>download</mat-icon>
+                Download PDF report
+              </button>
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="downloadSampleExcel()"
+                [disabled]="reportLoading()"
+              >
+                <mat-icon>table_view</mat-icon>
+                Download sample Excel
+              </button>
+            </div>
+          </form>
+
+          @if (reportSummary(); as summary) {
+            <section class="report-chart-section" aria-labelledby="contractor-chart-title">
+              <div class="report-chart-header">
+                <h3 id="contractor-chart-title">
+                  Work records by contractor
+                  <span class="report-total">Total: {{ summary.totalRecords }}</span>
+                </h3>
+                @if (summary.totalRecords > 0) {
+                  <div class="report-chart-controls" aria-label="Chart configuration">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Chart type</mat-label>
+                      <mat-select
+                        [value]="reportChartType()"
+                        (selectionChange)="setReportChartType($event.value)"
+                        aria-label="Chart type"
+                      >
+                        <mat-option value="bar">Vertical bar</mat-option>
+                        <mat-option value="line">Line</mat-option>
+                        <mat-option value="pie">Pie</mat-option>
+                        <mat-option value="doughnut">Doughnut</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Legend</mat-label>
+                      <mat-select
+                        [value]="showReportChartLegend()"
+                        (selectionChange)="setReportChartLegend($event.value)"
+                        aria-label="Chart legend visibility"
+                      >
+                        <mat-option [value]="true">Show legend</mat-option>
+                        <mat-option [value]="false">Hide legend</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                }
+              </div>
+              @if (summary.totalRecords > 0) {
+                <p class="chart-hint">Select a chart item to view its matching work records.</p>
+                <div class="chart-container">
+                  <canvas
+                    #contractorChart
+                    aria-label="Configurable work records by contractor chart"
+                  ></canvas>
+                </div>
+              } @else {
+                <p class="empty-report">No work records match these filters.</p>
+              }
+            </section>
+          }
+
+          <section class="excel-import" aria-labelledby="excel-import-title">
+            <h3 id="excel-import-title">Import work records from Excel</h3>
+            <p>
+              The sample Excel download above shows the required columns and contains fictional
+              example data. You can replace those rows with your own records before uploading.
+            </p>
+            <p>
+              Upload an .xlsx or .xls file. The first worksheet must have columns for Work Details,
+              Contractor Name, Stipulated Start Date, and Stipulated End Date. Actual Start Date is
+              optional. Dates can be Excel dates, yyyy-MM-dd, or d-M-yyyy.
+            </p>
+            <label class="excel-file-label" for="work-excel-file">Excel workbook</label>
+            <input
+              id="work-excel-file"
+              type="file"
+              accept=".xlsx,.xls"
+              [disabled]="excelLoading()"
+              (change)="onExcelSelected($event)"
+            />
+            @if (excelLoading()) {
+              <p role="status">Validating or importing workbook…</p>
+            }
+            @if (excelPreview(); as preview) {
+              <p class="preview-counts">
+                {{ preview.validRows.length }} valid row(s); {{ preview.errors.length }} invalid
+                row(s).
+              </p>
+              @if (preview.validRows.length > 0) {
+                <div class="table-container import-table">
+                  <table aria-label="Valid Excel rows to import">
+                    <thead>
+                      <tr>
+                        <th scope="col">Excel row</th>
+                        <th scope="col">Work details</th>
+                        <th scope="col">Contractor</th>
+                        <th scope="col">Actual start</th>
+                        <th scope="col">Stipulated start</th>
+                        <th scope="col">Stipulated end</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (row of preview.validRows; track row.rowNumber) {
+                        <tr>
+                          <td>{{ row.rowNumber }}</td>
+                          <td>{{ row.workDetails }}</td>
+                          <td>{{ row.contractorName }}</td>
+                          <td>{{ row.actualStartDate || '—' }}</td>
+                          <td>{{ row.stipulatedStartDate }}</td>
+                          <td>{{ row.stipulatedEndDate }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+              @if (preview.errors.length > 0) {
+                <ul class="import-errors" aria-label="Excel validation errors">
+                  @for (error of preview.errors; track error.rowNumber) {
+                    <li>Row {{ error.rowNumber }}: {{ error.message }}</li>
+                  }
+                </ul>
+              }
+              <button
+                mat-raised-button
+                color="primary"
+                type="button"
+                (click)="importExcel()"
+                [disabled]="excelLoading() || preview.validRows.length === 0"
+              >
+                <mat-icon>upload</mat-icon>
+                Import {{ preview.validRows.length }} valid row(s)
+              </button>
+            }
+          </section>
+        </section>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</section>
