@@ -13,6 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.cdac.scope.constant.DropdownConstant;
+
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
@@ -28,12 +30,12 @@ public class ApiExceptionHandler {
 		exception.getBindingResult().getGlobalErrors().forEach(error ->
 				fieldErrors.putIfAbsent("form", error.getDefaultMessage()));
 
-		return response(HttpStatus.BAD_REQUEST, "Request validation failed.", fieldErrors);
+		return response(HttpStatus.BAD_REQUEST, DropdownConstant.Messages.VALIDATION_FAILED, fieldErrors);
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ApiErrorResponse> handleUnreadableRequest(HttpMessageNotReadableException exception) {
-		return response(HttpStatus.BAD_REQUEST, "Request body is invalid or contains an unsupported value.", Map.of());
+		return response(HttpStatus.BAD_REQUEST, DropdownConstant.Messages.BODY_INVALID, Map.of());
 	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
@@ -41,12 +43,27 @@ public class ApiExceptionHandler {
 		return response(HttpStatus.NOT_FOUND, exception.getMessage(), Map.of());
 	}
 
+	@ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+	public ResponseEntity<ApiErrorResponse> handleBusinessViolation(RuntimeException exception) {
+		return response(HttpStatus.BAD_REQUEST, exception.getMessage(), Map.of());
+	}
+
+	@ExceptionHandler(org.springframework.web.server.ResponseStatusException.class)
+	public ResponseEntity<ApiErrorResponse> handleResponseStatus(org.springframework.web.server.ResponseStatusException exception) {
+		HttpStatus status = HttpStatus.resolve(exception.getStatusCode().value());
+		if (status == null) {
+			status = HttpStatus.BAD_REQUEST;
+		}
+		String message = exception.getReason() != null ? exception.getReason() : exception.getMessage();
+		return response(status, message, Map.of());
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiErrorResponse> handleUnexpected(Exception exception) {
 		LOGGER.error("Unexpected API error.", exception);
 		return response(
 				HttpStatus.INTERNAL_SERVER_ERROR,
-				"An unexpected error occurred.",
+				DropdownConstant.Messages.UNEXPECTED_ERROR,
 				Map.of());
 	}
 
