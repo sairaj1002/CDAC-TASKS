@@ -1,0 +1,439 @@
+<mat-card class="component-card component-add-card" appearance="outlined">
+
+  <mat-card-content>
+    <form [formGroup]="componentForm" (ngSubmit)="submitForm()">
+      <div class="component-form-table-wrapper">
+        <table class="component-form-table">
+          <thead>
+            <tr>
+              <th id="serial-number-heading" scope="col">Sr No.</th>
+              <th id="river-heading" scope="col">Name of River/Nallah/Barrier</th>
+              <th id="approval-road-heading" scope="col">Approval Road</th>
+              <th id="width-heading" scope="col">Width</th>
+              <th id="length-heading" scope="col">Length</th>
+              <th id="spans-heading" scope="col">No. Of Spans</th>
+              <th id="span-length-heading" scope="col">Span Length</th>
+              <th id="bridge-activity-heading" scope="col">Bridge Activity</th>
+              <th *ngIf="showOtherActivityDescriptionColumn" id="other-activity-heading" scope="col">
+                Other Activity Description
+              </th>
+              <th id="bridge-audit-heading" scope="col">Audit Details</th>
+              <th id="options-heading" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let component of bridgeComponents; let i = index">
+              <ng-container
+                *ngIf="(componentToEdit?.scopeId ?? componentToEdit?.id) === (component.scopeId ?? component.id); else savedComponentRow">
+                <ng-container *ngTemplateOutlet="entryFormRow"></ng-container>
+              </ng-container>
+              <ng-template #savedComponentRow>
+                <tr>
+                  <td headers="serial-number-heading" class="component-serial-number">{{ i + 1 }}</td>
+                  <td headers="river-heading">{{ component.riverNallahBarrier }}</td>
+                  <td headers="approval-road-heading">{{ component.approvalRoad }}</td>
+                  <td headers="width-heading">{{ component.width ?? '—' }}</td>
+                  <td headers="length-heading">{{ component.length ?? '—' }}</td>
+                  <td headers="spans-heading">{{ component.numberOfSpans ?? '—' }}</td>
+                  <td headers="span-length-heading">{{ component.spanLength ?? '—' }}</td>
+                  <td headers="bridge-activity-heading">{{ component.bridgeActivity }}</td>
+                  <td *ngIf="showOtherActivityDescriptionColumn" headers="other-activity-heading">
+                    {{ component.otherActivityDescription || '—' }}
+                  </td>
+                  <td headers="bridge-audit-heading" class="component-audit-cell" style="text-align: center;">
+                    <button mat-icon-button type="button" aria-label="View audit details" matTooltip="Audit Details"
+                      (click)="openAuditDialog(component)">
+                      <mat-icon [class.audit-icon-active]="component.auditDetails && component.auditDetails.length > 0"
+                        class="audit-check-icon" aria-hidden="true">check_circle</mat-icon>
+                    </button>
+                  </td>
+                  <td headers="options-heading">
+                    <div class="component-row-actions">
+                      <button mat-icon-button type="button" class="btn-action-view" aria-label="View bridge details"
+                        title="View Details" (click)="openDetailsDialog(component)">
+                        <mat-icon aria-hidden="true">visibility</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-edit" aria-label="Edit bridge"
+                        title="Edit" (click)="editComponent(component)">
+                        <mat-icon aria-hidden="true">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-delete" aria-label="Delete bridge"
+                        title="Delete" (click)="promptDelete(component)">
+                        <mat-icon aria-hidden="true">delete</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </ng-container>
+
+            <ng-template #entryFormRow>
+              <tr>
+                <td headers="serial-number-heading" class="component-serial-number">
+                  <div class="serial-badge-wrap">
+                    <span>{{ serialNumber }}</span>
+                    <span *ngIf="!componentToEdit" class="new-entry-pill">New</span>
+                  </div>
+                </td>
+                <td headers="river-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Name of River/Nallah/Barrier</mat-label>
+                    <input matInput maxlength="150" required formControlName="riverNallahBarrier" />
+                    <mat-error *ngIf="componentForm.controls.riverNallahBarrier.hasError('required')">
+                      River, nallah, or barrier name is required.
+                    </mat-error>
+                    <mat-error *ngIf="componentForm.controls.riverNallahBarrier.hasError('pattern')">
+                      Enter a non-blank river, nallah, or barrier name.
+                    </mat-error>
+                    <mat-error *ngIf="componentForm.controls.riverNallahBarrier.hasError('maxlength')">
+                      Enter no more than 150 characters.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="approval-road-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Approval Road</mat-label>
+                    <input matInput maxlength="150" required formControlName="approvalRoad" />
+                    <mat-error *ngIf="componentForm.controls.approvalRoad.hasError('required')">
+                      Approval road is required.
+                    </mat-error>
+                    <mat-error *ngIf="componentForm.controls.approvalRoad.hasError('pattern')">
+                      Enter a non-blank approval road.
+                    </mat-error>
+                    <mat-error *ngIf="componentForm.controls.approvalRoad.hasError('maxlength')">
+                      Enter no more than 150 characters.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="width-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Width</mat-label>
+                    <input matInput type="number" min="0" formControlName="width" />
+                    <mat-error *ngIf="componentForm.controls.width.hasError('min')">
+                      Width cannot be negative.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="length-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Length</mat-label>
+                    <input matInput type="number" min="0" formControlName="length" />
+                    <mat-error *ngIf="componentForm.controls.length.hasError('min')">
+                      Length cannot be negative.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="spans-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>No. Of Spans</mat-label>
+                    <input matInput type="number" min="0" step="1" formControlName="numberOfSpans" />
+                    <mat-error *ngIf="componentForm.controls.numberOfSpans.hasError('min')">
+                      Number of spans cannot be negative.
+                    </mat-error>
+                    <mat-error *ngIf="componentForm.controls.numberOfSpans.hasError('pattern')">
+                      Number of spans must be a whole number.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="span-length-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Span Length</mat-label>
+                    <input matInput type="number" min="0" formControlName="spanLength" />
+                    <mat-error *ngIf="componentForm.controls.spanLength.hasError('min')">
+                      Span length cannot be negative.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="bridge-activity-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Bridge Activity</mat-label>
+                    <mat-select formControlName="bridgeActivity" required
+                      (selectionChange)="onBridgeActivityChange($event.value)">
+                      <mat-option *ngFor="let option of bridgeActivityOptions" [value]="option.code || option.label">
+                        {{ option.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="componentForm.controls.bridgeActivity.hasError('required')">
+                      Select a bridge activity.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td *ngIf="showOtherActivityDescriptionColumn" headers="other-activity-heading">
+                  <mat-form-field
+                    *ngIf="componentForm.controls.bridgeActivity.value === 'Other Activity' || componentForm.controls.bridgeActivity.value === 'OTHER_ACTIVITY'"
+                    appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Other Activity Description</mat-label>
+                    <textarea matInput maxlength="500" formControlName="otherActivityDescription" rows="1" required>
+                        </textarea>
+                    <mat-error *ngIf="componentForm.controls.otherActivityDescription.hasError('required')">
+                      Please describe the other activity.
+                    </mat-error>
+                    <mat-error *ngIf="componentForm.controls.otherActivityDescription.hasError('maxlength')">
+                      Enter no more than 500 characters.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="bridge-audit-heading" class="component-audit-cell"
+                  style="text-align: center; color: var(--icon-muted);">
+                  —
+                </td>
+                <td headers="options-heading">
+                  <div class="component-row-actions">
+                    <ng-container *ngIf="componentToEdit; else newBridgeRowActions">
+                      <button mat-icon-button type="submit" class="btn-action-save"
+                        [disabled]="saving || bridgeActivities.length === 0" aria-label="Save bridge changes"
+                        title="Save Changes">
+                        <mat-icon aria-hidden="true">save</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-cancel" aria-label="Cancel editing bridge"
+                        title="Cancel" (click)="cancelEdit()">
+                        <mat-icon aria-hidden="true">close</mat-icon>
+                      </button>
+                    </ng-container>
+                    <ng-template #newBridgeRowActions>
+                      <button mat-icon-button type="submit" class="btn-action-add"
+                        [disabled]="saving || bridgeActivities.length === 0" aria-label="Add bridge" title="Add">
+                        <mat-icon aria-hidden="true">add</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-delete" aria-label="Clear form"
+                        title="Clear" (click)="resetForm()">
+                        <mat-icon aria-hidden="true">delete</mat-icon>
+                      </button>
+                    </ng-template>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-container *ngIf="!componentToEdit">
+              <ng-container *ngTemplateOutlet="entryFormRow"></ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<!-- DETAILS DIALOG TEMPLATE (Inputs with Labels like Search Component) -->
+<ng-template #detailsDialog>
+  <div *ngIf="selectedDetailsComponent as component" class="component-details-dialog-body">
+    <h2 class="component-dialog-title" mat-dialog-title>Bridge Component Details</h2>
+    <mat-dialog-content class="component-dialog-content">
+      <div class="component-details-panel">
+        <div class="component-search-fields component-view-details-fields">
+          <div class="component-search-field">
+            <label>ID</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.id" [matTooltip]="'' + component.id"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Name of River/Nallah/Barrier</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.riverNallahBarrier"
+                  [matTooltip]="component.riverNallahBarrier || '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Approval Road</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.approvalRoad" [matTooltip]="component.approvalRoad || '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Width</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.width ?? '—'"
+                  [matTooltip]="component.width != null ? ('' + component.width) : '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Length</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.length ?? '—'"
+                  [matTooltip]="component.length != null ? ('' + component.length) : '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>No. Of Spans</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.numberOfSpans ?? '—'"
+                  [matTooltip]="component.numberOfSpans != null ? ('' + component.numberOfSpans) : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Span Length</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.spanLength ?? '—'"
+                  [matTooltip]="component.spanLength != null ? ('' + component.spanLength) : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Bridge Activity</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.bridgeActivity"
+                  [matTooltip]="component.bridgeActivity || '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field"
+            *ngIf="component.bridgeActivity === 'Other Activity' || component.otherActivityDescription"
+            style="grid-column: span 2;">
+            <label>Other Activity Description</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <textarea matInput readonly rows="2" [value]="component.otherActivityDescription || '—'"
+                  [matTooltip]="component.otherActivityDescription || '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Created Date</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly
+                  [value]="component.createdAt ? (component.createdAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  [matTooltip]="component.createdAt ? (component.createdAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Updated Date</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly
+                  [value]="component.updatedAt ? (component.updatedAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  [matTooltip]="component.updatedAt ? (component.updatedAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Revision Date</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly
+                  [value]="component.revisionTimestamp ? (component.revisionTimestamp | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  [matTooltip]="component.revisionTimestamp ? (component.revisionTimestamp | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="component-dialog-actions" align="end">
+      <button mat-button type="button" mat-dialog-close>Close</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+<!-- AUDIT DIALOG TEMPLATE -->
+<ng-template #auditDialog>
+  <h2 class="component-dialog-title audit-details-title" mat-dialog-title>Audit Details</h2>
+  <mat-dialog-content class="component-dialog-content component-audit-details-content">
+    <div *ngIf="auditLoading" class="audit-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="!auditLoading">
+      <div class="component-audit-details-table-wrapper" *ngIf="selectedAuditDetails.length > 0; else noAuditDetails">
+        <table mat-table [dataSource]="pagedAuditDetails" class="component-audit-details-table"
+          aria-label="Audit details history">
+          <ng-container matColumnDef="remark">
+            <th mat-header-cell *matHeaderCellDef scope="col">Remark</th>
+            <td mat-cell *matCellDef="let item">{{ item.remark || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef scope="col">Name</th>
+            <td mat-cell *matCellDef="let item">{{ item.name || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="employeeName">
+            <th mat-header-cell *matHeaderCellDef scope="col">Employee Name</th>
+            <td mat-cell *matCellDef="let item">{{ item.employeeName || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="designation">
+            <th mat-header-cell *matHeaderCellDef scope="col">Designation</th>
+            <td mat-cell *matCellDef="let item">{{ item.designation || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef scope="col">Timestamp</th>
+            <td mat-cell *matCellDef="let item">
+              {{ item.timestamp ? (item.timestamp | date: 'dd/MM/yyyy HH:mm:ss') : '—' }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="auditColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: auditColumns"></tr>
+        </table>
+      </div>
+
+      <ng-template #noAuditDetails>
+        <div class="component-audit-empty">No audit details are available.</div>
+      </ng-template>
+
+      <mat-paginator class="component-audit-paginator" [length]="selectedAuditDetails.length"
+        [pageIndex]="auditPageIndex" [pageSize]="auditPageSize" [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons
+        aria-label="Audit details pagination" (page)="onAuditPageChange($event)"></mat-paginator>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions class="component-dialog-actions" align="end">
+    <button mat-button type="button" mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- DELETE CONFIRMATION DIALOG (Matching Screenshot) -->
+<ng-template #deleteConfirmDialog>
+  <div class="confirm-dialog-card">
+    <button type="button" class="confirm-dialog-close" [mat-dialog-close]="false" aria-label="Close dialog">
+      &times;
+    </button>
+    <h3 class="confirm-dialog-title">Delete Work?</h3>
+    <p class="confirm-dialog-prompt">Are you sure?</p>
+    <div class="confirm-dialog-actions">
+      <button type="button" class="btn-dialog-ok" [mat-dialog-close]="true">Ok</button>
+      <button type="button" class="btn-dialog-cancel" [mat-dialog-close]="false">Cancel</button>
+    </div>
+  </div>
+</ng-template>

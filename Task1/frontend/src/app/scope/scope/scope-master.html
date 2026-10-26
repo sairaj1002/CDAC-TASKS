@@ -1,36 +1,41 @@
-<mat-card appearance="outlined">
+<mat-card class="component-card component-shell-card" appearance="outlined">
   <mat-card-header>
-    <mat-card-title>Sub-Work Scopes</mat-card-title>
-    <hr />
+    <mat-card-title>Road and Bridge</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
-    <mat-tab-group
-      aria-label="Component actions"
-      animationDuration="0ms"
-      [(selectedIndex)]="selectedTabIndex"
-    >
-      <mat-tab label="Add">
-        <app-bridge-add
-          [componentToEdit]="componentToEdit"
-          [serialNumber]="serialNumber"
-          [components]="bridgeComponents"
-          [bridgeActivities]="bridgeActivities"
-          [saving]="saving"
-          (saveComponent)="saveComponent($event)"
-          (cancelEdit)="cancelEdit()"
-          (editComponent)="editComponent($event)"
-          (deleteComponent)="deleteComponent($event)"
-        />
-      </mat-tab>
+    <hr />
 
-      <mat-tab label="View">
-        <app-bridge-view
-          [components]="bridgeComponents"
-          (editComponent)="editComponent($event)"
-          (deleteComponent)="deleteComponent($event)"
-        />
-      </mat-tab>
-    </mat-tab-group>
+    <!-- Entity selection buttons -->
+    <div class="component-entity-selector">
+      <button mat-stroked-button type="button" [class.component-entity-active]="selectedEntityIndex === 0"
+        [attr.aria-pressed]="selectedEntityIndex === 0" (click)="selectedEntityIndex = 0">
+        Road
+      </button>
+
+      <button mat-stroked-button type="button" [class.component-entity-active]="selectedEntityIndex === 1"
+        [attr.aria-pressed]="selectedEntityIndex === 1" (click)="selectedEntityIndex = 1">
+        Bridge
+      </button>
+      <button mat-stroked-button type="button" [class.component-entity-active]="selectedEntityIndex === 2"
+        [attr.aria-pressed]="selectedEntityIndex === 2" (click)="selectedEntityIndex = 2">
+        Dropdown Master
+      </button>
+    </div>
+
+    <!-- Road component -->
+    <div *ngIf="selectedEntityIndex === 0" class="component-entity-content">
+      <app-road-component></app-road-component>
+    </div>
+
+    <!-- Bridge component -->
+    <div *ngIf="selectedEntityIndex === 1" class="component-entity-content">
+      <app-bridge-component></app-bridge-component>
+    </div>
+
+    <!-- Dropdown Master Admin component -->
+    <div *ngIf="selectedEntityIndex === 2" class="component-entity-content">
+      <app-dropdown-admin></app-dropdown-admin>
+    </div>
   </mat-card-content>
 </mat-card>

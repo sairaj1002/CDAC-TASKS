@@ -1,0 +1,435 @@
+<mat-card class="component-card component-add-card" appearance="outlined">
+  <mat-card-content>
+    <form [formGroup]="componentForm" (ngSubmit)="submitForm()">
+      <div class="component-form-table-wrapper">
+        <table class="component-form-table">
+          <thead>
+            <tr>
+              <th id="road-serial-heading" scope="col">Sr No.</th>
+              <th id="nature-work-heading" scope="col">Nature of Work</th>
+              <th id="proposed-road-heading" scope="col">Proposed Road Type</th>
+              <th id="road-length-heading" scope="col">Road Length</th>
+              <th id="road-width-heading" scope="col">Road Width</th>
+              <th id="work-plan-heading" scope="col">Work Plan Type</th>
+              <th id="cd-work-heading" scope="col">CD Work Type</th>
+              <th *ngIf="showRepairMaintenanceColumn" id="repair-maintenance-heading" scope="col">
+                Repair/Maintenance Type
+              </th>
+              <th id="road-audit-heading" scope="col">Audit Details</th>
+              <th id="road-actions-heading" scope="col">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <ng-container *ngFor="let component of roadComponents; let i = index">
+              <ng-container
+                *ngIf="(componentToEdit?.scopeId ?? componentToEdit?.id) === (component.scopeId ?? component.id); else savedRoadRow">
+                <ng-container *ngTemplateOutlet="roadEntryRow"></ng-container>
+              </ng-container>
+
+              <ng-template #savedRoadRow>
+                <tr>
+                  <td headers="road-serial-heading" class="component-serial-number">
+                    {{ i + 1 }}
+                  </td>
+                  <td headers="nature-work-heading">
+                    {{ component.natureOfWork }}
+                  </td>
+                  <td headers="proposed-road-heading">
+                    {{ component.proposedRoadType }}
+                  </td>
+                  <td headers="road-length-heading">
+                    {{ component.length ?? '—' }}
+                  </td>
+                  <td headers="road-width-heading">
+                    {{ component.width ?? '—' }}
+                  </td>
+                  <td headers="work-plan-heading">
+                    {{ component.workPlanType }}
+                  </td>
+                  <td headers="cd-work-heading">
+                    {{ component.cdWorkType }}
+                  </td>
+                  <td *ngIf="showRepairMaintenanceColumn" headers="repair-maintenance-heading">
+                    {{ component.repairMaintenanceType ?? '—' }}
+                  </td>
+                  <td headers="road-audit-heading" class="component-audit-cell" style="text-align: center;">
+                    <button mat-icon-button type="button" aria-label="View audit details" matTooltip="Audit Details"
+                      (click)="openAuditDialog(component)">
+                      <mat-icon [class.audit-icon-active]="component.auditDetails && component.auditDetails.length > 0"
+                        class="audit-check-icon" aria-hidden="true">check_circle</mat-icon>
+                    </button>
+                  </td>
+                  <td headers="road-actions-heading">
+                    <div class="component-row-actions">
+                      <button mat-icon-button type="button" class="btn-action-view" aria-label="View road details"
+                        title="View Details" (click)="openDetailsDialog(component)">
+                        <mat-icon aria-hidden="true">visibility</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-edit" aria-label="Edit road component"
+                        title="Edit" (click)="editComponent(component)">
+                        <mat-icon aria-hidden="true">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-delete" aria-label="Delete road component"
+                        title="Delete" (click)="promptDelete(component)">
+                        <mat-icon aria-hidden="true">delete</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </ng-container>
+
+            <ng-template #roadEntryRow>
+              <tr>
+                <td headers="road-serial-heading" class="component-serial-number">
+                  <div class="serial-badge-wrap">
+                    <span>{{ serialNumber }}</span>
+                    <span *ngIf="!componentToEdit" class="new-entry-pill">New</span>
+                  </div>
+                </td>
+
+                <td headers="nature-work-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Nature of Work</mat-label>
+                    <mat-select formControlName="natureOfWork" required>
+                      <mat-option *ngFor="let opt of natureOfWorks" [value]="opt.value">
+                        {{ opt.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="componentForm.controls.natureOfWork.hasError('required')">
+                      Select a nature of work.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+
+                <td headers="proposed-road-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Proposed Road Type</mat-label>
+                    <mat-select formControlName="proposedRoadType" required>
+                      <mat-option *ngFor="let opt of proposedRoadTypes" [value]="opt.value">
+                        {{ opt.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="componentForm.controls.proposedRoadType.hasError('required')">
+                      Select a proposed road type.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+
+                <td headers="road-length-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Road Length</mat-label>
+                    <input matInput type="number" min="0.001" step="0.001" required formControlName="length" />
+                    <mat-error *ngIf="componentForm.controls.length.hasError('required')">
+                      Road length is required.
+                    </mat-error>
+                    <mat-error *ngIf="componentForm.controls.length.hasError('min')">
+                      Road length must be greater than zero.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+
+                <td headers="road-width-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Road Width</mat-label>
+                    <input matInput type="number" min="0.001" step="0.001" formControlName="width" />
+                    <mat-error *ngIf="componentForm.controls.width.hasError('min')">
+                      Road width must be greater than zero.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+
+                <td headers="work-plan-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Work Plan Type</mat-label>
+                    <mat-select formControlName="workPlanType" required
+                      (selectionChange)="onWorkPlanChange($event.value)">
+                      <mat-option *ngFor="let opt of workPlanTypes" [value]="opt.value">
+                        {{ opt.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="componentForm.controls.workPlanType.hasError('required')">
+                      Select a work plan type.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+
+                <td headers="cd-work-heading">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>CD Work Type</mat-label>
+                    <mat-select formControlName="cdWorkType" required>
+                      <mat-option *ngFor="let opt of cdWorkTypes" [value]="opt.value">
+                        {{ opt.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="componentForm.controls.cdWorkType.hasError('required')">
+                      Select a CD work type.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+
+                <td *ngIf="showRepairMaintenanceColumn" headers="repair-maintenance-heading">
+                  <mat-form-field
+                    *ngIf="componentForm.controls.workPlanType.value === 'NON_PLAN' || componentForm.controls.workPlanType.value === 'Non-Plan'"
+                    appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Repair/Maintenance Type</mat-label>
+                    <mat-select formControlName="repairMaintenanceType" required>
+                      <mat-option *ngFor="let opt of repairMaintenanceTypes" [value]="opt.value">
+                        {{ opt.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="componentForm.controls.repairMaintenanceType.hasError('required')">
+                      Select a repair/maintenance type.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td headers="road-audit-heading" class="component-audit-cell"
+                  style="text-align: center; color: var(--icon-muted);">
+                  —
+                </td>
+
+                <td headers="road-actions-heading">
+                  <div class="component-row-actions">
+                    <ng-container *ngIf="componentToEdit; else newRowActions">
+                      <button mat-icon-button type="submit" class="btn-action-save" [disabled]="!canSave()"
+                        aria-label="Save road changes" title="Save Changes">
+                        <mat-icon aria-hidden="true">save</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-cancel" aria-label="Cancel editing"
+                        title="Cancel" (click)="cancelEdit()">
+                        <mat-icon aria-hidden="true">close</mat-icon>
+                      </button>
+                    </ng-container>
+                    <ng-template #newRowActions>
+                      <button mat-icon-button type="submit" class="btn-action-add" [disabled]="!canSave()"
+                        aria-label="Add road component" title="Add">
+                        <mat-icon aria-hidden="true">add</mat-icon>
+                      </button>
+                      <button mat-icon-button type="button" class="btn-action-delete" aria-label="Clear form"
+                        title="Clear" (click)="resetForm()">
+                        <mat-icon aria-hidden="true">delete</mat-icon>
+                      </button>
+                    </ng-template>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-container *ngIf="!componentToEdit">
+              <ng-container *ngTemplateOutlet="roadEntryRow"></ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<!-- DETAILS DIALOG TEMPLATE (Inputs with Labels like Search Component) -->
+<ng-template #detailsDialog>
+  <div *ngIf="selectedDetailsComponent as component" class="component-details-dialog-body">
+    <h2 class="component-dialog-title" mat-dialog-title>Road Component Details</h2>
+    <mat-dialog-content class="component-dialog-content">
+      <div class="component-details-panel">
+        <div class="component-search-fields component-view-details-fields">
+          <div class="component-search-field">
+            <label>ID</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.id" [matTooltip]="'' + component.id"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Nature of Work</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.natureOfWork" [matTooltip]="component.natureOfWork || '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Proposed Road Type</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.proposedRoadType"
+                  [matTooltip]="component.proposedRoadType || '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Road Length</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.length ?? '—'"
+                  [matTooltip]="component.length != null ? ('' + component.length) : '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Road Width</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.width ?? '—'"
+                  [matTooltip]="component.width != null ? ('' + component.width) : '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Work Plan Type</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.workPlanType" [matTooltip]="component.workPlanType || '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>CD Work Type</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.cdWorkType" [matTooltip]="component.cdWorkType || '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field" *ngIf="component.repairMaintenanceType" style="grid-column: span 2;">
+            <label>Repair/Maintenance Type</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly [value]="component.repairMaintenanceType || '—'"
+                  [matTooltip]="component.repairMaintenanceType || '—'" matTooltipPosition="above"
+                  matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Created Date</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly
+                  [value]="component.createdAt ? (component.createdAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  [matTooltip]="component.createdAt ? (component.createdAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Updated Date</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly
+                  [value]="component.updatedAt ? (component.updatedAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  [matTooltip]="component.updatedAt ? (component.updatedAt | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="component-search-field">
+            <label>Revision Date</label>
+            <div class="component-search-controls">
+              <mat-form-field appearance="outline" class="component-search-input">
+                <input matInput readonly
+                  [value]="component.revisionTimestamp ? (component.revisionTimestamp | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  [matTooltip]="component.revisionTimestamp ? (component.revisionTimestamp | date: 'dd/MM/yyyy HH:mm:ss') : '—'"
+                  matTooltipPosition="above" matTooltipClass="component-field-tooltip" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="component-dialog-actions" align="end">
+      <button mat-button type="button" mat-dialog-close>Close</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+<!-- AUDIT DIALOG TEMPLATE -->
+<ng-template #auditDialog>
+  <h2 class="component-dialog-title audit-details-title" mat-dialog-title>Audit Details</h2>
+  <mat-dialog-content class="component-dialog-content component-audit-details-content">
+    <div *ngIf="auditLoading" class="audit-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="!auditLoading">
+      <div class="component-audit-details-table-wrapper" *ngIf="selectedAuditDetails.length > 0; else noAuditDetails">
+        <table mat-table [dataSource]="pagedAuditDetails" class="component-audit-details-table"
+          aria-label="Audit details history">
+          <ng-container matColumnDef="remark">
+            <th mat-header-cell *matHeaderCellDef scope="col">Remark</th>
+            <td mat-cell *matCellDef="let item">{{ item.remark || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef scope="col">Name</th>
+            <td mat-cell *matCellDef="let item">{{ item.name || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="employeeName">
+            <th mat-header-cell *matHeaderCellDef scope="col">Employee Name</th>
+            <td mat-cell *matCellDef="let item">{{ item.employeeName || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="designation">
+            <th mat-header-cell *matHeaderCellDef scope="col">Designation</th>
+            <td mat-cell *matCellDef="let item">{{ item.designation || '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef scope="col">Timestamp</th>
+            <td mat-cell *matCellDef="let item">
+              {{ item.timestamp ? (item.timestamp | date: 'dd/MM/yyyy HH:mm:ss') : '—' }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="auditColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: auditColumns"></tr>
+        </table>
+      </div>
+
+      <ng-template #noAuditDetails>
+        <div class="component-audit-empty">No audit details are available.</div>
+      </ng-template>
+
+      <mat-paginator class="component-audit-paginator" [length]="selectedAuditDetails.length"
+        [pageIndex]="auditPageIndex" [pageSize]="auditPageSize" [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons
+        aria-label="Audit details pagination" (page)="onAuditPageChange($event)"></mat-paginator>
+    </ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions class="component-dialog-actions" align="end">
+    <button mat-button type="button" mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- DELETE CONFIRMATION DIALOG (Matching Screenshot) -->
+<ng-template #deleteConfirmDialog>
+  <div class="confirm-dialog-card">
+    <button type="button" class="confirm-dialog-close" [mat-dialog-close]="false" aria-label="Close dialog">
+      &times;
+    </button>
+    <h3 class="confirm-dialog-title">Delete Work?</h3>
+    <p class="confirm-dialog-prompt">Are you sure?</p>
+    <div class="confirm-dialog-actions">
+      <button type="button" class="btn-dialog-ok" [mat-dialog-close]="true">Ok</button>
+      <button type="button" class="btn-dialog-cancel" [mat-dialog-close]="false">Cancel</button>
+    </div>
+  </div>
+</ng-template>
