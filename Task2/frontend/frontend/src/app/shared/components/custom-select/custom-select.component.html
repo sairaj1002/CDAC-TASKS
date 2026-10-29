@@ -1,0 +1,49 @@
+<div class="wamis-custom-select-container"
+     [class.wamis-custom-select-open]="isOpen">
+
+  <!-- Custom Select Field Box (Matches Image 1 & 2) -->
+  <div class="wamis-custom-select-box"
+       (click)="toggleDropdown($event)"
+       [class.active]="isOpen"
+       [class.has-value]="!!value"
+       [appFieldTooltip]="label"
+       [tooltipValue]="value">
+
+    <div class="wamis-custom-select-inner">
+      <div class="wamis-custom-select-label" *ngIf="label">
+        {{ label }}<span class="required" *ngIf="required">*</span>
+      </div>
+      <div class="wamis-custom-select-display" [class.placeholder]="!value">
+        {{ value || placeholder }}
+      </div>
+    </div>
+
+    <div class="wamis-custom-select-controls">
+      <!-- Blue Triangle Caret (Matches Image 1: Solid blue triangle) -->
+      <span class="wamis-custom-select-caret" [class.open]="isOpen">
+        ▲
+      </span>
+
+      <!-- Clear Button (✕) -->
+      <button *ngIf="value"
+              type="button"
+              class="wamis-custom-select-clear-btn"
+              (click)="clearValue($event)"
+              title="Clear selection">
+        &#x2715;
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Dropdown Menu (Matches Image 1) -->
+  <div class="wamis-custom-select-menu" *ngIf="isOpen">
+    <div *ngFor="let opt of options; let i = index"
+         class="wamis-custom-select-option"
+         [class.selected]="opt === value"
+         [class.hovered]="i === hoveredIndex"
+         (mouseenter)="hoveredIndex = i"
+         (click)="selectOption(opt, $event)">
+      {{ opt }}
+    </div>
+  </div>
+</div>

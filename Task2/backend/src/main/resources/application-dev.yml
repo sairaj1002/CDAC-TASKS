@@ -1,0 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/wms_integration}
+    driverClassName: org.postgresql.Driver
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:sunbeam}
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+gepnic:
+  environment: dev
+  diagnostics-enabled: true
+
+pretender:
+  upload-dir: uploads
+  works:
+    provider: mock

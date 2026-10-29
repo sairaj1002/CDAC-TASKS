@@ -1,0 +1,45 @@
+<!-- Top Master Government & C-DAC Banner (Matches Screenshot 2) -->
+<header class="wamis-topbar">
+  <div class="wamis-topbar-left">
+    <!-- Emblem of India SVG Motif -->
+    <div class="wamis-emblem" matTooltip="Government of India / C-DAC Emblem">
+      <svg viewBox="0 0 24 24" class="wamis-emblem-svg">
+        <path fill="#ffffff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+      </svg>
+    </div>
+    <div class="wamis-topbar-title">
+      {{ systemTitle }} , {{ subTitle }}
+    </div>
+  </div>
+
+</header>
+
+<!-- Sub-Header Bar with Hamburger & Division Office Pill (Matches Screenshot 2) -->
+<div class="wamis-subbar">
+  <div class="wamis-subbar-left">
+    <!-- Hamburger Menu Toggle Button -->
+    <button class="wamis-hamburger-btn" (click)="toggleSidebar()" matTooltip="Toggle Sidebar Menu">
+      <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Division Office Container Box (Matches Screenshot 2) -->
+    <div class="wamis-division-container">
+      <div class="wamis-division-pill" (click)="toggleOfficeDropdown()" matTooltip="Active Division Office (Click to change)">
+        <span class="wamis-division-name">{{ selectedOffice || 'SELECT DIVISION OFFICE' }}</span>
+        <button class="wamis-clear-cross" (click)="clearOffice($event)" matTooltip="Clear office selection">
+          &times;
+        </button>
+      </div>
+
+      <!-- Dropdown list -->
+      <div class="wamis-division-dropdown" *ngIf="isOfficeDropdownOpen">
+        <div *ngFor="let office of divisionOffices"
+             class="wamis-division-option"
+             [class.selected]="office === selectedOffice"
+             (click)="selectOffice(office)">
+          {{ office }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

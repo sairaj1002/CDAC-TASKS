@@ -1,0 +1,197 @@
+<form [formGroup]="tenderForm" (ngSubmit)="submit()">
+  <div class="wamis-card">
+    <div class="wamis-card-title">
+      <span>Tender Basic Details & Work Information</span>
+      <span class="wamis-badge-pill">WAMIS Push Form</span>
+    </div>
+
+    <!-- Main Grid (Enforces 3 Input Components in Each Row) -->
+    <div class="wamis-form-grid">
+      <!-- Row 1: Col 1 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">WAMIS Tender Reference ID <span class="required">*</span></label>
+        <input type="text" class="wamis-form-control" formControlName="wamisTenderId"
+               [class.wamis-field-invalid]="tenderForm.get('wamisTenderId')?.invalid && tenderForm.get('wamisTenderId')?.touched" />
+        <span class="wamis-error-text" *ngIf="tenderForm.get('wamisTenderId')?.invalid && tenderForm.get('wamisTenderId')?.touched">
+          WAMIS Tender ID is required.
+        </span>
+      </div>
+
+      <!-- Row 1: Col 2 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Office Code / ID <span class="required">*</span></label>
+        <input type="text" class="wamis-form-control" formControlName="officeId"
+               [class.wamis-field-invalid]="tenderForm.get('officeId')?.invalid && tenderForm.get('officeId')?.touched" />
+        <span class="wamis-error-text" *ngIf="tenderForm.get('officeId')?.invalid && tenderForm.get('officeId')?.touched">
+          Office ID is required.
+        </span>
+      </div>
+
+      <!-- Row 1: Col 3 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Estimated Tender Value (₹) <span class="required">*</span></label>
+        <input type="number" class="wamis-form-control" formControlName="estimatedCost"
+               [class.wamis-field-invalid]="tenderForm.get('estimatedCost')?.invalid && tenderForm.get('estimatedCost')?.touched" />
+        <span class="wamis-error-text" *ngIf="tenderForm.get('estimatedCost')?.invalid && tenderForm.get('estimatedCost')?.touched">
+          Estimated value must be greater than zero.
+        </span>
+      </div>
+
+      <!-- Row 2: Col 1 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Tender Document Fee (₹)</label>
+        <input type="number" class="wamis-form-control" formControlName="tenderFee" />
+      </div>
+
+      <!-- Row 2: Col 2 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">EMD Amount (₹)</label>
+        <input type="number" class="wamis-form-control" formControlName="emdAmount" />
+      </div>
+
+      <!-- Row 2: Col 3 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Publishing Date & Time <span class="required">*</span></label>
+        <input type="datetime-local" class="wamis-form-control" formControlName="publishDate" />
+      </div>
+
+      <!-- Row 3: Col 1 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Bid Submission End Date <span class="required">*</span></label>
+        <input type="datetime-local" class="wamis-form-control" formControlName="submissionEndDate" />
+      </div>
+
+      <!-- Row 3: Col 2 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Tender Title <span class="required">*</span></label>
+        <input type="text" class="wamis-form-control" formControlName="tenderTitle"
+               [class.wamis-field-invalid]="tenderForm.get('tenderTitle')?.invalid && tenderForm.get('tenderTitle')?.touched" />
+        <span class="wamis-error-text" *ngIf="tenderForm.get('tenderTitle')?.invalid && tenderForm.get('tenderTitle')?.touched">
+          Tender title is required.
+        </span>
+      </div>
+
+      <!-- Row 3: Col 3 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Work Scope / Description</label>
+        <input type="text" class="wamis-form-control" formControlName="workDescription" />
+      </div>
+    </div>
+
+    <!-- Road / Work Component Table (Matches Screenshot 2) -->
+    <div style="margin-top: 16px; margin-bottom: 12px;">
+      <div style="font-weight: 600; font-size: 13.5px; color: var(--wamis-navy); margin-bottom: 8px;">
+        Work Component & Engineering Attributes (Screenshot Alignment)
+      </div>
+      <div class="wamis-table-container">
+        <table class="wamis-table">
+          <thead>
+            <tr>
+              <th style="width: 70px; text-align: center;">Sr No.</th>
+              <th>Nature of Work <span style="color: red;">*</span></th>
+              <th>Proposed Road Type</th>
+              <th>Road Length <span style="color: red;">*</span></th>
+              <th>Road Width</th>
+              <th>Work Plan Type <span style="color: red;">*</span></th>
+              <th>CD Works</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center;">
+                <span class="wamis-badge-pill" matTooltip="First newly added work item">1 New</span>
+              </td>
+              <td>
+                <select class="wamis-table-select" data-field-label="Nature of Work">
+                  <option selected>Maintenance</option>
+                  <option>Original Construction</option>
+                  <option>Widening / Strengthening</option>
+                </select>
+              </td>
+              <td>
+                <select class="wamis-table-select" data-field-label="Proposed Road Type">
+                  <option selected>Proposed Road Type...</option>
+                  <option>Bituminous Concrete (BC)</option>
+                  <option>Dense Bituminous Macadam (DBM)</option>
+                  <option>Cement Concrete (CC)</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" class="wamis-input-box" value="4.8"
+                       data-field-label="Road Length" />
+              </td>
+              <td>
+                <input type="text" class="wamis-input-box" value="7.00 m (Two Lane)"
+                       data-field-label="Road Width" />
+              </td>
+              <td>
+                <select class="wamis-table-select" data-field-label="Work Plan Type">
+                  <option selected>Annual Plan 2026-27</option>
+                  <option>Deposit Work</option>
+                  <option>Special Repair</option>
+                </select>
+              </td>
+              <td>
+                <div class="wamis-input-box" style="color: #64748b;"
+                     [appFieldTooltip]="'CD Works'" [tooltipValue]="'2 Culverts, 1 Minor Bridge'">
+                  2 Culverts, 1 Minor Bridge
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Attached Documents Section -->
+    <div style="margin-top: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span style="font-weight: 600; font-size: 13.5px; color: var(--wamis-navy);">
+          Tender Documents & Covers ({{ documents.length }})
+        </span>
+        <button type="button" class="wamis-btn-secondary" style="font-size: 12px; padding: 4px 12px;" (click)="addDocument()" matTooltip="Add an attachment slot">
+          + Add Document
+        </button>
+      </div>
+
+      <div class="wamis-table-container">
+        <table class="wamis-table">
+          <thead>
+            <tr>
+              <th style="width: 50px; text-align: center;">#</th>
+              <th>Doc Code</th>
+              <th>File Name</th>
+              <th>Format</th>
+              <th>Size (KB)</th>
+              <th style="width: 70px; text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of documents; let i = index">
+              <td style="text-align: center;">{{ i + 1 }}</td>
+              <td><strong>{{ doc.docCode }}</strong></td>
+              <td>{{ doc.fileName }}</td>
+              <td><span class="wamis-status-chip wamis-status-progress">{{ doc.contentType }}</span></td>
+              <td>{{ ((doc.fileSize || 0) / 1024) | number:'1.1-1' }}</td>
+              <td style="text-align: center;">
+                <button type="button" class="wamis-action-btn" (click)="removeDocument(i)" matTooltip="Remove document">
+                  <span class="material-icons wamis-icon-delete">delete</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div style="margin-top: 24px; display: flex; gap: 12px;">
+      <button type="submit" class="wamis-btn-primary" matTooltip="Validate and Push to GePNIC external service">
+        Push Tender to GePNIC
+      </button>
+      <button type="button" class="wamis-btn-secondary" (click)="tenderForm.reset()" matTooltip="Clear form fields">
+        Reset
+      </button>
+    </div>
+  </div>
+</form>

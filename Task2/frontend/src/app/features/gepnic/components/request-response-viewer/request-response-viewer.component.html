@@ -1,0 +1,19 @@
+<div class="wamis-card">
+  <div class="wamis-card-title">
+    <span>Integration Request / Response Inspector</span>
+    <span class="wamis-status-chip" [ngClass]="responseCode === 1 ? 'wamis-status-success' : 'wamis-status-failed'">
+      HTTP Status: Code {{ responseCode }} ({{ status }})
+    </span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div>
+      <div style="font-weight: 600; color: var(--wamis-navy); margin-bottom: 6px;">Outbound Request Envelope</div>
+      <app-json-viewer [title]="'Encrypted Envelope Sent'" [jsonContent]="requestPayload"></app-json-viewer>
+    </div>
+    <div>
+      <div style="font-weight: 600; color: var(--wamis-blue); margin-bottom: 6px;">GePNIC Inbound Response</div>
+      <app-json-viewer [title]="'Decrypted Response Received'" [jsonContent]="responsePayload"></app-json-viewer>
+    </div>
+  </div>
+</div>

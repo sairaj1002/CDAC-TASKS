@@ -1,0 +1,25 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/wamis_gepnic}
+    driverClassName: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+gepnic:
+  environment: prod
+  diagnostics-enabled: false
+  endpoint:
+    base-url: ${GEPNIC_BASE_URL:https://eproc.nic.in}
+  security:
+    unique-user-id: ${GEPNIC_UNIQUE_USER_ID}
+    key-id: ${GEPNIC_KEY_ID}
+    keystore-path: ${GEPNIC_KEYSTORE_PATH:/etc/gepnic/certs/wamis-keystore.p12}
+    gepnic-cert-path: ${GEPNIC_CERT_PATH:/etc/gepnic/certs/gepnic-public.crt}

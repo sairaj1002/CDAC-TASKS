@@ -1,0 +1,32 @@
+<div class="wamis-dialog-card wamis-modal-large">
+  <div class="wamis-modal-header">
+    <h3>{{ data.title || 'Transaction Details' }}</h3>
+    <button class="wamis-action-btn" (click)="close()" style="color: #ffffff;" matTooltip="Close">✕</button>
+  </div>
+
+  <div class="wamis-modal-body">
+    <div class="wamis-table-container">
+      <table class="wamis-table">
+        <thead>
+          <tr>
+            <th style="width: 35%;">Parameter / Field</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of getEntries()">
+            <td style="font-weight: 600; color: #1e293b;">{{ entry.key }}</td>
+            <td style="word-break: break-all;">
+              <span *ngIf="entry.value.length < 100">{{ entry.value }}</span>
+              <pre *ngIf="entry.value.length >= 100" class="wamis-json-box" style="margin: 0; max-height: 200px;">{{ entry.value }}</pre>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+      <button class="wamis-btn-primary" (click)="close()" matTooltip="Close details dialog">Close</button>
+    </div>
+  </div>
+</div>

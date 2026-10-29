@@ -1,0 +1,22 @@
+<div class="wamis-card" style="padding: 16px;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+    <span style="font-weight: 600; font-size: 14px;">Pre-Transmission Validation Checks</span>
+    <span class="wamis-status-chip" [ngClass]="isValid ? 'wamis-status-success' : 'wamis-status-failed'">
+      {{ isValid ? 'VALIDATION PASSED' : 'VALIDATION FAILED' }}
+    </span>
+  </div>
+
+  <div *ngIf="isValid" style="color: var(--wamis-success); font-size: 13px; display: flex; align-items: center; gap: 8px;">
+    <span class="material-icons" style="font-size: 18px;">check_circle</span>
+    All {{ checkedRulesCount }} schema, business logic, and cryptographic criteria passed. Safe to encrypt and dispatch.
+  </div>
+
+  <div *ngIf="!isValid">
+    <div style="color: var(--wamis-danger); font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+      The following issues must be resolved:
+    </div>
+    <ul style="padding-left: 20px; color: var(--wamis-danger); font-size: 12.5px;">
+      <li *ngFor="let err of validationErrors">{{ err }}</li>
+    </ul>
+  </div>
+</div>

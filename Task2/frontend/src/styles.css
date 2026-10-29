@@ -1,0 +1,2440 @@
+/* ==========================================================================
+   WAMIS - Works & Accounts Management System
+   Centre for Development of Advanced Computing (C-DAC Pune)
+   GePNIC Integration Module Master Global Stylesheet
+   ========================================================================== */
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+:root {
+  --wamis-topbar-bg: #0f4a74;
+  --wamis-subbar-bg: #ffffff;
+  --wamis-sidebar-rail-bg: #0c4873;
+  --wamis-sidebar-rail-active: rgba(255, 255, 255, 0.2);
+  --wamis-footer-bg: #083250;
+  
+  --wamis-navy: #0a2558;
+  --wamis-navy-dark: #071a3d;
+  --wamis-navy-light: #163e82;
+  --wamis-blue: #1565c0;
+  --wamis-blue-light: #1976d2;
+  --wamis-label-blue: #0f3d64;
+  
+  --wamis-table-header-bg: #e8f4f8;
+  --wamis-table-header-color: #0f2744;
+  --wamis-table-border: #d0dfe8;
+  --wamis-row-hover: #f5f9fc;
+  
+  --wamis-input-bg: #f2f5f8;
+  --wamis-input-disabled: #e9ecef;
+  --wamis-input-border: #c8d4df;
+  
+  --wamis-danger: #e53935;
+  --wamis-danger-hover: #c62828;
+  --wamis-success: #2e7d32;
+  --wamis-warning: #ed6c02;
+  --wamis-text-main: #1f2937;
+  --wamis-text-muted: #64748b;
+  --wamis-bg: #f8fafc;
+  --wamis-card-bg: #ffffff;
+  --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  background-color: var(--wamis-bg);
+  color: var(--wamis-text-main);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   1. MASTER TOP GOVERNMENT & C-DAC BANNER (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-topbar {
+  background-color: var(--wamis-topbar-bg);
+  color: #ffffff;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.wamis-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wamis-emblem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.wamis-emblem-svg {
+  width: 26px;
+  height: 26px;
+  fill: #ffffff;
+}
+
+.wamis-topbar-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.wamis-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.wamis-topbar-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.wamis-topbar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.wamis-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #0084d1;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   2. SUB-HEADER BAR WITH DIVISION OFFICE PILL (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-subbar {
+  background-color: var(--wamis-subbar-bg);
+  border-bottom: 1px solid #d0dfe8;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 48px;
+  z-index: 1000;
+}
+
+.wamis-subbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wamis-hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.15s;
+}
+
+.wamis-hamburger-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-division-container {
+  position: relative;
+}
+
+.wamis-division-pill {
+  background-color: #ffffff;
+  border: 1px solid #c8d4df;
+  border-radius: 4px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f2744;
+  transition: border-color 0.2s;
+}
+
+.wamis-division-pill:hover {
+  border-color: var(--wamis-blue);
+}
+
+.wamis-division-name {
+  white-space: nowrap;
+}
+
+.wamis-clear-cross {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.wamis-clear-cross:hover {
+  color: #0f2744;
+}
+
+.wamis-division-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 260px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 1010;
+  overflow: hidden;
+}
+
+.wamis-division-option {
+  padding: 9px 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.wamis-division-option:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-division-option.selected {
+  background-color: #e2f0fb;
+  color: var(--wamis-navy);
+  font-weight: 600;
+}
+
+.wamis-subbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.wamis-env-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ==========================================================================
+   3. SIDEBAR NAVIGATION SYSTEM (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-layout-container {
+  display: flex;
+  min-height: calc(100vh - 92px - 32px);
+  padding-bottom: 32px;
+}
+
+.wamis-sidebar-wrapper {
+  display: flex;
+  position: sticky;
+  top: 92px;
+  height: calc(100vh - 92px - 32px);
+  z-index: 900;
+}
+
+/* Deep Blue Vertical Rail */
+.wamis-sidebar-rail {
+  width: 72px;
+  background-color: var(--wamis-sidebar-rail-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar {
+  width: 4px;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.wamis-rail-items {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.wamis-rail-item {
+  width: 62px;
+  padding: 8px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.wamis-rail-item:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.wamis-rail-item.active {
+  background-color: var(--wamis-sidebar-rail-active);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.wamis-rail-icon {
+  font-size: 22px;
+  margin-bottom: 3px;
+  color: #ffffff;
+}
+
+.wamis-rail-label {
+  font-size: 10.5px;
+  font-weight: 500;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+/* GePNIC Module Drawer under Integration (Closable) */
+.wamis-sidebar-drawer {
+  width: 220px;
+  background-color: #ffffff;
+  border-right: 1px solid #d0dfe8;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.25s ease, opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.wamis-sidebar-drawer.collapsed {
+  width: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+.wamis-drawer-header {
+  padding: 12px 14px 10px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wamis-drawer-header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.wamis-drawer-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--wamis-navy);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.wamis-drawer-subtitle {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.wamis-drawer-close-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.wamis-drawer-close-btn:hover {
+  background-color: #e2e8f0;
+  color: #0f2744;
+}
+
+.wamis-drawer-nav {
+  list-style: none;
+  padding: 8px 0;
+}
+
+.wamis-drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.wamis-drawer-item:hover {
+  background-color: #f1f5f9;
+  color: var(--wamis-blue);
+}
+
+.wamis-drawer-item.active {
+  background-color: #e8f4fc;
+  color: var(--wamis-navy);
+  font-weight: 600;
+  border-left-color: var(--wamis-navy);
+}
+
+.wamis-drawer-icon {
+  font-size: 18px;
+}
+
+/* Main Content Area */
+.wamis-content {
+  flex: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  min-height: calc(100vh - 92px - 32px);
+}
+
+/* ==========================================================================
+   4. BOTTOM FOOTER BAR (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background-color: var(--wamis-footer-bg);
+  color: #d0e0ec;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1002;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wamis-footer-left {
+  font-weight: 500;
+}
+
+.wamis-footer-right {
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   5. SUB WORK DETAILS & AUTHENTIC WAMIS FORM (Matches Screenshots 1 & 2)
+   ========================================================================== */
+.wamis-subwork-container {
+  background: #ffffff;
+}
+
+.wamis-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2744;
+  margin-bottom: 14px;
+}
+
+/* Primary Tabs (Add | View) */
+.wamis-primary-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid #d0dfe8;
+  margin-bottom: 20px;
+}
+
+.wamis-primary-tab {
+  background: none;
+  border: none;
+  padding: 6px 12px 10px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.wamis-primary-tab:hover {
+  color: var(--wamis-navy);
+}
+
+.wamis-primary-tab.active {
+  color: var(--wamis-navy);
+  font-weight: 700;
+  border-bottom-color: var(--wamis-navy);
+}
+
+/* Responsive Grid Configuration:
+   - When second menu is open: 3 input components per row
+   - On max screen / when second menu is closed: 4 input components per row
+   - Responsive breakpoints for tablet and mobile
+*/
+.wamis-wms-form-grid,
+.wamis-form-grid,
+.wamis-nit-grid,
+.wamis-3col-grid {
+  display: grid !important;
+  column-gap: 20px !important;
+  row-gap: 16px !important;
+  margin-bottom: 24px;
+}
+
+/* Default & when second menu is open: 3 components */
+.second-menu-open .wamis-wms-form-grid,
+.second-menu-open .wamis-form-grid,
+.second-menu-open .wamis-nit-grid,
+.second-menu-open .wamis-3col-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+/* Max screen / when second menu is closed: 4 components */
+.second-menu-closed .wamis-wms-form-grid,
+.second-menu-closed .wamis-form-grid,
+.second-menu-closed .wamis-nit-grid,
+.second-menu-closed .wamis-3col-grid {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+
+@media (min-width: 1600px) {
+  .second-menu-closed .wamis-wms-form-grid,
+  .second-menu-closed .wamis-form-grid,
+  .second-menu-closed .wamis-nit-grid,
+  .second-menu-closed .wamis-3col-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .wamis-wms-form-grid,
+  .wamis-form-grid,
+  .wamis-nit-grid,
+  .wamis-3col-grid,
+  .second-menu-open .wamis-wms-form-grid,
+  .second-menu-open .wamis-form-grid,
+  .second-menu-closed .wamis-wms-form-grid,
+  .second-menu-closed .wamis-form-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .wamis-wms-form-grid,
+  .wamis-form-grid,
+  .wamis-nit-grid,
+  .wamis-3col-grid,
+  .second-menu-open .wamis-wms-form-grid,
+  .second-menu-open .wamis-form-grid,
+  .second-menu-closed .wamis-wms-form-grid,
+  .second-menu-closed .wamis-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.wamis-wms-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wamis-wms-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wamis-wms-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wamis-wms-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--wamis-label-blue);
+}
+
+.wamis-wms-label .required {
+  color: #c62828;
+  margin-left: 2px;
+}
+
+.wamis-wms-counter {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.wamis-wms-disabled-box {
+  background-color: var(--wamis-input-disabled);
+  border: 1px solid var(--wamis-table-border);
+  border-radius: 3px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  color: #64748b;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+}
+
+.wamis-wms-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.wamis-wms-input, .wamis-wms-select {
+  width: 100%;
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 3px;
+  padding: 7px 28px 7px 10px;
+  font-size: 13px;
+  color: #1e293b;
+  background-color: #ffffff;
+  min-height: 34px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.wamis-wms-input:focus, .wamis-wms-select:focus {
+  border-color: var(--wamis-blue);
+}
+
+.wamis-wms-select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.wamis-wms-clear-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.wamis-wms-clear-btn:hover {
+  color: #0f2744;
+}
+
+/* Checkboxes (Emergency, Departmental, Lumpsum) */
+.wamis-wms-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.wamis-wms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--wamis-label-blue);
+  user-select: none;
+}
+
+.wamis-wms-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--wamis-navy);
+}
+
+/* Secondary Child Tabs (Work Type, Account Heads, etc.) */
+.wamis-secondary-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #d0dfe8;
+  margin-top: 12px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.wamis-secondary-tab {
+  background: none;
+  border: none;
+  padding: 6px 4px 10px 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0f2744;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.wamis-secondary-tab:hover {
+  color: var(--wamis-navy);
+}
+
+.wamis-secondary-tab.active {
+  color: var(--wamis-navy);
+  font-weight: 700;
+  border-bottom-color: var(--wamis-navy);
+}
+
+.wamis-child-section {
+  margin-bottom: 20px;
+}
+
+.wamis-rounded-input {
+  border-radius: 4px !important;
+  background-color: #ffffff;
+}
+
+.wamis-tab-placeholder {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 4px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Bottom Action Buttons (Save [Disabled] & Reset [Navy Blue]) */
+.wamis-form-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.wamis-btn-save {
+  background-color: #d9d9d9;
+  color: #8c8c8c;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: not-allowed;
+  transition: all 0.2s;
+}
+
+.wamis-btn-save:not([disabled]) {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.wamis-btn-save:not([disabled]):hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+.wamis-btn-reset {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.wamis-btn-reset:hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+/* ==========================================================================
+   6. TABLES SYSTEM (Matches User Image 2)
+   ========================================================================== */
+.wamis-table-container,
+.wamis-scrollable-table,
+.mat-mdc-table-container {
+  width: 100%;
+  overflow-x: auto !important;
+  border: 1px solid #d0dfe8;
+  border-radius: 4px;
+  background: #ffffff;
+  margin-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #888888 #eef2f5;
+}
+
+/* Custom styled horizontal scrollbar with arrow buttons matching Image 2 */
+.wamis-table-container::-webkit-scrollbar,
+.wamis-scrollable-table::-webkit-scrollbar,
+.mat-mdc-table-container::-webkit-scrollbar {
+  height: 12px !important;
+  background-color: #eef2f5;
+}
+
+.wamis-table-container::-webkit-scrollbar-track,
+.wamis-scrollable-table::-webkit-scrollbar-track,
+.mat-mdc-table-container::-webkit-scrollbar-track {
+  background: #eef2f5;
+  border-top: 1px solid #d0dfe8;
+}
+
+.wamis-table-container::-webkit-scrollbar-thumb,
+.wamis-scrollable-table::-webkit-scrollbar-thumb,
+.mat-mdc-table-container::-webkit-scrollbar-thumb {
+  background-color: #888888;
+  border-radius: 4px;
+  border: 2px solid #eef2f5;
+}
+
+.wamis-table-container::-webkit-scrollbar-thumb:hover,
+.wamis-scrollable-table::-webkit-scrollbar-thumb:hover,
+.mat-mdc-table-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555555;
+}
+
+.wamis-table-container::-webkit-scrollbar-button:single-button:horizontal:decrement,
+.wamis-scrollable-table::-webkit-scrollbar-button:single-button:horizontal:decrement {
+  background-color: #e2e8f0;
+  display: block;
+  width: 16px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23555555'%3e%3cpath d='M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z'/%3e%3c/svg%3e");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wamis-table-container::-webkit-scrollbar-button:single-button:horizontal:increment,
+.wamis-scrollable-table::-webkit-scrollbar-button:single-button:horizontal:increment {
+  background-color: #e2e8f0;
+  display: block;
+  width: 16px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23555555'%3e%3cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/%3e%3c/svg%3e");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wamis-table,
+table.mat-mdc-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: #ffffff;
+}
+
+.wamis-table th,
+table.mat-mdc-table th.mat-mdc-header-cell {
+  background-color: #e6f2f7 !important; /* Matches User Image 2 light ice-blue tint */
+  color: #0f2744 !important;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-right: 1px solid #d0dfe8;
+  border-bottom: 1px solid #d0dfe8;
+  white-space: nowrap;
+}
+
+.wamis-table th:last-child,
+table.mat-mdc-table th.mat-mdc-header-cell:last-child {
+  border-right: none;
+}
+
+.wamis-table td,
+table.mat-mdc-table td.mat-mdc-cell {
+  padding: 10px 14px;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 12.5px;
+  color: #1f293b;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.wamis-table td:last-child,
+table.mat-mdc-table td.mat-mdc-cell:last-child {
+  border-right: none;
+}
+
+.wamis-table tr:hover td,
+table.mat-mdc-table tr.mat-mdc-row:hover td {
+  background-color: #f8fafc;
+}
+
+.wamis-status-chip.wamis-status-success,
+.wamis-status-pill.success {
+  background-color: #def7ec !important;
+  color: #03543f !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  padding: 3px 10px !important;
+  font-size: 11px !important;
+  display: inline-block !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+}
+
+.wamis-table-empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--wamis-text-muted);
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* Table Inputs & Boxes (Matches Screenshot 1 & 2) */
+.wamis-input-box {
+  background-color: var(--wamis-input-bg);
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 12.5px;
+  color: #1e293b;
+  width: 100%;
+}
+
+.wamis-table-select {
+  background-color: var(--wamis-input-bg);
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 12.5px;
+  color: #1e293b;
+  width: 100%;
+  cursor: pointer;
+}
+
+.wamis-table-select:focus, .wamis-input-box:focus {
+  outline: none;
+  border-color: var(--wamis-blue);
+  background-color: #ffffff;
+}
+
+.wamis-field-invalid {
+  border: 1.5px solid var(--wamis-danger) !important;
+  background-color: #fff8f8 !important;
+}
+
+.wamis-error-text {
+  color: var(--wamis-danger);
+  font-size: 11px;
+  margin-top: 3px;
+  display: block;
+}
+
+.wamis-radio-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.wamis-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 12.5px;
+}
+
+/* ==========================================================================
+   7. ACTION ICONS & AUDIT DETAILS (Matches Screenshots 1, 3, 4, 5)
+   ========================================================================== */
+.wamis-actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.wamis-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.wamis-action-btn:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.wamis-icon-edit {
+  color: var(--wamis-blue);
+  font-size: 18px;
+}
+
+.wamis-icon-delete {
+  color: var(--wamis-danger);
+  font-size: 18px;
+}
+
+.wamis-icon-add {
+  color: var(--wamis-blue);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.wamis-icon-check {
+  color: var(--wamis-blue);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.wamis-icon-close {
+  color: var(--wamis-blue);
+  font-size: 18px;
+}
+
+.wamis-icon-circle-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+}
+
+.wamis-icon-circle-check.active {
+  background-color: var(--wamis-blue);
+  color: #ffffff;
+}
+
+.wamis-icon-circle-check.inactive {
+  background-color: #94a3b8;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   8. BUTTONS & CHIPS
+   ========================================================================== */
+.wamis-btn-primary {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s;
+}
+
+.wamis-btn-primary:hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+.wamis-btn-secondary {
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.wamis-btn-secondary:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-note {
+  color: var(--wamis-danger);
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wamis-badge-pill {
+  background-color: #1a237e;
+  color: #ffffff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.wamis-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.wamis-status-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.wamis-status-failed {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.wamis-status-pending {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+.wamis-status-progress {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+/* ==========================================================================
+   9. CONFIRMATION DIALOG (Matches Screenshot 3)
+   ========================================================================== */
+.wamis-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.wamis-dialog-card {
+  background: #ffffff;
+  border-radius: 4px;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: wamisFadeIn 0.2s ease-out;
+}
+
+@keyframes wamisFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.wamis-dialog-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.wamis-dialog-close-btn:hover {
+  color: #1e293b;
+}
+
+.wamis-dialog-body {
+  padding: 28px 24px 20px 24px;
+  text-align: center;
+}
+
+.wamis-dialog-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.wamis-dialog-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.wamis-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 24px 24px 24px;
+}
+
+/* Modals & Dialogs */
+.wamis-modal-large {
+  width: 780px !important;
+  max-width: 95vw !important;
+}
+
+.wamis-modal-header {
+  padding: 14px 18px;
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wamis-modal-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.wamis-modal-body {
+  padding: 20px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+/* Standard WAMIS Card */
+.wamis-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.wamis-card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--wamis-navy);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wamis-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.wamis-page-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wamis-navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wamis-page-subtitle {
+  font-size: 12.5px;
+  color: var(--wamis-text-muted);
+  margin-top: 2px;
+}
+
+.wamis-tabs-bar {
+  display: flex;
+  border-bottom: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 0 12px;
+  margin-bottom: 18px;
+  gap: 4px;
+}
+
+.wamis-tab-item {
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.wamis-tab-item:hover {
+  color: var(--wamis-blue);
+  background: #f8fafc;
+}
+
+.wamis-tab-item.active {
+  color: var(--wamis-navy);
+  border-bottom-color: var(--wamis-navy);
+  background: #ffffff;
+}
+
+.wamis-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.wamis-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.wamis-form-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+.wamis-form-label .required {
+  color: var(--wamis-danger);
+}
+
+.wamis-form-control {
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  color: #1e293b;
+  background-color: #ffffff;
+  transition: border-color 0.2s;
+}
+
+.wamis-form-control:focus {
+  outline: none;
+  border-color: var(--wamis-blue);
+  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.15);
+}
+
+select.wamis-form-control,
+select.wamis-table-select,
+select.wamis-wms-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231565c0'%3e%3cpath d='M7 14l5-5 5 5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px 14px;
+  padding-right: 30px !important;
+  cursor: pointer;
+}
+
+select.wamis-form-control:focus,
+select.wamis-table-select:focus,
+select.wamis-wms-select:focus {
+  border-color: #1565c0 !important;
+  border-bottom: 2px solid #1565c0 !important;
+}
+
+.wamis-json-box {
+  background-color: #1e293b;
+  color: #38bdf8;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  padding: 14px;
+  border-radius: 4px;
+  overflow-x: auto;
+  max-height: 400px;
+  white-space: pre-wrap;
+  border: 1px solid #334155;
+}
+
+/* ==========================================================================
+   10. NIT (NOTICE INVITING TENDER) & FILE UPLOAD STYLING (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-nit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 24px;
+  row-gap: 16px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 992px) {
+  .wamis-nit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wamis-disabled-input {
+  background-color: var(--wamis-input-disabled) !important;
+  color: #64748b !important;
+  border: 1px solid var(--wamis-table-border) !important;
+}
+
+.wamis-date-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.wamis-date-input-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.wamis-date-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 17px;
+  color: #475569;
+  pointer-events: none;
+}
+
+.wamis-date-hint {
+  font-size: 10.5px;
+  color: #8c8c8c;
+  margin-top: 3px;
+  font-weight: 500;
+  display: block;
+}
+
+.wamis-file-upload-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.wamis-paperclip-icon {
+  font-size: 22px;
+  color: #1e293b;
+  transform: rotate(45deg);
+}
+
+.wamis-file-input-custom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wamis-file-btn {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 6px 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wamis-file-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.wamis-file-name-badge {
+  font-size: 12.5px;
+  color: var(--wamis-navy);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.wamis-btn-view-nit {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.wamis-btn-view-nit:hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+/* ==========================================================================
+   BOQ ITEM DETAILS SCREEN (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-boq-item-details-box {
+  background: #ffffff;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  padding: 16px 20px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.wamis-boq-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.wamis-boq-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #071a3d;
+}
+
+.wamis-boq-close-btn {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #1f2937;
+  background: transparent;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.wamis-boq-close-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-boq-subtabs {
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid #cbd5e1;
+  margin-bottom: 16px;
+}
+
+.wamis-boq-subtab {
+  padding: 8px 4px 10px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s ease;
+}
+
+.wamis-boq-subtab.active {
+  color: #071a3d;
+  font-weight: 700;
+}
+
+.wamis-boq-subtab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #0a2558;
+}
+
+.wamis-boq-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.wamis-boq-group-left,
+.wamis-boq-group-right {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.wamis-boq-label-blue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.wamis-boq-inline-input {
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  outline: none;
+  background-color: #ffffff;
+  min-width: 220px;
+}
+
+.wamis-boq-inline-input:focus {
+  border-color: #1565c0;
+}
+
+.wamis-boq-btn-navy {
+  height: 34px;
+  background-color: #071a3d;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  padding: 0 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.wamis-boq-btn-navy:hover {
+  background-color: #0a2558;
+}
+
+.wamis-boq-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+}
+
+.wamis-boq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  background: #ffffff;
+}
+
+.wamis-boq-table th {
+  background-color: #e0f2fe;
+  color: #0f2744;
+  font-weight: 700;
+  padding: 10px 8px;
+  text-align: left;
+  border-right: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+
+.wamis-boq-table th .req {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.wamis-boq-table td {
+  padding: 8px 6px;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.wamis-boq-cell-input {
+  width: 100%;
+  height: 32px;
+  padding: 4px 8px;
+  font-size: 12.5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  outline: none;
+  background-color: #ffffff;
+}
+
+.wamis-boq-cell-input:focus {
+  border-color: #2563eb;
+}
+
+.wamis-boq-cell-select {
+  width: 100%;
+  height: 32px;
+  padding: 4px 6px;
+  font-size: 12.5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  outline: none;
+  background-color: #ffffff;
+}
+
+.wamis-boq-btn-doc {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wamis-boq-btn-doc:hover {
+  color: #1d4ed8;
+}
+
+.wamis-boq-pagination-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: #475569;
+  padding: 10px 4px 14px 4px;
+}
+
+.wamis-boq-actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.wamis-boq-btn-save-items {
+  height: 34px;
+  background-color: #94a3b8;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  padding: 0 16px;
+  cursor: not-allowed;
+}
+
+.wamis-boq-btn-save-items.active {
+  background-color: #0f4a74;
+  cursor: pointer;
+}
+
+.wamis-boq-banner-strip {
+  background-color: #e0f2fe;
+  padding: 9px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0369a1;
+  border-radius: 2px;
+  margin-top: 14px;
+  margin-bottom: 18px;
+}
+
+.wamis-boq-btn-bottom-save {
+  background-color: #071a3d;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  border: none;
+  border-radius: 3px;
+  padding: 8px 26px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.wamis-boq-btn-bottom-save:hover {
+  background-color: #0a2558;
+}
+
+/* ==========================================================================
+   CUSTOM TWO-TONED TOOLTIP (Matches User Image 2)
+   ========================================================================== */
+.mat-mdc-tooltip .mdc-tooltip__surface,
+.wamis-tooltip-twotone {
+  background: linear-gradient(to bottom, #e2e8f0 0%, #e2e8f0 26px, #cbd5e1 26px, #cbd5e1 27px, #ffffff 27px, #ffffff 100%) !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  padding: 5px 14px 18px 14px !important;
+  font-family: var(--font-family) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  min-width: 90px !important;
+  max-width: 260px !important;
+  text-align: center !important;
+  letter-spacing: 0.1px !important;
+}
+
+.mat-mdc-tooltip .mdc-tooltip__caret {
+  display: none !important;
+}
+
+/* ==========================================================================
+   CUSTOM SELECT DROPDOWN COMPONENT (Matches User Image 1)
+   ========================================================================== */
+.wamis-custom-select-container {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+.wamis-custom-select-box {
+  background-color: #ffffff;
+  border: 1px solid #c8d4df;
+  border-radius: 4px;
+  min-height: 46px;
+  padding: 5px 10px 5px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.wamis-custom-select-box:hover {
+  border-color: #1565c0;
+}
+
+.wamis-custom-select-box.active {
+  background-color: #f1f5f9;
+  border-color: #1565c0;
+  border-bottom: 2px solid #1565c0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.wamis-custom-select-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.wamis-custom-select-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0a2558;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.wamis-custom-select-label .required {
+  color: #dc2626;
+  margin-left: 2px;
+  font-weight: 700;
+}
+
+.wamis-custom-select-display {
+  font-size: 13.5px;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.wamis-custom-select-display.placeholder {
+  color: #64748b;
+  font-weight: 400;
+}
+
+.wamis-custom-select-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.wamis-custom-select-caret {
+  color: #1565c0;
+  font-size: 10px;
+  line-height: 1;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+
+.wamis-custom-select-caret.open {
+  transform: rotate(0deg);
+}
+
+.wamis-custom-select-clear-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+  padding: 2px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.wamis-custom-select-clear-btn:hover {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.08);
+}
+
+.wamis-custom-select-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.wamis-custom-select-option {
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: #0f172a;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.wamis-custom-select-option:hover,
+.wamis-custom-select-option.hovered {
+  background-color: #e2e8f0;
+}
+
+.wamis-custom-select-option.selected {
+  background-color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   CUSTOM SNACKBAR STYLING (Matches User Image 1)
+   ========================================================================== */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  padding: 10px 16px !important;
+  min-height: 44px !important;
+  font-family: var(--font-family) !important;
+}
+
+/* Error Snackbar: Soft pastel pink background with crimson text & action (Matches Image 1) */
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mdc-snackbar__surface {
+  background-color: #fde8e8 !important;
+  border: 1px solid #f8b4b4 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mdc-snackbar__label {
+  color: #c81e1e !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1px !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mat-mdc-button,
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mat-mdc-snack-bar-action {
+  color: #c81e1e !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+/* Success Snackbar */
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mdc-snackbar__surface {
+  background-color: #def7ec !important;
+  border: 1px solid #bcf0da !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mdc-snackbar__label {
+  color: #03543f !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mat-mdc-button,
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mat-mdc-snack-bar-action {
+  color: #03543f !important;
+  font-weight: 600 !important;
+}
+
+/* Info Snackbar */
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mdc-snackbar__surface {
+  background-color: #e1effe !important;
+  border: 1px solid #b4c6fc !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mdc-snackbar__label {
+  color: #1e429f !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mat-mdc-button,
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mat-mdc-snack-bar-action {
+  color: #1e429f !important;
+  font-weight: 600 !important;
+}
+
+/* Warning Snackbar */
+.mat-mdc-snack-bar-container.wamis-snackbar-warning .mdc-snackbar__surface {
+  background-color: #fef08a !important;
+  border: 1px solid #fde047 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-warning .mdc-snackbar__label {
+  color: #713f12 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+/* ==========================================================================
+   SECOND MENU DRAWER (Matches User Image 3)
+   ========================================================================== */
+.wamis-second-menu-v3 {
+  width: 220px;
+  background-color: #eceff1 !important;
+  border-right: 1px solid #cfd8dc;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.wamis-drawer-header-v3 {
+  background-color: #004b87;
+  height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.wamis-drawer-title-v3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.wamis-drawer-collapse-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.wamis-drawer-collapse-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.wamis-drawer-body-v3 {
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #888888 #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar {
+  width: 14px;
+  background-color: #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar-thumb {
+  background-color: #888888;
+  border-radius: 6px;
+  border: 2px solid #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-color: #e0e0e0;
+  display: block;
+  height: 14px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666666'%3e%3cpath d='M7 14l5-5 5 5z'/%3e%3c/svg%3e");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wamis-accordion-group {
+  border-bottom: 1px solid #d0dfe8;
+}
+
+.wamis-accordion-header {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+  background-color: #eceff1;
+}
+
+.wamis-accordion-header:hover {
+  background-color: #e2e8f0;
+}
+
+.wamis-accordion-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #003366;
+  letter-spacing: 0.1px;
+}
+
+.wamis-accordion-chevron {
+  font-size: 18px;
+  color: #475569;
+  transition: transform 0.2s ease;
+}
+
+.wamis-accordion-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #f1f5f9;
+}
+
+.wamis-accordion-subitem {
+  display: block;
+  padding: 8px 18px 8px 24px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border-left: 3px solid transparent;
+}
+
+.wamis-accordion-subitem:hover {
+  background-color: #e2e8f0;
+  color: #003366;
+}
+
+.wamis-accordion-subitem.active {
+  background-color: #e0f2fe;
+  color: #0284c7;
+  font-weight: 700;
+  border-left-color: #0284c7;
+}
+
+/* ==========================================================================
+   ANGULAR MATERIAL UI COMPONENT OVERRIDES (Zero-Boilerplate Standard Theming)
+   ========================================================================== */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-select-panel {
+  background-color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16) !important;
+  border-radius: 4px !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.mat-mdc-option {
+  font-size: 13px !important;
+  color: #0f172a !important;
+  min-height: 38px !important;
+  padding: 8px 14px !important;
+}
+
+.mat-mdc-option:hover,
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple) {
+  background-color: #e2e8f0 !important;
+}
+
+.mat-mdc-card {
+  border-radius: 4px !important;
+  border: 1px solid #cbd5e1 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ==========================================================================
+   CUSTOM TWO-TONED FIELD TOOLTIP (Matches User Screenshot)
+   ========================================================================== */
+.wamis-field-tooltip-box {
+  position: absolute;
+  z-index: 10000;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  min-width: 120px;
+  max-width: 320px;
+  pointer-events: none;
+  font-family: var(--font-family);
+  overflow: visible;
+  animation: wamisTooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes wamisTooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wamis-field-tooltip-header {
+  background-color: #e9ecef; /* Cool light grey header */
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1e293b;
+  border-bottom: 1px solid #cbd5e1;
+  border-radius: 5px 5px 0 0;
+  text-align: left;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.wamis-field-tooltip-body {
+  background-color: #ffffff; /* Clean white body */
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #334155;
+  min-height: 24px;
+  border-radius: 0 0 5px 5px;
+  text-align: left;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+/* Downward Arrow Caret pointing at the input */
+.wamis-field-tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #cbd5e1;
+}
+
+.wamis-field-tooltip-arrow::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: -6px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #ffffff;
+}
+
+/* When flipped below input */
+.wamis-field-tooltip-box.wamis-tooltip-below .wamis-field-tooltip-arrow {
+  top: auto;
+  bottom: 100%;
+  border-top: none;
+  border-bottom: 7px solid #cbd5e1;
+}
+
+.wamis-field-tooltip-box.wamis-tooltip-below .wamis-field-tooltip-arrow::after {
+  bottom: auto;
+  top: 1px;
+  border-top: none;
+  border-bottom: 6px solid #e9ecef;
+}
+
+/* ==========================================================================
+   WAMIS - WORK TYPE CARD (Matches User Screenshot)
+   ========================================================================== */
+.wamis-work-type-card {
+  background: #eaf6fc;
+  border: 1px solid #bfe4f6;
+  border-radius: 4px;
+  padding: 18px 20px 24px;
+  margin-top: 14px;
+  margin-bottom: 24px;
+}
+
+.wamis-work-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+
+.wamis-work-type-col {
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wamis-work-type-col:first-child {
+  border-right: 1px solid #c8e6f7;
+}
+
+.wamis-work-type-header {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e3a5f;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.wamis-work-type-input-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+}
+
+.wamis-work-type-input {
+  width: 100%;
+  height: 38px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 8px 36px 8px 12px;
+  font-size: 13px;
+  color: #1e293b;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+.wamis-work-type-input:focus {
+  border-color: #155a96;
+}
+
+.wamis-work-type-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wamis-work-type-clear:hover {
+  color: #0f172a;
+}
+
+
+
+
+
+

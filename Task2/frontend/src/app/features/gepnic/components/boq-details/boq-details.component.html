@@ -1,0 +1,201 @@
+<div class="wamis-boq-item-details-box" [class.boq-modal-container]="isModal">
+  <!-- Title & Close Icon [X] (Matching Screenshot 2) -->
+  <div class="wamis-boq-header-row">
+    <div>
+      <div class="wamis-boq-title">Item Details (BOQ)</div>
+      <div *ngIf="tenderReference" class="boq-tender-subtitle">
+        Tender Ref: <strong>{{ tenderReference }}</strong>
+        <span *ngIf="parentWork"> | Work: {{ parentWork }}</span>
+      </div>
+    </div>
+    <button type="button" class="wamis-boq-close-btn" (click)="onClose()" matTooltip="Close Item Details">
+      &times;
+    </button>
+  </div>
+
+  <!-- Sub-Tabs: Non Sch. Item | Schedule Item -->
+  <div class="wamis-boq-subtabs">
+    <div class="wamis-boq-subtab" [class.active]="boqActiveSubTab === 'non-sch'"
+      (click)="boqActiveSubTab = 'non-sch'">
+      Non Sch. Item
+    </div>
+    <div class="wamis-boq-subtab" [class.active]="boqActiveSubTab === 'sch'" (click)="boqActiveSubTab = 'sch'">
+      Schedule Item
+    </div>
+  </div>
+
+  <!-- Top Common Filter / Action Bar -->
+  <div class="wamis-boq-top-bar">
+    <!-- Left: HSN/SAC input & Add to all -->
+    <div class="wamis-boq-group-left">
+      <div>
+        <label class="wamis-boq-label-blue">HSN/SAC</label>
+        <input type="text" class="wamis-boq-inline-input" [(ngModel)]="commonHsnSac"
+          placeholder="select common HSN/SAC" />
+      </div>
+      <button type="button" class="wamis-boq-btn-navy" (click)="addCommonHsnToAll()">
+        Add to all
+      </button>
+    </div>
+
+    <!-- Right: Quote% dropdown, input & Add to all -->
+    <div class="wamis-boq-group-right">
+      <div>
+        <label class="wamis-boq-label-blue">Quote%</label>
+        <div style="display: flex; gap: 8px;">
+          <select class="wamis-boq-inline-input" style="min-width: 140px;" [(ngModel)]="quotePercentType">
+            <option value="At par">At par</option>
+            <option value="Above">Above</option>
+            <option value="Below">Below</option>
+          </select>
+          <input type="text" class="wamis-boq-inline-input" style="min-width: 140px; background-color: #f1f5f9;"
+            [disabled]="quotePercentType === 'At par'" [(ngModel)]="quotePercentVal" placeholder="" />
+        </div>
+      </div>
+      <button type="button" class="wamis-boq-btn-navy" (click)="addQuoteToAll()">
+        Add to all
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Matching Screenshot 2 -->
+  <div class="wamis-boq-table-wrap">
+    <table class="wamis-boq-table">
+      <thead>
+        <tr>
+          <th style="width: 55px; text-align: center;">Sr.No.</th>
+          <th style="min-width: 130px;">Sch Name <span class="req">*</span></th>
+          <th style="min-width: 140px;">Goods/Service <span class="req">*</span></th>
+          <th style="min-width: 100px;">Item Code <span class="req">*</span></th>
+          <th style="min-width: 150px;">Item Desc <span class="req">*</span></th>
+          <th style="min-width: 110px;">HSN/SAC <span class="req">*</span></th>
+          <th style="min-width: 90px;">UOM <span class="req">*</span></th>
+          <th style="min-width: 90px; text-align: center;">Material Co-efficient <span class="req">*</span></th>
+          <th style="min-width: 100px;">Quantity <span class="req">*</span></th>
+          <th style="min-width: 90px;">Type <span class="req">*</span></th>
+          <th style="width: 60px; text-align: center;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of boqTableItems; let i = index">
+          <td style="text-align: center; font-weight: 600;">{{ item.srNo }}</td>
+          <td>
+            <input type="text" class="wamis-boq-cell-input" [(ngModel)]="item.schName"
+              placeholder="Schedule name" />
+          </td>
+          <td>
+            <select class="wamis-boq-cell-select" [(ngModel)]="item.goodsService">
+              <option value="" disabled selected>Select type</option>
+              <option value="Goods">Goods</option>
+              <option value="Service">Service</option>
+              <option value="Works">Works</option>
+            </select>
+          </td>
+          <td>
+            <input type="text" class="wamis-boq-cell-input" [(ngModel)]="item.itemCode" placeholder="Item code" />
+          </td>
+          <td>
+            <input type="text" class="wamis-boq-cell-input" [(ngModel)]="item.itemDesc" placeholder="Item Desc" />
+          </td>
+          <td>
+            <input type="text" class="wamis-boq-cell-input" [(ngModel)]="item.hsnSac" placeholder="select hsnSac" />
+          </td>
+          <td>
+            <input type="text" class="wamis-boq-cell-input" [(ngModel)]="item.uom" placeholder="select UOM" />
+          </td>
+          <td style="text-align: center;">
+            <button type="button" class="wamis-boq-btn-doc" matTooltip="Attach / view material coefficient">
+              <span class="material-icons" style="font-size: 20px;">note_add</span>
+            </button>
+          </td>
+          <td>
+            <input type="number" class="wamis-boq-cell-input" [(ngModel)]="item.quantity"
+              placeholder="Enter quantity" />
+          </td>
+          <td>
+            <input type="text" class="wamis-boq-cell-input" [(ngModel)]="item.type" placeholder="At par" />
+          </td>
+          <td style="text-align: center;">
+            <button type="button" class="wamis-action-btn" (click)="removeBoqRow(i)" matTooltip="Delete row">
+              <span class="material-icons wamis-icon-delete">delete</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination / items per page bar below table -->
+  <div class="wamis-boq-pagination-bar">
+    <span>Items per page:</span>
+    <select style="border: 1px solid #cbd5e1; border-radius: 3px; padding: 2px 6px; font-size: 12px;">
+      <option>5</option>
+      <option>10</option>
+      <option>25</option>
+    </select>
+    <span>1 - {{ boqTableItems.length }} of {{ boqTableItems.length }}</span>
+    <span style="display: flex; gap: 8px; cursor: pointer; user-select: none;">
+      <span class="material-icons" style="font-size: 16px;">first_page</span>
+      <span class="material-icons" style="font-size: 16px;">chevron_left</span>
+      <span class="material-icons" style="font-size: 16px;">chevron_right</span>
+      <span class="material-icons" style="font-size: 16px;">last_page</span>
+    </span>
+  </div>
+
+  <!-- Action Buttons Bar -->
+  <div class="wamis-boq-actions-bar">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button type="button" class="wamis-boq-btn-save-items active" (click)="saveBoqItemDetails()">
+        Save Items
+      </button>
+      <button type="button" class="wamis-boq-btn-navy" (click)="downloadBoqFormat()">
+        Download format <span class="material-icons" style="font-size: 16px;">download</span>
+      </button>
+      <button type="button" class="wamis-boq-btn-navy" (click)="triggerBoqUpload()">
+        Upload Excel <span class="material-icons" style="font-size: 16px;">upload</span>
+      </button>
+    </div>
+    <div>
+      <button type="button" class="wamis-boq-btn-navy" (click)="addBoqRow()">
+        + Add Row
+      </button>
+    </div>
+  </div>
+
+  <!-- Total Banner Strip (Pale Blue Full Width) -->
+  <div class="wamis-boq-banner-strip">
+    <span>Total Non-Scheduled Items Amount : ₹ {{ totalNonScheduledAmount | number:'1.2-2' }}</span>
+    <span>Total Non-Scheduled Items Amount with GST : ₹ {{ totalNonScheduledAmountWithGst | number:'1.2-2' }}</span>
+  </div>
+
+  <!-- 3 Input Components in Each Row -->
+  <div class="wamis-form-grid" style="margin-bottom: 16px;">
+    <div class="wamis-form-group">
+      <label class="wamis-form-label">Round Off Amount</label>
+      <input type="number" class="wamis-form-control" [(ngModel)]="roundOffAmount" />
+    </div>
+
+    <div class="wamis-form-group">
+      <label class="wamis-form-label">Agreement Amount</label>
+      <input type="text" class="wamis-form-control wamis-disabled-input" [value]="agreementAmount | number:'1.2-2'"
+        readonly placeholder="Round Off Amount" />
+    </div>
+
+    <div class="wamis-form-group">
+      <label class="wamis-form-label">Agreement Amount With GST</label>
+      <input type="text" class="wamis-form-control wamis-disabled-input"
+        [value]="agreementAmountWithGst | number:'1.2-2'" readonly placeholder="Round Off Amount" />
+    </div>
+  </div>
+
+  <!-- Bottom Save Button -->
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <button type="button" class="wamis-boq-btn-bottom-save" (click)="saveBoqItemDetails()">
+      Save BOQ
+    </button>
+    <button *ngIf="isModal" type="button" class="wamis-boq-btn-navy" (click)="onClose()">
+      Close
+    </button>
+  </div>
+</div>
+

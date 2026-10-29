@@ -1,0 +1,46 @@
+services:
+  gepnic-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wamis-gepnic-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://gepnic-db:5432/wamis_gepnic
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - GEPNIC_UNIQUE_USER_ID=WAMIS-REGISTERED-USER-ID
+      - GEPNIC_KEY_ID=GEPNIC-CERTIFICATE-THUMBPRINT-001
+    depends_on:
+      gepnic-db:
+        condition: service_healthy
+    networks:
+      - gepnic-net
+
+  gepnic-db:
+    image: postgres:16-alpine
+    container_name: gepnic-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=wamis_gepnic
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - gepnic_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gepnic-net
+
+volumes:
+  gepnic_pgdata:
+
+networks:
+  gepnic-net:
+    driver: bridge

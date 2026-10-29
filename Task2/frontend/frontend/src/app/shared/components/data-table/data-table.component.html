@@ -1,0 +1,140 @@
+<div class="wamis-card" style="margin-bottom: 16px;">
+  <!-- Optional Red Note Header (Matches Screenshot) -->
+  <div class="wamis-note" *ngIf="note">
+    <span>{{ note }}</span>
+  </div>
+
+  <!-- Shared Data Table Container (Matches Screenshot) -->
+  <div class="wamis-table-container">
+    <table class="wamis-table">
+      <thead>
+        <tr>
+          <th style="width: 55px; text-align: center;">S.No.</th>
+          <th *ngFor="let col of columns"
+              [style.width]="col.width || 'auto'"
+              [style.textAlign]="col.align || 'left'">
+            {{ col.label }}
+            <span *ngIf="col.required" style="color: red; margin-left: 2px;">*</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data; let i = index">
+          <!-- S.No. Index -->
+          <td style="text-align: center; font-weight: 600; color: #1e293b;">
+            {{ i + 1 }}
+          </td>
+
+          <!-- Dynamic Columns -->
+          <td *ngFor="let col of columns"
+              [style.textAlign]="col.align || 'left'">
+
+            <!-- 1. Input Box Type -->
+            <div *ngIf="col.type === 'input'">
+              <input type="text"
+                     class="wamis-input-box"
+                     [value]="row[col.key] || ''"
+                     (input)="onCellInput(row, col.key, $event, i)"
+                     [matTooltip]="col.tooltip || col.label" />
+            </div>
+
+            <!-- 2. Radio Button Type (Yes / No) -->
+            <div *ngIf="col.type === 'radio'" class="wamis-radio-group" style="justify-content: center;">
+              <label class="wamis-radio-label">
+                <input type="radio"
+                       [name]="col.key + '_' + i"
+                       [checked]="row[col.key] === true"
+                       (change)="onRadio(row, col.key, true, i)" />
+                Yes
+              </label>
+              <label class="wamis-radio-label">
+                <input type="radio"
+                       [name]="col.key + '_' + i"
+                       [checked]="row[col.key] === false"
+                       (change)="onRadio(row, col.key, false, i)" />
+                No
+              </label>
+            </div>
+
+            <!-- 3. Status Chip Type -->
+            <div *ngIf="col.type === 'chip'">
+              <app-status-chip [status]="row[col.key]"></app-status-chip>
+            </div>
+
+            <!-- 4. Action Icons Type (+, Delete, Edit, Check) -->
+            <div *ngIf="col.type === 'actions'" class="wamis-actions-cell">
+              <button *ngIf="row.canAdd !== false"
+                      type="button"
+                      class="wamis-action-btn"
+                      (click)="onAction('add', row, i)"
+                      matTooltip="Add row / link">
+                <span class="wamis-icon-add">+</span>
+              </button>
+              <button *ngIf="row.canEdit"
+                      type="button"
+                      class="wamis-action-btn"
+                      (click)="onAction('edit', row, i)"
+                      matTooltip="Edit details">
+                <span class="material-icons wamis-icon-edit">edit</span>
+              </button>
+              <button *ngIf="row.canDelete !== false"
+                      type="button"
+                      class="wamis-action-btn"
+                      (click)="onAction('delete', row, i)"
+                      matTooltip="Delete entry">
+                <span class="material-icons wamis-icon-delete">delete</span>
+              </button>
+              <button *ngIf="row.canCheck"
+                      type="button"
+                      class="wamis-action-btn"
+                      (click)="onAction('check', row, i)"
+                      matTooltip="Verify / Audit">
+                <span class="material-icons wamis-icon-check">check</span>
+              </button>
+            </div>
+
+            <!-- 5. Number Type -->
+            <div *ngIf="col.type === 'number'">
+              {{ row[col.key] | number:'1.2-2' }}
+            </div>
+
+            <!-- 6. Date Type -->
+            <div *ngIf="col.type === 'date'" style="color: #64748b; font-size: 12.5px;">
+              {{ row[col.key] | date:'yyyy-MM-dd HH:mm' }}
+            </div>
+
+            <!-- 7. Standard Text (Default) -->
+            <div *ngIf="!col.type || col.type === 'text'">
+              {{ row[col.key] }}
+            </div>
+
+          </td>
+        </tr>
+
+        <!-- Empty State -->
+        <tr *ngIf="data.length === 0 && !loading">
+          <td [attr.colspan]="columns.length + 1" class="wamis-table-empty">
+            {{ emptyMessage }}
+          </td>
+        </tr>
+
+        <!-- Loading State -->
+        <tr *ngIf="loading">
+          <td [attr.colspan]="columns.length + 1" class="wamis-table-empty">
+            Loading table records...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bottom Action Button (e.g. Modify - Matches Screenshot) -->
+  <div *ngIf="showActionButton" style="margin-top: 14px;">
+    <button type="button"
+            class="wamis-btn-primary"
+            (click)="onModify()"
+            matTooltip="Apply or modify active table settings">
+      {{ actionButtonText }}
+    </button>
+  </div>
+</div>

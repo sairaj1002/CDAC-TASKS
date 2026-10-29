@@ -1,0 +1,93 @@
+<div class="wamis-section-title">
+  Document Upload
+</div>
+
+<div class="wamis-card">
+  <div class="wamis-card-title">
+    <span>Upload New Tender Document</span>
+    <span class="wamis-badge-pill">Multipart / Form-Data</span>
+  </div>
+
+  <form [formGroup]="uploadForm" (ngSubmit)="submitUpload()">
+    <div class="wamis-form-grid">
+      <!-- Row 1: Col 1 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Unique File No <span class="required">*</span></label>
+        <input type="text" class="wamis-form-control" formControlName="uniqueFileNo" />
+      </div>
+
+      <!-- Row 1: Col 2 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Doc Unique ID <span class="required">*</span></label>
+        <input type="text" class="wamis-form-control" formControlName="docUniqueId" />
+      </div>
+
+      <!-- Row 1: Col 3 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Tender Reference <span class="required">*</span></label>
+        <input type="text" class="wamis-form-control" formControlName="tenderReference" />
+      </div>
+
+      <!-- Row 2: Col 1 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Document Category / Code</label>
+        <select class="wamis-form-control" formControlName="docCode">
+          <option *ngFor="let dc of docCodeOptions" [value]="dc.value">{{ dc.label }}</option>
+        </select>
+      </div>
+
+      <!-- Row 2: Col 2 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Select File to Upload <span class="required">*</span></label>
+        <input type="file" class="wamis-form-control" (change)="onFileSelected($event)" />
+      </div>
+
+      <!-- Row 2: Col 3 -->
+      <div class="wamis-form-group">
+        <label class="wamis-form-label">Document Description / Notes</label>
+        <input type="text" class="wamis-form-control" placeholder="Optional attachment description" />
+      </div>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <button type="submit" class="wamis-btn-primary" [disabled]="uploading" matTooltip="Upload file to GePNIC external storage">
+        {{ uploading ? 'Uploading...' : 'Upload Document to GePNIC' }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Upload History Table -->
+<div class="wamis-card">
+  <div class="wamis-card-title">Document Upload Status History</div>
+  <div class="wamis-table-container">
+    <table class="wamis-table">
+      <thead>
+        <tr>
+          <th style="width: 50px; text-align: center;">Sr No.</th>
+          <th>Unique File No</th>
+          <th>Doc ID</th>
+          <th>Tender Reference</th>
+          <th>File Name</th>
+          <th>Size (KB)</th>
+          <th>Status</th>
+          <th>Response Message</th>
+          <th>Uploaded At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of uploadedDocuments; let i = index">
+          <td style="text-align: center; font-weight: 500;">{{ i + 1 }}</td>
+          <td><strong>{{ doc.uniqueFileNo }}</strong></td>
+          <td>{{ doc.docUniqueId }}</td>
+          <td>{{ doc.tenderReference }}</td>
+          <td>{{ doc.fileName }}</td>
+          <td>{{ ((doc.fileSizeBytes || 0) / 1024) | number:'1.1-1' }}</td>
+          <td><span class="wamis-status-chip wamis-status-success">{{ doc.uploadStatus }}</span></td>
+          <td style="font-size: 12px;">{{ doc.responseMessage }}</td>
+          <td style="color: #64748b; font-size: 12px;">{{ doc.uploadedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

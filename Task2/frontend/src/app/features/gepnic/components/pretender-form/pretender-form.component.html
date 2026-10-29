@@ -1,0 +1,474 @@
+<div class="pretender-wrapper">
+  <!-- Top Tabs: Add | View (Exact match to Image 1) -->
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab === 'add'" (click)="activeTab = 'add'" type="button">Add</button>
+    <button class="tab" [class.active]="activeTab === 'view'" (click)="switchToView()" type="button">View</button>
+  </div>
+
+  <!-- ==================== ADD TAB: FORM VIEW ==================== -->
+  <div *ngIf="activeTab === 'add'">
+    <!-- Search in sub works (Collapsible Search Component) -->
+    <div class="work-search-container">
+      <app-work-search
+        [selectedWorkId]="tender.parentWorkId"
+        [selectedWorkNumber]="tender.parentWorkNumber"
+        [selectedWorkDescription]="tender.parentWorkDescription"
+        (workSelected)="selectWork($event)"
+        (workCleared)="clearWork()">
+      </app-work-search>
+    </div>
+
+    <form class="tender-form" #formRef="ngForm" (ngSubmit)="save()">
+      <div class="form-grid" [class.subwork-5-col]="isSubWorkContext">
+        <!-- Tender Type (Procurement) Radio Bar (Full Width) -->
+        <fieldset class="field full-width procurement">
+          <legend>Tender Type (Procurement) <span class="required">*</span></legend>
+          <label class="radio-option">
+            <input type="radio" name="procurementType" value="Open Tender" [(ngModel)]="tender.procurementType" required>
+            Open Tender
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="procurementType" value="Limited" [(ngModel)]="tender.procurementType">
+            Limited
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="procurementType" value="Open Limited" [(ngModel)]="tender.procurementType">
+            Open Limited
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="procurementType" value="National Competitive Bid (NCB)" [(ngModel)]="tender.procurementType">
+            National Competitive Bid (NCB)
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="procurementType" value="Global Tender" [(ngModel)]="tender.procurementType">
+            Global Tender
+          </label>
+        </fieldset>
+
+        <!-- ROW 1 -->
+        <!-- Col 1: Tender Reference Number -->
+        <label class="field">
+          <span>Tender Reference Number <span class="required">*</span></span>
+          <input type="text" name="tenderReferenceNumber" [(ngModel)]="tender.tenderReferenceNumber" required placeholder="Enter tender reference number">
+        </label>
+
+        <!-- Col 2: Tender Type (Dropdown from DB) -->
+        <label class="field">
+          <span>Tender Type <span class="required">*</span></span>
+          <select name="tenderTypeId" [(ngModel)]="tender.tenderTypeId" required>
+            <option [ngValue]="null" disabled>Select tender type</option>
+            <option *ngFor="let option of list('tender-type')" [ngValue]="option.id">{{ option.name }}</option>
+          </select>
+        </label>
+
+        <!-- Col 3: Number of Covers (Dropdown from DB) -->
+        <label class="field">
+          <span>Number of Covers <span class="required">*</span></span>
+          <select name="numberOfCoversId" [(ngModel)]="tender.numberOfCoversId" required>
+            <option [ngValue]="null" disabled>Select number of covers</option>
+            <option *ngFor="let option of list('number-of-covers')" [ngValue]="option.id">{{ option.name }}</option>
+          </select>
+        </label>
+
+        <!-- ROW 2 -->
+        <!-- Col 1: Tender Category (Dropdown from DB) -->
+        <label class="field">
+          <span>Tender Category <span class="required">*</span></span>
+          <select name="tenderCategoryId" [(ngModel)]="tender.tenderCategoryId" (ngModelChange)="changeTenderCategory($event)" required>
+            <option [ngValue]="null" disabled>Select tender category</option>
+            <option *ngFor="let option of tenderCategories()" [ngValue]="option.id">{{ option.name }}</option>
+          </select>
+        </label>
+
+        <!-- Col 2: Work Item Product Category (Dropdown from DB, filtered by Tender Category) -->
+        <label class="field">
+          <span>Work Item Product Category <span class="required">*</span></span>
+          <select name="workItemProductCategoryId" [(ngModel)]="tender.workItemProductCategoryId" required>
+            <option [ngValue]="null" disabled>Select product category</option>
+            <option *ngFor="let option of productCategoryOptions()" [ngValue]="option.id">{{ option.name }}</option>
+          </select>
+        </label>
+
+        <!-- Col 3: Number of Bid Openers (Dropdown from DB) -->
+        <label class="field">
+          <span>Number of Bid Openers <span class="required">*</span></span>
+          <select name="numberOfBidOpenersId" [(ngModel)]="tender.numberOfBidOpenersId" required>
+            <option [ngValue]="null" disabled>Select bid openers</option>
+            <option *ngFor="let option of list('number-of-bid-openers')" [ngValue]="option.id">{{ option.name }}</option>
+          </select>
+        </label>
+
+        <!-- ROW 3 -->
+        <!-- Col 1: Form of Contract (Dropdown from DB) -->
+        <label class="field">
+          <span>Form of Contract <span class="required">*</span></span>
+          <select name="formOfContractId" [(ngModel)]="tender.formOfContractId" required>
+            <option [ngValue]="null" disabled>Select contract form</option>
+            <option *ngFor="let option of list('form-of-contract')" [ngValue]="option.id">{{ option.name }}</option>
+          </select>
+        </label>
+
+        <!-- Col 2: Bid Validity Days -->
+        <label class="field">
+          <span>Bid Validity Days <span class="required">*</span></span>
+          <input type="number" min="1" max="2147483647" step="1" name="bidValidityDays" [(ngModel)]="tender.bidValidityDays" required placeholder="Enter days">
+        </label>
+
+        <!-- Document Description for Cover 1 -->
+        <label class="field">
+          <span>Document Description for Cover 1 <span class="required">*</span></span>
+          <input type="text" name="cover1Description" [(ngModel)]="tender.cover1Description" required placeholder="Describe the documents for cover 1">
+        </label>
+
+        <!-- Document Description for Cover 2 -->
+        <label class="field">
+          <span>Document Description for Cover 2</span>
+          <input type="text" name="cover2Description" [(ngModel)]="tender.cover2Description" placeholder="Describe the documents for cover 2">
+        </label>
+
+        <!-- Delivery Period Days -->
+        <label class="field">
+          <span>Delivery Period Days <span class="required">*</span></span>
+          <input type="number" min="1" max="2147483647" step="1" name="deliveryPeriodDays" [(ngModel)]="tender.deliveryPeriodDays" required placeholder="Enter days">
+        </label>
+
+        <!-- ROW 6 -->
+        <!-- Col 1: Tenderer Class (Dropdown from DB) -->
+        <label class="field">
+          <span>Tenderer Class <span class="required">*</span></span>
+          <select name="tendererClassId" [(ngModel)]="tender.tendererClassId" required>
+            <option [ngValue]="null" disabled>Select tenderer class</option>
+            <option *ngFor="let option of list('tenderer-class')" [ngValue]="option.id">{{ option.name }}</option>
+          </select>
+        </label>
+
+        <!-- Col 2: EMD Exemption Box -->
+        <fieldset class="field choice-field">
+          <legend>EMD Exemption <span class="required">*</span></legend>
+          <label><input type="radio" name="emdExemption" [value]="true" [(ngModel)]="tender.emdExemption"> Yes</label>
+          <label><input type="radio" name="emdExemption" [value]="false" [(ngModel)]="tender.emdExemption"> No</label>
+        </fieldset>
+
+        <!-- Col 3: Paper Cost Exemption Box -->
+        <fieldset class="field choice-field">
+          <legend>Paper Cost Exemption <span class="required">*</span></legend>
+          <label><input type="radio" name="paperCostExemption" [value]="true" [(ngModel)]="tender.paperCostExemption"> Yes</label>
+          <label><input type="radio" name="paperCostExemption" [value]="false" [(ngModel)]="tender.paperCostExemption"> No</label>
+        </fieldset>
+
+        <!-- ROW 7 -->
+        <!-- Col 1: Tender Fee -->
+        <label class="field">
+          <span>Tender Fee</span>
+          <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderFee" [(ngModel)]="tender.tenderFee" placeholder="0.00">
+        </label>
+
+        <!-- Col 2: Tender EMD Fee -->
+        <label class="field">
+          <span>Tender EMD Fee</span>
+          <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderEmdFee" [(ngModel)]="tender.tenderEmdFee" placeholder="0.00">
+        </label>
+
+        <!-- Col 3: Pre Bid Meeting Box -->
+        <fieldset class="field choice-field">
+          <legend>Pre Bid Meeting <span class="required">*</span></legend>
+          <label><input type="radio" name="preBidMeeting" [value]="true" [(ngModel)]="tender.preBidMeeting"> Yes</label>
+          <label><input type="radio" name="preBidMeeting" [value]="false" [(ngModel)]="tender.preBidMeeting"> No</label>
+        </fieldset>
+
+        <!-- ROW 8: Pre Bid Meeting Address (Full Width) -->
+        <label class="field full-width">
+          <span>Pre Bid Meeting Address</span>
+          <input type="text" name="preBidMeetingAddress" [(ngModel)]="tender.preBidMeetingAddress" placeholder="Enter meeting address">
+        </label>
+
+        <!-- TENDER SCHEDULE SECTION DIVIDER -->
+        <div class="section-divider full-width">
+          <span>TENDER SCHEDULE</span>
+        </div>
+
+        <!-- ROW 9: Schedule Row 1 (3 Cols) -->
+        <label class="field">
+          <span>Tender Publishing Date and Time <span class="required">*</span></span>
+          <input type="datetime-local" name="tenderPublishingDateTime" [(ngModel)]="tender.tenderPublishingDateTime" required>
+        </label>
+
+        <label class="field">
+          <span>Document Download Start Date and Time <span class="required">*</span></span>
+          <input type="datetime-local" name="documentDownloadStartDateTime" [(ngModel)]="tender.documentDownloadStartDateTime" required>
+        </label>
+
+        <label class="field">
+          <span>Seek Clarification Start Date and Time <span class="required">*</span></span>
+          <input type="datetime-local" name="seekClarificationStartDateTime" [(ngModel)]="tender.seekClarificationStartDateTime" required>
+        </label>
+
+        <!-- ROW 10: Schedule Row 2 (3 Cols) -->
+        <label class="field">
+          <span>Seek Clarification End Date and Time <span class="required">*</span></span>
+          <input type="datetime-local" name="seekClarificationEndDateTime" [(ngModel)]="tender.seekClarificationEndDateTime" [attr.min]="tender.seekClarificationStartDateTime || null" required>
+        </label>
+
+        <label class="field">
+          <span>Bid-Sub Start Date and Time <span class="required">*</span></span>
+          <input type="datetime-local" name="bidSubmissionStartDateTime" [(ngModel)]="tender.bidSubmissionStartDateTime" required>
+        </label>
+
+        <label class="field">
+          <span>Bid-Sub End Date and Time <span class="required">*</span></span>
+          <input type="datetime-local" name="bidSubmissionEndDateTime" [(ngModel)]="tender.bidSubmissionEndDateTime" [attr.min]="tender.bidSubmissionStartDateTime || null" required>
+        </label>
+
+        <!-- ROW 11: Schedule Row 3 -->
+        <label class="field">
+          <span>Bid Opening Date and Time <span class="required">*</span></span>
+          <input type="datetime-local" name="bidOpeningDateTime" [(ngModel)]="tender.bidOpeningDateTime" required>
+        </label>
+      </div>
+
+      <!-- Loading Dropdown Values Feedback (Matching Image 3) -->
+      <p class="feedback loading" *ngIf="mastersLoading || loadingRecord">
+        {{ loadingRecord ? 'Loading record...' : 'Loading dropdown values...' }}
+      </p>
+
+      <!-- Inline Feedback / Status -->
+      <div class="inline-snackbar-wrapper" *ngIf="error || success">
+        <div class="snackbar-pill" [ngClass]="error ? 'snackbar-error' : 'snackbar-success'">
+          <div class="snackbar-left">
+            <span class="bullet-dot">•</span>
+            <span class="snackbar-message">{{ error || success }}</span>
+          </div>
+          <button *ngIf="error" class="retry-button" type="button" (click)="loadMasters()">Retry dropdowns</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons (Save & Cancel Matching Image 3) -->
+      <div class="form-actions">
+        <button class="primary-button" type="submit" [disabled]="formRef.invalid || saving || loadingRecord">
+          {{ saving ? 'Saving...' : recordId ? 'Update' : 'Save' }}
+        </button>
+        <button class="secondary-button" type="button" (click)="clear()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ==================== VIEW TAB: TENDERS TABLE ==================== -->
+  <div *ngIf="activeTab === 'view'" class="view-container">
+    <div class="table-card">
+      <div class="table-scroll">
+        <table class="wamis-pretender-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reference Number</th>
+              <th>Parent Work</th>
+              <th>Procurement Type</th>
+              <th>Tender Type</th>
+              <th>Category</th>
+              <th>Publishing Date</th>
+              <th style="text-align: center;">BOQ</th>
+              <th style="text-align: center;">Docs</th>
+              <th>NIT</th>
+              <th>DTCN</th>
+              <th>Other</th>
+              <th class="actions-header">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of savedTenders">
+              <td>{{ row.id }}</td>
+              <td class="font-bold">{{ row.tenderReferenceNumber }}</td>
+              <td>{{ row.parentWorkNumber || '—' }}</td>
+              <td>{{ row.procurementType }}</td>
+              <td>{{ row.tenderType }}</td>
+              <td>{{ row.tenderCategory }}</td>
+              <td>{{ row.tenderPublishingDateTime | date:'dd-MM-yyyy HH:mm' }}</td>
+              <!-- BOQ Column with Button to Open BOQ Modal (Requirement 2) -->
+              <td style="text-align: center;">
+                <button type="button" class="table-pill-btn boq-pill-btn" (click)="openBoqModal(row)" title="Open BOQ Component">
+                  <span class="material-icons pill-icon">table_chart</span>
+                  <span>BOQ</span>
+                </button>
+              </td>
+              <!-- Docs Column with Button to Open Docs Multi-upload Modal (Requirement 3) -->
+              <td style="text-align: center;">
+                <button type="button" class="table-pill-btn docs-pill-btn" (click)="openDocsModal(row)" title="Upload & Manage Documents">
+                  <span class="material-icons pill-icon">cloud_upload</span>
+                  <span>Docs</span>
+                </button>
+              </td>
+              <td>
+                <a *ngIf="row.nitFileName" [href]="fileUrl(row.nitFileName)" target="_blank" class="doc-link">Download</a>
+                <span *ngIf="!row.nitFileName">—</span>
+              </td>
+              <td>
+                <a *ngIf="row.dtcnFileName" [href]="fileUrl(row.dtcnFileName)" target="_blank" class="doc-link">Download</a>
+                <span *ngIf="!row.dtcnFileName">—</span>
+              </td>
+              <td>
+                <a *ngIf="row.otherFileName" [href]="fileUrl(row.otherFileName)" target="_blank" class="doc-link">Download</a>
+                <span *ngIf="!row.otherFileName">—</span>
+              </td>
+              <td class="action-cell">
+                <button type="button" class="action-btn edit-btn" (click)="editTender(row.id)" title="Edit Tender">
+                  Edit
+                </button>
+                <button type="button" class="action-btn delete-btn" (click)="deleteTender(row)" title="Delete Tender">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="savedTenders.length === 0">
+              <td colspan="13" class="empty-cell">No tenders found. Switch to "Add" tab to create one.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BOQ MODAL DIALOG (Requirement 2) ==================== -->
+  <div class="custom-modal-backdrop" *ngIf="showBoqModal" (click)="closeBoqModal()">
+    <div class="custom-modal-dialog boq-modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-inner-wrap">
+        <app-boq-details
+          [isModal]="true"
+          [tenderReference]="selectedTenderForBoq?.tenderReferenceNumber"
+          [parentWork]="selectedTenderForBoq?.parentWorkDescription || selectedTenderForBoq?.parentWorkNumber"
+          (close)="closeBoqModal()">
+        </app-boq-details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DOCS MULTI-UPLOAD MODAL DIALOG (Requirement 3) ==================== -->
+  <div class="custom-modal-backdrop" *ngIf="showDocsModal" (click)="closeDocsModal()">
+    <div class="custom-modal-dialog docs-modal-dialog" (click)="$event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="modal-custom-header">
+        <div class="modal-header-text">
+          <div class="modal-title">
+            <span class="material-icons modal-title-icon">cloud_upload</span>
+            Tender Documents Repository & Multi-Upload
+          </div>
+          <div class="modal-subtitle">
+            Tender Ref: <strong>{{ selectedTenderForDocs?.tenderReferenceNumber }}</strong>
+            <span *ngIf="selectedTenderForDocs?.parentWorkNumber"> | Work No: {{ selectedTenderForDocs?.parentWorkNumber }}</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-cross" (click)="closeDocsModal()" matTooltip="Close">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-custom-body">
+        <!-- Multiple Files Drag & Drop Zone -->
+        <div class="docs-dropzone" (dragover)="onDragOver($event)" (drop)="onFilesDropped($event)" (click)="docsFileInput.click()">
+          <span class="material-icons dropzone-icon">drive_folder_upload</span>
+          <div class="dropzone-primary-text">Click to choose files or drag & drop multiple documents here</div>
+          <div class="dropzone-hint">Supports PDF, DOC, DOCX, XLS, XLSX, ZIP, DWG (Select multiple files at once)</div>
+          <input type="file" #docsFileInput multiple style="display: none;" (change)="onMultipleDocsSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.dwg,.csv">
+        </div>
+
+        <!-- Default Category Selector for new uploads -->
+        <div class="docs-category-bar">
+          <label class="docs-cat-label">Document Category:</label>
+          <select class="docs-cat-select" [(ngModel)]="selectedDocCategory">
+            <option *ngFor="let cat of docCategoryOptions" [value]="cat">{{ cat }}</option>
+          </select>
+          <button type="button" class="btn-add-files" (click)="docsFileInput.click()">
+            <span class="material-icons" style="font-size: 16px;">add_circle</span> Select Files
+          </button>
+        </div>
+
+        <!-- Staged Files Queue for Upload -->
+        <div class="staged-docs-section" *ngIf="stagedFiles.length > 0">
+          <div class="staged-docs-title">
+            <span>Staged Documents for Upload ({{ stagedFiles.length }})</span>
+            <span class="staged-docs-badge">Ready</span>
+          </div>
+          <div class="staged-docs-list">
+            <div class="staged-doc-item" *ngFor="let item of stagedFiles; let i = index">
+              <span class="material-icons file-item-icon">description</span>
+              <div class="staged-file-info">
+                <span class="staged-file-name" [title]="item.name">{{ item.name }}</span>
+                <span class="staged-file-size">{{ formatFileSize(item.size) }}</span>
+              </div>
+              <select class="staged-cat-select" [(ngModel)]="item.category">
+                <option *ngFor="let cat of docCategoryOptions" [value]="cat">{{ cat }}</option>
+              </select>
+              <span class="staged-status-badge" [class.uploading]="item.status === 'uploading'">
+                {{ item.status === 'uploading' ? 'Uploading...' : 'Ready' }}
+              </span>
+              <button type="button" class="staged-remove-btn" (click)="removeStagedFile(i)" title="Remove file">
+                &times;
+              </button>
+            </div>
+          </div>
+          <div class="staged-actions-bar">
+            <button type="button" class="btn-upload-all" [disabled]="uploadingDocs" (click)="uploadAllDocs()">
+              <span class="material-icons" style="font-size: 16px;">cloud_upload</span>
+              {{ uploadingDocs ? 'Uploading Documents...' : 'Upload All (' + stagedFiles.length + ' files)' }}
+            </button>
+            <button type="button" class="btn-clear-staged" (click)="stagedFiles = []" [disabled]="uploadingDocs">
+              Clear Queue
+            </button>
+          </div>
+        </div>
+
+        <!-- Attached / Existing Documents List -->
+        <div class="existing-docs-section">
+          <div class="existing-docs-title">
+            Attached Tender Documents ({{ existingDocs.length }})
+          </div>
+          <table class="existing-docs-table" *ngIf="existingDocs.length > 0">
+            <thead>
+              <tr>
+                <th>Document Name</th>
+                <th>Category</th>
+                <th>Upload Date</th>
+                <th>Size</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let doc of existingDocs">
+                <td class="doc-name-cell">
+                  <span class="material-icons doc-pdf-icon">picture_as_pdf</span>
+                  <strong>{{ doc.name }}</strong>
+                </td>
+                <td>
+                  <span class="doc-cat-badge">{{ doc.category }}</span>
+                </td>
+                <td style="color: #64748b;">{{ doc.uploadDate }}</td>
+                <td style="color: #64748b;">{{ formatFileSize(doc.size) }}</td>
+                <td style="text-align: right;">
+                  <a [href]="fileUrl(doc.name)" target="_blank" class="existing-download-link" title="Download">
+                    <span class="material-icons" style="font-size: 14px;">download</span> Download
+                  </a>
+                  <button type="button" class="existing-delete-btn" (click)="deleteExistingDoc(doc)" title="Delete">
+                    <span class="material-icons" style="font-size: 14px;">delete</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="empty-docs-note" *ngIf="existingDocs.length === 0">
+            No documents uploaded yet for this tender. Select multiple documents above and click "Upload All".
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-custom-footer">
+        <button type="button" class="primary-button" (click)="closeDocsModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

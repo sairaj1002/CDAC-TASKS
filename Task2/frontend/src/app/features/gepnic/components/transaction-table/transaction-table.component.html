@@ -1,0 +1,61 @@
+<div class="wamis-table-container">
+  <table class="wamis-table">
+    <thead>
+      <tr>
+        <th style="width: 50px; text-align: center;">Sr No.</th>
+        <th>Correlation Ref</th>
+        <th>Operation</th>
+        <th>Target System</th>
+        <th>Status</th>
+        <th>Timestamp</th>
+        <th style="text-align: center;">Action</th>
+        <th style="text-align: center;">Close</th>
+        <th style="text-align: center;">Audit Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let txn of transactions; let i = index">
+        <td style="text-align: center; font-weight: 500;">{{ i + 1 }}</td>
+        <td>
+          <strong>{{ txn.correlationId }}</strong>
+          <div style="font-size: 11px; color: #64748b;">{{ txn.transactionId }}</div>
+        </td>
+        <td>{{ txn.operation }}</td>
+        <td>{{ txn.targetSystem || 'GePNIC' }}</td>
+        <td>
+          <app-status-chip [status]="txn.status"></app-status-chip>
+        </td>
+        <td style="color: #64748b; font-size: 12.5px;">{{ txn.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td>
+          <div class="wamis-actions-cell">
+            <button class="wamis-action-btn" (click)="openDetails(txn)" matTooltip="Edit / View Details">
+              <span class="material-icons wamis-icon-edit">edit</span>
+            </button>
+            <button class="wamis-action-btn" (click)="onDelete(txn)" matTooltip="Delete Work Transaction">
+              <span class="material-icons wamis-icon-delete">delete</span>
+            </button>
+            <button class="wamis-action-btn" (click)="onRetry(txn)" matTooltip="Retry Synchronization">
+              <span class="wamis-icon-circle-check active">✓</span>
+            </button>
+          </div>
+        </td>
+        <td style="text-align: center;">
+          <button class="wamis-action-btn" (click)="onDelete(txn)" matTooltip="Close record">
+            <span class="material-icons wamis-icon-close">close</span>
+          </button>
+        </td>
+        <td style="text-align: center;">
+          <button class="wamis-action-btn" (click)="openAudit(txn)" matTooltip="View Verification Audit Trail">
+            <span class="material-icons wamis-icon-check">check</span>
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="transactions.length === 0 && !loading">
+        <td colspan="9" class="wamis-table-empty">No transactions found matching criteria.</td>
+      </tr>
+      <tr *ngIf="loading">
+        <td colspan="9" class="wamis-table-empty">Loading integration records...</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: wamis-gepnic-service
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+gepnic:
+  environment: dev
+  diagnostics-enabled: true
+  endpoint:
+    base-url: https://demoeproc.nic.in
+    tender-push-path: /nicgep_external_webservice/push/postTenderJsonDetailsService
+    document-upload-path: /nicgep_external_webservice/push/postTenderFileUploadDetailsService
+    tender-pull-path: /nicgep_external_webservice/pull/getTenderInfoFromPreTenderbyPublishDateService
+    corrigendum-pull-path: /nicgep_external_webservice/pull/getPreTenderCorrigendumInfosByPublishedDateService
+    aoc-pull-path: /nicgep_external_webservice/pull/getAocInfoFromPreTenderbyCreatedDateService
+    aoc-download-path: /nicgep_external_webservice/pull/postAOCFileDownloadDetailsService
+    metadata-check-path: /nicgep_external_webservice/check/getMetadataStatusService
+  security:
+    unique-user-id: WAMIS-REGISTERED-USER-ID
+    key-id: GEPNIC-CERTIFICATE-THUMBPRINT-001
+    keystore-path: classpath:certs/wamis-keystore.p12
+    keystore-type: PKCS12
+    key-alias: wamis-client
+    gepnic-cert-path: classpath:certs/gepnic-public.crt
+  http:
+    connect-timeout: 10s
+    read-timeout: 30s
+    max-retries: 3
+    retry-backoff: 1000ms
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
