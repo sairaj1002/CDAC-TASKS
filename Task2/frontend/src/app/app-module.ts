@@ -31,6 +31,7 @@ import { JsonDiffViewerComponent } from './shared/components/json-diff-viewer/js
 import { StatusChipComponent } from './shared/components/status-chip/status-chip.component';
 import { DataTableComponent } from './shared/components/data-table/data-table.component';
 import { CustomSelectComponent } from './shared/components/custom-select/custom-select.component';
+import { EmptyTabComponent } from './shared/components/empty-tab/empty-tab.component';
 import { FieldTooltipDirective } from './shared/directives/field-tooltip.directive';
 
 // Feature Components
@@ -67,6 +68,7 @@ import { SystemDiagnosticsComponent } from './features/gepnic/pages/system-diagn
     StatusChipComponent,
     DataTableComponent,
     CustomSelectComponent,
+    EmptyTabComponent,
     FieldTooltipDirective,
     // Feature components
     SubWorkDetailsComponent,
