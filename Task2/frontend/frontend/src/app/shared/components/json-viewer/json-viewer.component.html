@@ -1,9 +1,0 @@
-<div class="wamis-card" style="margin-bottom: 12px; padding: 14px;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-    <span style="font-weight: 600; font-size: 13.5px; color: var(--wamis-navy);">{{ title }}</span>
-    <button class="wamis-btn-secondary" style="padding: 4px 10px; font-size: 11.5px;" (click)="copyToClipboard()" matTooltip="Copy JSON to clipboard">
-      {{ copied ? 'Copied!' : 'Copy JSON' }}
-    </button>
-  </div>
-  <pre class="wamis-json-box">{{ formattedJson }}</pre>
-</div>

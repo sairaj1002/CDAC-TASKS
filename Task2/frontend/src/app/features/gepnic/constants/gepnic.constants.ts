@@ -8,10 +8,8 @@ export const GEPNIC_CONSTANTS = {
     SUB_WORK: 'sub-work',
     PRE_TENDER: 'pretender',
     TENDER_PUSH: 'tender-push',
-    DOCUMENT_UPLOAD: 'document-upload',
     TENDER_CORRIGENDUM_PULL: 'tender-corrigendum-pull',
-    AWARDING: 'awarding',
-    SYSTEM_DIAGNOSTICS: 'system-diagnostics'
+    AWARDING: 'awarding'
   },
 
   SYSTEM_NAMES: {
@@ -28,10 +26,8 @@ export const GEPNIC_CONSTANTS = {
   // Integration Module Submenu Items (Under "Gepnic")
   GEPNIC_NAV_ITEMS: [
     { label: 'Tender Push', route: '/tender-push', icon: 'send' },
-    { label: 'Document Upload', route: '/document-upload', icon: 'cloud_upload' },
     { label: 'Tender & Corrigendum', route: '/tender-corrigendum-pull', icon: 'sync_alt' },
-    { label: 'Awarding', route: '/awarding', icon: 'workspace_premium' },
-    { label: 'System & Diagnostics', route: '/system-diagnostics', icon: 'tune' }
+    { label: 'Awarding', route: '/awarding', icon: 'workspace_premium' }
   ],
 
   // WMS Module Submenu Items (Under "Works")

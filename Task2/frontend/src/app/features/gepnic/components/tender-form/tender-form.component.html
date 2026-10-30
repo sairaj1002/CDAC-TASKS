@@ -1,197 +1,258 @@
-<form [formGroup]="tenderForm" (ngSubmit)="submit()">
-  <div class="wamis-card">
-    <div class="wamis-card-title">
-      <span>Tender Basic Details & Work Information</span>
-      <span class="wamis-badge-pill">WAMIS Push Form</span>
+<div class="tender-form-wrapper">
+  <!-- Search in sub works (Collapsible Search Component) -->
+  <div class="work-search-container">
+    <app-work-search [selectedWorkId]="tender.parentWorkId" [selectedWorkNumber]="tender.parentWorkNumber"
+      [selectedWorkDescription]="tender.parentWorkDescription" (workSelected)="selectWork($event)"
+      (workCleared)="clearWork()">
+    </app-work-search>
+  </div>
+
+  <form class="tender-form" #formRef="ngForm" (ngSubmit)="submit()">
+    <div class="form-grid">
+      <!-- Tender Type (Procurement) Radio Bar (Full Width) -->
+      <fieldset class="field full-width procurement">
+        <legend>Tender Type (Procurement) <span class="required">*</span></legend>
+        <label class="radio-option">
+          <input type="radio" name="procurementType" value="Open Tender" [(ngModel)]="tender.procurementType" required>
+          Open Tender
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="procurementType" value="Limited" [(ngModel)]="tender.procurementType">
+          Limited
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="procurementType" value="Open Limited" [(ngModel)]="tender.procurementType">
+          Open Limited
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="procurementType" value="National Competitive Bid (NCB)"
+            [(ngModel)]="tender.procurementType">
+          National Competitive Bid (NCB)
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="procurementType" value="Global Tender" [(ngModel)]="tender.procurementType">
+          Global Tender
+        </label>
+      </fieldset>
+
+      <!-- ROW 1 (4 Columns) -->
+      <!-- Col 1: Tender Reference Number -->
+      <label class="field">
+        <span>Tender Reference Number <span class="required">*</span></span>
+        <input type="text" name="tenderReferenceNumber" [(ngModel)]="tender.tenderReferenceNumber" required
+          placeholder="Enter tender reference number">
+      </label>
+
+      <!-- Col 2: Tender Type -->
+      <label class="field">
+        <span>Tender Type <span class="required">*</span></span>
+        <select name="tenderTypeId" [(ngModel)]="tender.tenderTypeId" required>
+          <option [ngValue]="null" disabled>Select tender type</option>
+          <option *ngFor="let option of list('tender-type')" [ngValue]="option.id">{{ option.name }}</option>
+        </select>
+      </label>
+
+      <!-- Col 3: Number of Covers -->
+      <label class="field">
+        <span>Number of Covers <span class="required">*</span></span>
+        <select name="numberOfCoversId" [(ngModel)]="tender.numberOfCoversId" required>
+          <option [ngValue]="null" disabled>Select number of covers</option>
+          <option *ngFor="let option of list('number-of-covers')" [ngValue]="option.id">{{ option.name }}</option>
+        </select>
+      </label>
+
+      <!-- Col 4: Tender Category -->
+      <label class="field">
+        <span>Tender Category <span class="required">*</span></span>
+        <select name="tenderCategoryId" [(ngModel)]="tender.tenderCategoryId"
+          (ngModelChange)="changeTenderCategory($event)" required>
+          <option [ngValue]="null" disabled>Select tender category</option>
+          <option *ngFor="let option of tenderCategories()" [ngValue]="option.id">{{ option.name }}</option>
+        </select>
+      </label>
+
+      <!-- ROW 2 (4 Columns) -->
+      <!-- Col 1: Work Item Product Category -->
+      <label class="field">
+        <span>Work Item Product Category <span class="required">*</span></span>
+        <select name="workItemProductCategoryId" [(ngModel)]="tender.workItemProductCategoryId" required>
+          <option [ngValue]="null" disabled>Select product category</option>
+          <option *ngFor="let option of productCategoryOptions()" [ngValue]="option.id">{{ option.name }}</option>
+        </select>
+      </label>
+
+      <!-- Col 2: Number of Bid Openers -->
+      <label class="field">
+        <span>Number of Bid Openers <span class="required">*</span></span>
+        <select name="numberOfBidOpenersId" [(ngModel)]="tender.numberOfBidOpenersId" required>
+          <option [ngValue]="null" disabled>Select bid openers</option>
+          <option *ngFor="let option of list('number-of-bid-openers')" [ngValue]="option.id">{{ option.name }}</option>
+        </select>
+      </label>
+
+      <!-- Col 3: Form of Contract -->
+      <label class="field">
+        <span>Form of Contract <span class="required">*</span></span>
+        <select name="formOfContractId" [(ngModel)]="tender.formOfContractId" required>
+          <option [ngValue]="null" disabled>Select contract form</option>
+          <option *ngFor="let option of list('form-of-contract')" [ngValue]="option.id">{{ option.name }}</option>
+        </select>
+      </label>
+
+      <!-- Col 4: Bid Validity Days -->
+      <label class="field">
+        <span>Bid Validity Days <span class="required">*</span></span>
+        <input type="number" min="1" max="2147483647" step="1" name="bidValidityDays"
+          [(ngModel)]="tender.bidValidityDays" required placeholder="Enter days">
+      </label>
+
+      <!-- ROW 3 (4 Columns) -->
+      <!-- Col 1: Document Description for Cover 1 -->
+      <label class="field">
+        <span>Document Description for Cover 1 <span class="required">*</span></span>
+        <input type="text" name="cover1Description" [(ngModel)]="tender.cover1Description" required
+          placeholder="Describe the documents for cover 1">
+      </label>
+
+      <!-- Col 2: Document Description for Cover 2 -->
+      <label class="field">
+        <span>Document Description for Cover 2</span>
+        <input type="text" name="cover2Description" [(ngModel)]="tender.cover2Description"
+          placeholder="Describe the documents for cover 2">
+      </label>
+
+      <!-- Col 3: Delivery Period Days -->
+      <label class="field">
+        <span>Delivery Period Days <span class="required">*</span></span>
+        <input type="number" min="1" max="2147483647" step="1" name="deliveryPeriodDays"
+          [(ngModel)]="tender.deliveryPeriodDays" required placeholder="Enter days">
+      </label>
+
+      <!-- Col 4: Tenderer Class -->
+      <label class="field">
+        <span>Tenderer Class <span class="required">*</span></span>
+        <select name="tendererClassId" [(ngModel)]="tender.tendererClassId" required>
+          <option [ngValue]="null" disabled>Select tenderer class</option>
+          <option *ngFor="let option of list('tenderer-class')" [ngValue]="option.id">{{ option.name }}</option>
+        </select>
+      </label>
+
+      <!-- ROW 4 (4 Columns) -->
+      <!-- Col 1: EMD Exemption Box -->
+      <fieldset class="field choice-field">
+        <legend>EMD Exemption <span class="required">*</span></legend>
+        <label><input type="radio" name="emdExemption" [value]="true" [(ngModel)]="tender.emdExemption"> Yes</label>
+        <label><input type="radio" name="emdExemption" [value]="false" [(ngModel)]="tender.emdExemption"> No</label>
+      </fieldset>
+
+      <!-- Col 2: Paper Cost Exemption Box -->
+      <fieldset class="field choice-field">
+        <legend>Paper Cost Exemption <span class="required">*</span></legend>
+        <label><input type="radio" name="paperCostExemption" [value]="true" [(ngModel)]="tender.paperCostExemption">
+          Yes</label>
+        <label><input type="radio" name="paperCostExemption" [value]="false" [(ngModel)]="tender.paperCostExemption">
+          No</label>
+      </fieldset>
+
+      <!-- Col 3: Tender Fee -->
+      <label class="field">
+        <span>Tender Fee</span>
+        <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderFee" [(ngModel)]="tender.tenderFee"
+          placeholder="0.00">
+      </label>
+
+      <!-- Col 4: Tender EMD Fee -->
+      <label class="field">
+        <span>Tender EMD Fee</span>
+        <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderEmdFee"
+          [(ngModel)]="tender.tenderEmdFee" placeholder="0.00">
+      </label>
+
+      <!-- ROW 5 (4 Columns) -->
+      <!-- Col 1: Pre Bid Meeting Box -->
+      <fieldset class="field choice-field">
+        <legend>Pre Bid Meeting <span class="required">*</span></legend>
+        <label><input type="radio" name="preBidMeeting" [value]="true" [(ngModel)]="tender.preBidMeeting"> Yes</label>
+        <label><input type="radio" name="preBidMeeting" [value]="false" [(ngModel)]="tender.preBidMeeting"> No</label>
+      </fieldset>
+
+      <!-- Col 2: Pre Bid Meeting Address (Single Column Width - Same size as other inputs) -->
+      <label class="field">
+        <span>Pre Bid Meeting Address</span>
+        <input type="text" name="preBidMeetingAddress" [(ngModel)]="tender.preBidMeetingAddress"
+          placeholder="Enter meeting address">
+      </label>
+
+      <!-- Col 3 & 4 empty to maintain clean 4-input row alignment -->
+      <div class="empty-field"></div>
+      <div class="empty-field"></div>
+
+      <!-- TENDER SCHEDULE SECTION DIVIDER -->
+      <div class="section-divider full-width">
+        <span>TENDER SCHEDULE</span>
+      </div>
+
+      <!-- ROW 6: Schedule Row 1 (4 Columns) -->
+      <label class="field">
+        <span>Tender Publishing Date and Time <span class="required">*</span></span>
+        <input type="datetime-local" name="tenderPublishingDateTime" [(ngModel)]="tender.tenderPublishingDateTime"
+          required>
+      </label>
+
+      <label class="field">
+        <span>Document Download Start Date and Time <span class="required">*</span></span>
+        <input type="datetime-local" name="documentDownloadStartDateTime"
+          [(ngModel)]="tender.documentDownloadStartDateTime" required>
+      </label>
+
+      <label class="field">
+        <span>Seek Clarification Start Date and Time <span class="required">*</span></span>
+        <input type="datetime-local" name="seekClarificationStartDateTime"
+          [(ngModel)]="tender.seekClarificationStartDateTime" required>
+      </label>
+
+      <label class="field">
+        <span>Seek Clarification End Date and Time <span class="required">*</span></span>
+        <input type="datetime-local" name="seekClarificationEndDateTime"
+          [(ngModel)]="tender.seekClarificationEndDateTime" [attr.min]="tender.seekClarificationStartDateTime || null"
+          required>
+      </label>
+
+      <!-- ROW 7: Schedule Row 2 (4 Columns) -->
+      <label class="field">
+        <span>Bid-Sub Start Date and Time <span class="required">*</span></span>
+        <input type="datetime-local" name="bidSubmissionStartDateTime" [(ngModel)]="tender.bidSubmissionStartDateTime"
+          required>
+      </label>
+
+      <label class="field">
+        <span>Bid-Sub End Date and Time <span class="required">*</span></span>
+        <input type="datetime-local" name="bidSubmissionEndDateTime" [(ngModel)]="tender.bidSubmissionEndDateTime"
+          [attr.min]="tender.bidSubmissionStartDateTime || null" required>
+      </label>
+
+      <label class="field">
+        <span>Bid Opening Date and Time <span class="required">*</span></span>
+        <input type="datetime-local" name="bidOpeningDateTime" [(ngModel)]="tender.bidOpeningDateTime" required>
+      </label>
+
+      <!-- Col 4 empty -->
+      <div class="empty-field"></div>
     </div>
 
-    <!-- Main Grid (Enforces 3 Input Components in Each Row) -->
-    <div class="wamis-form-grid">
-      <!-- Row 1: Col 1 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">WAMIS Tender Reference ID <span class="required">*</span></label>
-        <input type="text" class="wamis-form-control" formControlName="wamisTenderId"
-               [class.wamis-field-invalid]="tenderForm.get('wamisTenderId')?.invalid && tenderForm.get('wamisTenderId')?.touched" />
-        <span class="wamis-error-text" *ngIf="tenderForm.get('wamisTenderId')?.invalid && tenderForm.get('wamisTenderId')?.touched">
-          WAMIS Tender ID is required.
-        </span>
-      </div>
+    <!-- Loading Masters Feedback -->
+    <p class="feedback-loading" *ngIf="mastersLoading">
+      Loading dropdown options...
+    </p>
 
-      <!-- Row 1: Col 2 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Office Code / ID <span class="required">*</span></label>
-        <input type="text" class="wamis-form-control" formControlName="officeId"
-               [class.wamis-field-invalid]="tenderForm.get('officeId')?.invalid && tenderForm.get('officeId')?.touched" />
-        <span class="wamis-error-text" *ngIf="tenderForm.get('officeId')?.invalid && tenderForm.get('officeId')?.touched">
-          Office ID is required.
-        </span>
-      </div>
-
-      <!-- Row 1: Col 3 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Estimated Tender Value (₹) <span class="required">*</span></label>
-        <input type="number" class="wamis-form-control" formControlName="estimatedCost"
-               [class.wamis-field-invalid]="tenderForm.get('estimatedCost')?.invalid && tenderForm.get('estimatedCost')?.touched" />
-        <span class="wamis-error-text" *ngIf="tenderForm.get('estimatedCost')?.invalid && tenderForm.get('estimatedCost')?.touched">
-          Estimated value must be greater than zero.
-        </span>
-      </div>
-
-      <!-- Row 2: Col 1 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Tender Document Fee (₹)</label>
-        <input type="number" class="wamis-form-control" formControlName="tenderFee" />
-      </div>
-
-      <!-- Row 2: Col 2 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">EMD Amount (₹)</label>
-        <input type="number" class="wamis-form-control" formControlName="emdAmount" />
-      </div>
-
-      <!-- Row 2: Col 3 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Publishing Date & Time <span class="required">*</span></label>
-        <input type="datetime-local" class="wamis-form-control" formControlName="publishDate" />
-      </div>
-
-      <!-- Row 3: Col 1 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Bid Submission End Date <span class="required">*</span></label>
-        <input type="datetime-local" class="wamis-form-control" formControlName="submissionEndDate" />
-      </div>
-
-      <!-- Row 3: Col 2 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Tender Title <span class="required">*</span></label>
-        <input type="text" class="wamis-form-control" formControlName="tenderTitle"
-               [class.wamis-field-invalid]="tenderForm.get('tenderTitle')?.invalid && tenderForm.get('tenderTitle')?.touched" />
-        <span class="wamis-error-text" *ngIf="tenderForm.get('tenderTitle')?.invalid && tenderForm.get('tenderTitle')?.touched">
-          Tender title is required.
-        </span>
-      </div>
-
-      <!-- Row 3: Col 3 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Work Scope / Description</label>
-        <input type="text" class="wamis-form-control" formControlName="workDescription" />
-      </div>
-    </div>
-
-    <!-- Road / Work Component Table (Matches Screenshot 2) -->
-    <div style="margin-top: 16px; margin-bottom: 12px;">
-      <div style="font-weight: 600; font-size: 13.5px; color: var(--wamis-navy); margin-bottom: 8px;">
-        Work Component & Engineering Attributes (Screenshot Alignment)
-      </div>
-      <div class="wamis-table-container">
-        <table class="wamis-table">
-          <thead>
-            <tr>
-              <th style="width: 70px; text-align: center;">Sr No.</th>
-              <th>Nature of Work <span style="color: red;">*</span></th>
-              <th>Proposed Road Type</th>
-              <th>Road Length <span style="color: red;">*</span></th>
-              <th>Road Width</th>
-              <th>Work Plan Type <span style="color: red;">*</span></th>
-              <th>CD Works</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="text-align: center;">
-                <span class="wamis-badge-pill" matTooltip="First newly added work item">1 New</span>
-              </td>
-              <td>
-                <select class="wamis-table-select" data-field-label="Nature of Work">
-                  <option selected>Maintenance</option>
-                  <option>Original Construction</option>
-                  <option>Widening / Strengthening</option>
-                </select>
-              </td>
-              <td>
-                <select class="wamis-table-select" data-field-label="Proposed Road Type">
-                  <option selected>Proposed Road Type...</option>
-                  <option>Bituminous Concrete (BC)</option>
-                  <option>Dense Bituminous Macadam (DBM)</option>
-                  <option>Cement Concrete (CC)</option>
-                </select>
-              </td>
-              <td>
-                <input type="number" class="wamis-input-box" value="4.8"
-                       data-field-label="Road Length" />
-              </td>
-              <td>
-                <input type="text" class="wamis-input-box" value="7.00 m (Two Lane)"
-                       data-field-label="Road Width" />
-              </td>
-              <td>
-                <select class="wamis-table-select" data-field-label="Work Plan Type">
-                  <option selected>Annual Plan 2026-27</option>
-                  <option>Deposit Work</option>
-                  <option>Special Repair</option>
-                </select>
-              </td>
-              <td>
-                <div class="wamis-input-box" style="color: #64748b;"
-                     [appFieldTooltip]="'CD Works'" [tooltipValue]="'2 Culverts, 1 Minor Bridge'">
-                  2 Culverts, 1 Minor Bridge
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Attached Documents Section -->
-    <div style="margin-top: 20px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span style="font-weight: 600; font-size: 13.5px; color: var(--wamis-navy);">
-          Tender Documents & Covers ({{ documents.length }})
-        </span>
-        <button type="button" class="wamis-btn-secondary" style="font-size: 12px; padding: 4px 12px;" (click)="addDocument()" matTooltip="Add an attachment slot">
-          + Add Document
-        </button>
-      </div>
-
-      <div class="wamis-table-container">
-        <table class="wamis-table">
-          <thead>
-            <tr>
-              <th style="width: 50px; text-align: center;">#</th>
-              <th>Doc Code</th>
-              <th>File Name</th>
-              <th>Format</th>
-              <th>Size (KB)</th>
-              <th style="width: 70px; text-align: center;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let doc of documents; let i = index">
-              <td style="text-align: center;">{{ i + 1 }}</td>
-              <td><strong>{{ doc.docCode }}</strong></td>
-              <td>{{ doc.fileName }}</td>
-              <td><span class="wamis-status-chip wamis-status-progress">{{ doc.contentType }}</span></td>
-              <td>{{ ((doc.fileSize || 0) / 1024) | number:'1.1-1' }}</td>
-              <td style="text-align: center;">
-                <button type="button" class="wamis-action-btn" (click)="removeDocument(i)" matTooltip="Remove document">
-                  <span class="material-icons wamis-icon-delete">delete</span>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div style="margin-top: 24px; display: flex; gap: 12px;">
-      <button type="submit" class="wamis-btn-primary" matTooltip="Validate and Push to GePNIC external service">
-        Push Tender to GePNIC
+    <!-- Form Action Buttons -->
+    <div class="form-actions-bar">
+      <button class="primary-push-button" type="submit" [disabled]="formRef.invalid || submitting">
+        {{ submitting ? 'Pushing to GePNIC...' : 'Push Tender to GePNIC' }}
       </button>
-      <button type="button" class="wamis-btn-secondary" (click)="tenderForm.reset()" matTooltip="Clear form fields">
+      <button class="secondary-reset-button" type="button" (click)="resetForm()">
         Reset
       </button>
     </div>
-  </div>
-</form>
+  </form>
+</div>

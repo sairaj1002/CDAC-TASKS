@@ -1,0 +1,620 @@
+.tender-push-page {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #1e293b;
+}
+
+/* ==========================================================================
+   TABLE CARD & TENDER VIEW TABLE (Matches WMS Pretender View)
+   ========================================================================== */
+.table-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.wamis-pretender-table {
+  width: 100%;
+  min-width: 1300px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.wamis-pretender-table th {
+  background: #e0f2fe;
+  color: #0f2744;
+  font-weight: 700;
+  padding: 11px 13px;
+  border-bottom: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+
+.wamis-pretender-table td {
+  padding: 10px 13px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.wamis-pretender-table tr:hover td {
+  background: #f8fafc;
+}
+
+.font-bold {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.doc-link {
+  color: #0d6efd;
+  text-decoration: underline;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.empty-cell {
+  text-align: center;
+  padding: 24px;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   PILL BUTTONS (BOQ & DOCS)
+   ========================================================================== */
+.table-pill-btn {
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border: 1px solid transparent;
+  outline: none;
+}
+
+.pill-icon {
+  font-size: 14px;
+}
+
+.boq-pill-btn {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+.boq-pill-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.docs-pill-btn {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.docs-pill-btn:hover {
+  background: #16a34a;
+  color: #ffffff;
+  border-color: #16a34a;
+}
+
+/* Action: Push Button */
+.action-btn.push-btn {
+  background: #0b2e59;
+  color: #ffffff;
+  border: none;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 150ms ease;
+}
+
+.action-btn.push-btn:hover:not(:disabled) {
+  background: #0f3d75;
+}
+
+.action-btn.push-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   TABLE BOTTOM ACTIONS BAR (Document Upload Button Below Table)
+   ========================================================================== */
+.table-bottom-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+  padding: 10px 0;
+}
+
+.primary-doc-upload-btn {
+  background-color: #0b2e59;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background 150ms ease;
+}
+
+.primary-doc-upload-btn:hover {
+  background-color: #0f3d75;
+}
+
+.secondary-add-btn {
+  background-color: #ffffff;
+  color: #1e3a5f;
+  border: 1px solid #cbd5e1;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 150ms ease;
+}
+
+.secondary-add-btn:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+/* ==========================================================================
+   MODAL BACKDROP & DIALOGS
+   ========================================================================== */
+.custom-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.custom-modal-dialog {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.boq-modal-dialog {
+  width: 94vw;
+  max-width: 1360px;
+  max-height: 90vh;
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.docs-modal-dialog {
+  width: 90vw;
+  max-width: 920px;
+  max-height: 88vh;
+}
+
+.modal-inner-wrap {
+  width: 100%;
+}
+
+.modal-custom-header {
+  padding: 14px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2744;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-title-icon {
+  font-size: 20px;
+  color: #0b2e59;
+}
+
+.modal-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+.modal-subtitle strong {
+  color: #1e3a5f;
+}
+
+.modal-close-cross {
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 120ms ease;
+}
+
+.modal-close-cross:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.modal-custom-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-custom-footer {
+  padding: 12px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
+   DOCS MULTI-UPLOAD DROPZONE & SECTIONS
+   ========================================================================== */
+.docs-dropzone {
+  border: 2px dashed #93c5fd;
+  background: #f0f7ff;
+  border-radius: 8px;
+  padding: 24px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.docs-dropzone:hover {
+  border-color: #0b2e59;
+  background: #e0f2fe;
+}
+
+.dropzone-icon {
+  font-size: 40px;
+  color: #0b2e59;
+  margin-bottom: 6px;
+}
+
+.dropzone-primary-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f2744;
+}
+
+.dropzone-hint {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.docs-category-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.docs-cat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.docs-cat-select {
+  flex: 1;
+  height: 34px;
+  font-size: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 4px 8px;
+  background: #ffffff;
+  color: #1e293b;
+  outline: none;
+}
+
+.btn-add-files {
+  background: #0b2e59;
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.staged-docs-section {
+  margin-top: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 14px;
+  background: #fafafa;
+}
+
+.staged-docs-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f2744;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.staged-docs-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.staged-docs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.staged-doc-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+}
+
+.file-item-icon {
+  font-size: 20px;
+  color: #0b2e59;
+}
+
+.staged-file-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.staged-file-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.staged-file-size {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.staged-cat-select {
+  height: 28px;
+  font-size: 11.5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 2px 6px;
+  background: #ffffff;
+}
+
+.staged-status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.staged-status-badge.uploading {
+  color: #0369a1;
+  background: #e0f2fe;
+}
+
+.staged-remove-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.staged-remove-btn:hover {
+  color: #dc2626;
+}
+
+.staged-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.btn-upload-all {
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-upload-all:hover:not(:disabled) {
+  background: #15803d;
+}
+
+.btn-clear-staged {
+  background: #ffffff;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Existing Documents Section */
+.existing-docs-section {
+  margin-top: 24px;
+}
+
+.existing-docs-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f2744;
+  margin-bottom: 10px;
+}
+
+.existing-docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.existing-docs-table th {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-bottom: 1px solid #cbd5e1;
+  text-align: left;
+}
+
+.existing-docs-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.doc-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1e293b;
+}
+
+.doc-pdf-icon {
+  font-size: 18px;
+  color: #dc2626;
+}
+
+.doc-cat-badge {
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.existing-download-link {
+  color: #0b2e59;
+  text-decoration: none;
+  font-weight: 600;
+  margin-right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.existing-download-link:hover {
+  text-decoration: underline;
+}
+
+.existing-delete-btn {
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.empty-docs-note {
+  font-size: 12px;
+  color: #64748b;
+  font-style: italic;
+  padding: 16px 0;
+}
+
+.primary-button {
+  background: #0b2e59;
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+

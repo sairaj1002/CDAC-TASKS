@@ -565,19 +565,16 @@ html, body {
   margin-bottom: 24px;
 }
 
-/* Default & when second menu is open: 3 components */
+/* 4 input components in a single row */
+.wamis-wms-form-grid,
+.wamis-form-grid,
+.wamis-nit-grid,
 .second-menu-open .wamis-wms-form-grid,
 .second-menu-open .wamis-form-grid,
 .second-menu-open .wamis-nit-grid,
-.second-menu-open .wamis-3col-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-}
-
-/* Max screen / when second menu is closed: 4 components */
 .second-menu-closed .wamis-wms-form-grid,
 .second-menu-closed .wamis-form-grid,
-.second-menu-closed .wamis-nit-grid,
-.second-menu-closed .wamis-3col-grid {
+.second-menu-closed .wamis-nit-grid {
   grid-template-columns: repeat(4, 1fr) !important;
 }
 

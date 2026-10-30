@@ -1,81 +1,307 @@
-<div class="wamis-section-title">
-  GePNIC Tender Push
-</div>
-
-<!-- Primary Tabs Bar (Add | View) -->
-<div class="wamis-primary-tabs" style="margin-bottom: 20px;">
-  <button type="button"
-          class="wamis-primary-tab"
-          [class.active]="primaryTab === 'Add'"
-          (click)="setPrimaryTab('Add')"
-          matTooltip="Create and push new Tender to GePNIC">
-    Add
-  </button>
-  <button type="button"
-          class="wamis-primary-tab"
-          [class.active]="primaryTab === 'View'"
-          (click)="setPrimaryTab('View')"
-          matTooltip="View pushed tenders repository and status">
-    View
-  </button>
-</div>
-
-<!-- Add View: Tender Push Form & Response Viewer -->
-<div *ngIf="primaryTab === 'Add'">
-  <app-tender-form [initialData]="initialTenderData" (formSubmit)="onFormSubmit($event)"></app-tender-form>
-
-  <div *ngIf="lastResult" style="margin-top: 24px;">
-    <app-request-response-viewer
-      [requestPayload]="requestPayload"
-      [responsePayload]="responsePayload"
-      [status]="lastResult.status"
-      [responseCode]="lastResult.responseCode || 1">
-    </app-request-response-viewer>
-  </div>
-</div>
-
-<!-- View Tab: Pushed Tenders Repository -->
-<div *ngIf="primaryTab === 'View'" class="wamis-card">
-  <div class="wamis-card-title">
-    <span>Pushed Tenders Repository ({{ pushedTenders.length }})</span>
-    <span class="wamis-badge-pill">WAMIS Ledger</span>
+<div class="tender-push-page">
+  <div class="wamis-section-title">
+    GePNIC Tender Push & Document Repository
   </div>
 
-  <div class="wamis-table-container">
-    <table class="wamis-table">
-      <thead>
-        <tr>
-          <th style="width: 50px; text-align: center;">#</th>
-          <th>Tender Reference</th>
-          <th>Tender Title</th>
-          <th>Office ID</th>
-          <th style="text-align: right;">Estimated Cost (₹)</th>
-          <th>Publish Date</th>
-          <th>Status</th>
-          <th style="width: 90px; text-align: center;">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let t of pushedTenders; let i = index">
-          <td style="text-align: center;">{{ i + 1 }}</td>
-          <td><strong>{{ t.wamisTenderId }}</strong></td>
-          <td>{{ t.tenderTitle }}</td>
-          <td>{{ t.officeId }}</td>
-          <td style="text-align: right; font-weight: 600;">{{ t.estimatedCost | number:'1.2-2' }}</td>
-          <td>{{ t.publishDate }}</td>
-          <td>
-            <span class="wamis-status-chip wamis-status-success">{{ t.status }}</span>
-          </td>
-          <td style="text-align: center;">
-            <button type="button"
-                    class="wamis-action-btn"
-                    (click)="viewTenderDetails(t)"
-                    matTooltip="Inspect GePNIC payload and receipt">
-              <span class="material-icons" style="font-size: 18px; color: #1565c0;">visibility</span>
+  <!-- Primary Tabs Bar (View Tenders [Default] | Create & Push Tender) -->
+  <div class="wamis-primary-tabs" style="margin-bottom: 20px;">
+    <button type="button"
+            class="wamis-primary-tab"
+            [class.active]="primaryTab === 'View'"
+            (click)="setPrimaryTab('View')"
+            matTooltip="View tenders repository and manage documents">
+      View Tenders
+    </button>
+    <button type="button"
+            class="wamis-primary-tab"
+            [class.active]="primaryTab === 'Add'"
+            (click)="setPrimaryTab('Add')"
+            matTooltip="Create and push new Tender to GePNIC">
+      Create & Push Tender
+    </button>
+  </div>
+
+  <!-- ==================== VIEW TAB: TENDER VIEW TABLE VIEW ==================== -->
+  <div *ngIf="primaryTab === 'View'">
+    <div class="table-card">
+      <div class="table-scroll">
+        <table class="wamis-pretender-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reference Number</th>
+              <th>Parent Work</th>
+              <th>Procurement Type</th>
+              <th>Tender Type</th>
+              <th>Category</th>
+              <th>Publishing Date</th>
+              <th style="text-align: center;">BOQ</th>
+              <th style="text-align: center;">Docs</th>
+              <th>NIT</th>
+              <th>DTCN</th>
+              <th>Other</th>
+              <th>GePNIC Status</th>
+              <th class="actions-header" style="text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of tenders">
+              <td>{{ row.id }}</td>
+              <td class="font-bold">
+                <a href="javascript:void(0)" (click)="viewTenderDetails(row)" style="color: #0d6efd; text-decoration: none;">
+                  {{ row.tenderReferenceNumber }}
+                </a>
+              </td>
+              <td>{{ row.parentWorkNumber || '—' }}</td>
+              <td>{{ row.procurementType }}</td>
+              <td>{{ row.tenderType }}</td>
+              <td>{{ row.tenderCategory }}</td>
+              <td>{{ row.tenderPublishingDateTime | date:'dd-MM-yyyy HH:mm' }}</td>
+
+              <!-- BOQ Column with Button to Open BOQ Modal -->
+              <td style="text-align: center;">
+                <button type="button" class="table-pill-btn boq-pill-btn" (click)="openBoqModal(row)" title="Open BOQ Component">
+                  <span class="material-icons pill-icon">table_chart</span>
+                  <span>BOQ</span>
+                </button>
+              </td>
+
+              <!-- Docs Column with Button to Open Docs Multi-upload Modal -->
+              <td style="text-align: center;">
+                <button type="button" class="table-pill-btn docs-pill-btn" (click)="openDocsModal(row)" title="Upload & Manage Documents">
+                  <span class="material-icons pill-icon">cloud_upload</span>
+                  <span>Docs</span>
+                </button>
+              </td>
+
+              <!-- Documents Download Links -->
+              <td>
+                <a *ngIf="row.nitFileName" [href]="fileUrl(row.nitFileName)" target="_blank" class="doc-link">Download</a>
+                <span *ngIf="!row.nitFileName">—</span>
+              </td>
+              <td>
+                <a *ngIf="row.dtcnFileName" [href]="fileUrl(row.dtcnFileName)" target="_blank" class="doc-link">Download</a>
+                <span *ngIf="!row.dtcnFileName">—</span>
+              </td>
+              <td>
+                <a *ngIf="row.otherFileName" [href]="fileUrl(row.otherFileName)" target="_blank" class="doc-link">Download</a>
+                <span *ngIf="!row.otherFileName">—</span>
+              </td>
+
+              <!-- GePNIC Push Status Badge -->
+              <td>
+                <span class="wamis-status-chip" [class.wamis-status-success]="row.pushStatus === 'PUSHED_TO_GEPNIC'" [class.wamis-status-pending]="row.pushStatus !== 'PUSHED_TO_GEPNIC'">
+                  {{ row.pushStatus === 'PUSHED_TO_GEPNIC' ? 'PUSHED' : 'READY TO PUSH' }}
+                </span>
+              </td>
+
+              <!-- Action: Push to GePNIC Button -->
+              <td style="text-align: center; white-space: nowrap;">
+                <button
+                  type="button"
+                  class="action-btn push-btn"
+                  (click)="pushTenderToGepnic(row)"
+                  [disabled]="submitting"
+                  title="Encrypt and Push Tender to GePNIC">
+                  <span class="material-icons" style="font-size: 14px; vertical-align: middle;">send</span>
+                  {{ row.pushStatus === 'PUSHED_TO_GEPNIC' ? 'Re-Push' : 'Push to GePNIC' }}
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="tenders.length === 0">
+              <td colspan="14" class="empty-cell">No tenders found. Click "Create & Push Tender" to add one.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Below the Table: Prominent Document Upload Button & Actions (Matches Requirement) -->
+    <div class="table-bottom-actions-bar">
+      <button
+        type="button"
+        class="primary-doc-upload-btn"
+        (click)="openDocsModal()"
+        matTooltip="Open Document Repository & Upload Files">
+        <span class="material-icons">cloud_upload</span>
+        <span>Document Upload</span>
+      </button>
+
+      <button
+        type="button"
+        class="secondary-add-btn"
+        (click)="setPrimaryTab('Add')"
+        matTooltip="Switch to Tender Configuration & Push Form">
+        <span class="material-icons">add</span>
+        <span>Create New Tender</span>
+      </button>
+    </div>
+
+    <!-- GePNIC Push Result Payload Viewer -->
+    <div *ngIf="lastResult" style="margin-top: 24px;">
+      <app-request-response-viewer
+        [requestPayload]="requestPayload"
+        [responsePayload]="responsePayload"
+        [status]="lastResult.status"
+        [responseCode]="lastResult.responseCode || 1">
+      </app-request-response-viewer>
+    </div>
+  </div>
+
+  <!-- ==================== ADD TAB: TENDER PUSH FORM ==================== -->
+  <div *ngIf="primaryTab === 'Add'">
+    <app-tender-form [initialData]="initialTenderData" (formSubmit)="onFormSubmit($event)"></app-tender-form>
+
+    <div *ngIf="lastResult" style="margin-top: 24px;">
+      <app-request-response-viewer
+        [requestPayload]="requestPayload"
+        [responsePayload]="responsePayload"
+        [status]="lastResult.status"
+        [responseCode]="lastResult.responseCode || 1">
+      </app-request-response-viewer>
+    </div>
+  </div>
+
+  <!-- ==================== BOQ MODAL DIALOG ==================== -->
+  <div class="custom-modal-backdrop" *ngIf="showBoqModal" (click)="closeBoqModal()">
+    <div class="custom-modal-dialog boq-modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-inner-wrap">
+        <app-boq-details
+          [isModal]="true"
+          [tenderReference]="selectedTenderForBoq?.tenderReferenceNumber"
+          [parentWork]="selectedTenderForBoq?.parentWorkDescription || selectedTenderForBoq?.parentWorkNumber"
+          (close)="closeBoqModal()">
+        </app-boq-details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DOCS MULTI-UPLOAD MODAL DIALOG (Same Component from WMS Pretender View) ==================== -->
+  <div class="custom-modal-backdrop" *ngIf="showDocsModal" (click)="closeDocsModal()">
+    <div class="custom-modal-dialog docs-modal-dialog" (click)="$event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="modal-custom-header">
+        <div class="modal-header-text">
+          <div class="modal-title">
+            <span class="material-icons modal-title-icon">cloud_upload</span>
+            Tender Documents Repository & Multi-Upload
+          </div>
+          <div class="modal-subtitle">
+            Tender Ref: <strong>{{ selectedTenderForDocs?.tenderReferenceNumber }}</strong>
+            <span *ngIf="selectedTenderForDocs?.parentWorkNumber"> | Work No: {{ selectedTenderForDocs?.parentWorkNumber }}</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-cross" (click)="closeDocsModal()" matTooltip="Close">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-custom-body">
+        <!-- Multiple Files Drag & Drop Zone -->
+        <div class="docs-dropzone" (dragover)="onDragOver($event)" (drop)="onFilesDropped($event)" (click)="docsFileInput.click()">
+          <span class="material-icons dropzone-icon">drive_folder_upload</span>
+          <div class="dropzone-primary-text">Click to choose files or drag & drop multiple documents here</div>
+          <div class="dropzone-hint">Supports PDF, DOC, DOCX, XLS, XLSX, ZIP, DWG (Select multiple files at once)</div>
+          <input type="file" #docsFileInput multiple style="display: none;" (change)="onMultipleDocsSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.dwg,.csv">
+        </div>
+
+        <!-- Default Category Selector for new uploads -->
+        <div class="docs-category-bar">
+          <label class="docs-cat-label">Document Category:</label>
+          <select class="docs-cat-select" [(ngModel)]="selectedDocCategory">
+            <option *ngFor="let cat of docCategoryOptions" [value]="cat">{{ cat }}</option>
+          </select>
+          <button type="button" class="btn-add-files" (click)="docsFileInput.click()">
+            <span class="material-icons" style="font-size: 16px;">add_circle</span> Select Files
+          </button>
+        </div>
+
+        <!-- Staged Files Queue for Upload -->
+        <div class="staged-docs-section" *ngIf="stagedFiles.length > 0">
+          <div class="staged-docs-title">
+            <span>Staged Documents for Upload ({{ stagedFiles.length }})</span>
+            <span class="staged-docs-badge">Ready</span>
+          </div>
+          <div class="staged-docs-list">
+            <div class="staged-doc-item" *ngFor="let item of stagedFiles; let i = index">
+              <span class="material-icons file-item-icon">description</span>
+              <div class="staged-file-info">
+                <span class="staged-file-name" [title]="item.name">{{ item.name }}</span>
+                <span class="staged-file-size">{{ formatFileSize(item.size) }}</span>
+              </div>
+              <select class="staged-cat-select" [(ngModel)]="item.category">
+                <option *ngFor="let cat of docCategoryOptions" [value]="cat">{{ cat }}</option>
+              </select>
+              <span class="staged-status-badge" [class.uploading]="item.status === 'uploading'">
+                {{ item.status === 'uploading' ? 'Uploading...' : 'Ready' }}
+              </span>
+              <button type="button" class="staged-remove-btn" (click)="removeStagedFile(i)" title="Remove file">
+                &times;
+              </button>
+            </div>
+          </div>
+          <div class="staged-actions-bar">
+            <button type="button" class="btn-upload-all" [disabled]="uploadingDocs" (click)="uploadAllDocs()">
+              <span class="material-icons" style="font-size: 16px;">cloud_upload</span>
+              {{ uploadingDocs ? 'Uploading Documents...' : 'Upload All (' + stagedFiles.length + ' files)' }}
             </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <button type="button" class="btn-clear-staged" (click)="stagedFiles = []" [disabled]="uploadingDocs">
+              Clear Queue
+            </button>
+          </div>
+        </div>
+
+        <!-- Attached / Existing Documents List -->
+        <div class="existing-docs-section">
+          <div class="existing-docs-title">
+            Attached Tender Documents ({{ existingDocs.length }})
+          </div>
+          <table class="existing-docs-table" *ngIf="existingDocs.length > 0">
+            <thead>
+              <tr>
+                <th>Document Name</th>
+                <th>Category</th>
+                <th>Upload Date</th>
+                <th>Size</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let doc of existingDocs">
+                <td class="doc-name-cell">
+                  <span class="material-icons doc-pdf-icon">picture_as_pdf</span>
+                  <strong>{{ doc.name }}</strong>
+                </td>
+                <td>
+                  <span class="doc-cat-badge">{{ doc.category }}</span>
+                </td>
+                <td style="color: #64748b;">{{ doc.uploadDate }}</td>
+                <td style="color: #64748b;">{{ formatFileSize(doc.size) }}</td>
+                <td style="text-align: right;">
+                  <a [href]="fileUrl(doc.name)" target="_blank" class="existing-download-link" title="Download">
+                    <span class="material-icons" style="font-size: 14px;">download</span> Download
+                  </a>
+                  <button type="button" class="existing-delete-btn" (click)="deleteExistingDoc(doc)" title="Delete">
+                    <span class="material-icons" style="font-size: 14px;">delete</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="empty-docs-note" *ngIf="existingDocs.length === 0">
+            No documents uploaded yet for this tender. Select multiple documents above and click "Upload All".
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-custom-footer">
+        <button type="button" class="primary-button" (click)="closeDocsModal()">
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 </div>

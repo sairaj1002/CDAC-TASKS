@@ -185,59 +185,212 @@
       </app-pretender-form>
     </div>
 
-    <!-- ============================================================== -->
-    <!-- TAB 7: AWARDING (Demo Tab)                                     -->
+        <!-- ============================================================== -->
+    <!-- TAB 7: AWARDING (Exact match to User Image)                    -->
     <!-- ============================================================== -->
     <div *ngIf="activeSecondaryTab === 'Awarding'" class="wamis-child-section"
-      style="background: #ffffff; padding: 18px; border: 1px solid var(--wamis-table-border); border-radius: 4px; margin-bottom: 20px;">
-      <div style="font-weight: 600; font-size: 13.5px; color: var(--wamis-navy); margin-bottom: 14px;">
-        Contract Awarding & Work Order Details
+      style="background: #ffffff; padding: 12px 16px 20px; border: 1px solid #d0dfe8; border-radius: 4px; margin-bottom: 20px;">
+
+      <!-- Top Search Bar Matching Image 4 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1.5px solid #0f2744; padding-bottom: 2px;">
+        <input
+          type="text"
+          [(ngModel)]="searchContractQuery"
+          placeholder="Search Contract"
+          style="border: none; outline: none; background: transparent; font-size: 13.5px; color: #1e293b; width: 100%; padding: 2px 0;" />
+        <span class="material-icons" style="font-size: 20px; color: #0f2744; cursor: pointer;">search</span>
       </div>
-      <div class="wamis-form-grid">
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Work Order Number <span class="required">*</span></label>
-          <input type="text" class="wamis-form-control" [(ngModel)]="awardingData.workOrderNumber" />
+
+      <!-- Contract Records Table with Horizontal Scrollbar & Pale Blue Header -->
+      <div class="wamis-table-container" style="margin-bottom: 12px; border: 1px solid #d0dfe8;">
+        <table class="wamis-table" style="margin-bottom: 0; min-width: 1100px;">
+          <thead>
+            <tr style="background-color: #e0f2fe; color: #0f2744;">
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Registration<br/>No.</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Status</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Contract/Agreement<br/>No</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">AA Amount (₹)</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">TS Amount (₹)</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">Total Amount<br/>(Exclusive of GST) (₹)</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">Total Amt.<br/>with GST (₹)</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Item</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Actions</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Audit Details</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Attachments</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Report</th>
+              <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Amendment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Empty state matching User Image exactly -->
+            <tr *ngIf="contractRecords.length === 0">
+              <td colspan="13" style="background-color: #e0f2fe; color: #0369a1; padding: 16px 20px; font-weight: 600; font-size: 13.5px; border-bottom: none;">
+                No Contract records to display!
+              </td>
+            </tr>
+
+            <!-- Render records if any present -->
+            <tr *ngFor="let row of contractRecords; let i = index">
+              <td style="font-weight: 600;">{{ row.registrationNo }}</td>
+              <td><app-status-chip [status]="row.status"></app-status-chip></td>
+              <td>{{ row.contractAgreementNo }}</td>
+              <td>₹ {{ row.aaAmount | number:'1.2-2' }}</td>
+              <td>₹ {{ row.tsAmount | number:'1.2-2' }}</td>
+              <td>₹ {{ row.totalAmountExclusiveGst | number:'1.2-2' }}</td>
+              <td>₹ {{ row.totalAmountWithGst | number:'1.2-2' }}</td>
+              <td>{{ row.item }}</td>
+              <td style="text-align: center;">
+                <button type="button" class="wamis-action-btn" (click)="viewContractDetails(row)" matTooltip="View Details">
+                  <span class="material-icons" style="font-size: 18px;">visibility</span>
+                </button>
+              </td>
+              <td style="text-align: center;">
+                <span class="material-icons" style="font-size: 18px; color: #0d6efd;">check</span>
+              </td>
+              <td style="text-align: center;">
+                <span class="material-icons" style="font-size: 18px; color: #0d6efd;">attach_file</span>
+              </td>
+              <td style="text-align: center;">
+                <span class="material-icons" style="font-size: 18px; color: #0d6efd;">description</span>
+              </td>
+              <td style="text-align: center;">
+                <span class="material-icons" style="font-size: 18px; color: #0d6efd;">edit_note</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer Bar: Document Icon, Refresh, Paginator (10), Counts, Navigation Controls -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 4px 16px;">
+        <!-- Left: Document / CSV Icon -->
+        <div>
+          <button
+            type="button"
+            (click)="exportContractCsv()"
+            matTooltip="Export to CSV / Document"
+            style="background: none; border: none; cursor: pointer; padding: 4px; display: inline-flex; align-items: center;">
+            <span class="material-icons" style="font-size: 24px; color: #0f172a;">description</span>
+          </button>
         </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Awarding Date <span class="required">*</span></label>
-          <div class="wamis-date-input-wrap">
-            <input type="date" class="wamis-form-control" [(ngModel)]="awardingData.awardingDate" />
-            <span class="material-icons wamis-date-icon">calendar_today</span>
+
+        <!-- Right: Pagination Controls matching image -->
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <!-- Refresh Button -->
+          <button
+            type="button"
+            (click)="refreshContracts()"
+            matTooltip="Refresh Records"
+            style="background: none; border: none; cursor: pointer; display: inline-flex; align-items: center;">
+            <span class="material-icons" style="font-size: 20px; color: #1e40af;">refresh</span>
+          </button>
+
+          <!-- Page Size Dropdown -->
+          <div style="display: inline-flex; align-items: center;">
+            <select
+              [(ngModel)]="contractPageSize"
+              style="padding: 4px 8px; border: 1px solid #94a3b8; border-radius: 4px; background: #ffffff; font-size: 13px; color: #1e293b; cursor: pointer;">
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="25">25</option>
+              <option [ngValue]="50">50</option>
+            </select>
+          </div>
+
+          <!-- 0 of 0 Counter -->
+          <span style="font-size: 13px; color: #475569;">
+            {{ contractRecords.length === 0 ? '0 of 0' : '1 - ' + contractRecords.length + ' of ' + contractRecords.length }}
+          </span>
+
+          <!-- Navigation Chevrons: |< < > >| -->
+          <div style="display: flex; align-items: center; gap: 4px; color: #94a3b8;">
+            <button type="button" disabled style="background: none; border: none; cursor: not-allowed; color: #94a3b8; display: inline-flex;">
+              <span class="material-icons" style="font-size: 18px;">first_page</span>
+            </button>
+            <button type="button" disabled style="background: none; border: none; cursor: not-allowed; color: #94a3b8; display: inline-flex;">
+              <span class="material-icons" style="font-size: 18px;">chevron_left</span>
+            </button>
+            <button type="button" disabled style="background: none; border: none; cursor: not-allowed; color: #94a3b8; display: inline-flex;">
+              <span class="material-icons" style="font-size: 18px;">chevron_right</span>
+            </button>
+            <button type="button" disabled style="background: none; border: none; cursor: not-allowed; color: #94a3b8; display: inline-flex;">
+              <span class="material-icons" style="font-size: 18px;">last_page</span>
+            </button>
           </div>
         </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Awarded Contractor / Agency <span class="required">*</span></label>
-          <input type="text" class="wamis-form-control" [(ngModel)]="awardingData.awardedAgency" />
-        </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Tender Reference No.</label>
-          <input type="text" class="wamis-form-control" [(ngModel)]="awardingData.tenderRefNo" />
-        </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Agreement Number</label>
-          <input type="text" class="wamis-form-control" [(ngModel)]="awardingData.agreementNumber" />
-        </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Accepted Bid Value (₹) <span class="required">*</span></label>
-          <input type="number" class="wamis-form-control" [(ngModel)]="awardingData.acceptedBidValue" />
-        </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Performance Security (₹)</label>
-          <input type="number" class="wamis-form-control" [(ngModel)]="awardingData.performanceSecurity" />
-        </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Completion Period (Months)</label>
-          <input type="number" class="wamis-form-control" [(ngModel)]="awardingData.completionPeriodMonths" />
-        </div>
-        <div class="wamis-form-group">
-          <label class="wamis-form-label">Awarding Status</label>
-          <input type="text" class="wamis-form-control wamis-disabled-input" [value]="awardingData.awardingStatus" readonly />
-        </div>
       </div>
-      <div style="margin-top: 14px;">
-        <button type="button" class="wamis-btn-primary" (click)="saveAwarding()">
-          Save Awarding Details
+
+      <!-- Add Awarding Navy Blue Button at Bottom Left Matching Image -->
+      <div style="margin-top: 10px;">
+        <button
+          type="button"
+          (click)="onAddAwarding()"
+          style="background-color: #0b2e59; color: #ffffff; border: none; padding: 8px 18px; border-radius: 4px; font-size: 13.5px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+          Add Awarding
         </button>
+      </div>
+    </div>
+
+    <!-- Contract Details View Modal -->
+    <div class="custom-modal-backdrop" *ngIf="showContractDetailsModal" (click)="closeContractDetails()">
+      <div class="custom-modal-dialog" style="max-width: 650px; width: 90%; background: #ffffff; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden;" (click)="$event.stopPropagation()">
+        <div style="background: var(--wamis-navy, #0f2c59); color: #ffffff; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons" style="font-size: 20px;">description</span>
+            <span>Contract Awarding Details</span>
+          </div>
+          <button type="button" (click)="closeContractDetails()" style="background: none; border: none; color: #ffffff; cursor: pointer; font-size: 20px; line-height: 1;">✕</button>
+        </div>
+
+        <div style="padding: 20px;" *ngIf="selectedContractRecord">
+          <div class="wamis-table-container">
+            <table class="wamis-table">
+              <tbody>
+                <tr>
+                  <td style="font-weight: 600; width: 45%;">Registration No.</td>
+                  <td style="font-weight: 600; color: var(--wamis-navy);">{{ selectedContractRecord.registrationNo }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Status</td>
+                  <td><app-status-chip [status]="selectedContractRecord.status"></app-status-chip></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Contract/Agreement No.</td>
+                  <td>{{ selectedContractRecord.contractAgreementNo }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">AA Amount (₹)</td>
+                  <td>₹ {{ selectedContractRecord.aaAmount | number:'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">TS Amount (₹)</td>
+                  <td>₹ {{ selectedContractRecord.tsAmount | number:'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Total Amount (Exclusive of GST)</td>
+                  <td>₹ {{ selectedContractRecord.totalAmountExclusiveGst | number:'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Total Amt. with GST (₹)</td>
+                  <td style="font-weight: 700; color: #15803d;">₹ {{ selectedContractRecord.totalAmountWithGst | number:'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Item</td>
+                  <td>{{ selectedContractRecord.item }}</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Audit Details</td>
+                  <td>{{ selectedContractRecord.auditDetails }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+            <button type="button" class="wamis-btn-primary" (click)="closeContractDetails()" matTooltip="Close details">
+              Close
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -254,14 +407,105 @@
     </div>
   </div>
 
-  <!-- View Tab View -->
-  <div *ngIf="primaryTab === 'View'" class="wamis-tab-placeholder">
-    <div style="font-size: 14px; font-weight: 600; color: var(--wamis-navy); margin-bottom: 8px;">
-      Registered Sub Works List
-    </div>
-    <div style="color: #64748b; font-size: 13px;">
-      Select any work from the division inventory to inspect engineering attributes, bill items, and GePNIC publication
-      status.
+  <!-- View Tab View: Matches Image 2 (Sub Work View with Pale Blue Header and Icons) -->
+  <div *ngIf="primaryTab === 'View'" style="background: #ffffff; padding: 14px 18px 24px; border: 1px solid #d0dfe8; border-radius: 4px;">
+    <div class="wamis-table-container" style="margin-bottom: 0; border: 1px solid #d0dfe8;">
+      <table class="wamis-table" style="margin-bottom: 0; min-width: 1400px;">
+        <thead>
+          <tr style="background-color: #e0f2fe; color: #0f2744;">
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Registration<br/>Number</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 250px;">Sub Work Name</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Work Category</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Stipulated Start<br/>Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Stipulated End<br/>Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Start Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">End Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Contractor<br/>Name</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">Agreement Amt.<br/>(₹)</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">GST Agreement<br/>Amt. (₹)</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">Progressive<br/>Expenditure (₹)</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Action</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Close</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Audit Details</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Report</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Attachments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of subWorkRecords">
+            <!-- Registration Number (blue link) -->
+            <td>
+              <a href="javascript:void(0)" style="color: #0d6efd; font-weight: 600; text-decoration: none;">
+                {{ row.registrationNumber }}
+              </a>
+            </td>
+
+            <!-- Sub Work Name -->
+            <td style="font-size: 12.5px; color: #1e293b; max-width: 320px;">
+              {{ row.subWorkName }}
+            </td>
+
+            <!-- Work Category -->
+            <td style="font-size: 12.5px;">
+              {{ row.workCategory }}
+            </td>
+
+            <!-- Stipulated Dates -->
+            <td style="text-align: center;">{{ row.stipulatedStartDate ? (row.stipulatedStartDate | date:'dd-MM-yyyy') : '' }}</td>
+            <td style="text-align: center;">{{ row.stipulatedEndDate ? (row.stipulatedEndDate | date:'dd-MM-yyyy') : '' }}</td>
+
+            <!-- Start / End Date -->
+            <td style="text-align: center;">{{ row.startDate }}</td>
+            <td style="text-align: center;">{{ row.endDate }}</td>
+
+            <!-- Contractor Name -->
+            <td>{{ row.contractorName || '-' }}</td>
+
+            <!-- Financials -->
+            <td style="text-align: right; font-weight: 500;">{{ row.agreementAmt | number:'1.2-2' }}</td>
+            <td style="text-align: right; font-weight: 500;">{{ row.gstAgreementAmt | number:'1.2-2' }}</td>
+            <td style="text-align: right; font-weight: 500;">{{ row.progressiveExpenditure | number:'1.2-2' }}</td>
+
+            <!-- Action: Blue Edit Pen + Red Delete Trash -->
+            <td style="text-align: center; white-space: nowrap;">
+              <button type="button" (click)="editSubWork(row)" matTooltip="Edit Sub Work" style="background: none; border: none; cursor: pointer; color: #0d6efd; padding: 2px 4px;">
+                <span class="material-icons" style="font-size: 18px;">edit</span>
+              </button>
+              <button type="button" (click)="deleteSubWork(row)" matTooltip="Delete Sub Work" style="background: none; border: none; cursor: pointer; color: #dc2626; padding: 2px 4px;">
+                <span class="material-icons" style="font-size: 18px;">delete</span>
+              </button>
+            </td>
+
+            <!-- Close: Blue Cross (x) -->
+            <td style="text-align: center;">
+              <button type="button" (click)="closeSubWork(row)" matTooltip="Close Sub Work" style="background: none; border: none; cursor: pointer; color: #0d6efd; padding: 2px;">
+                <span class="material-icons" style="font-size: 18px;">close</span>
+              </button>
+            </td>
+
+            <!-- Audit Details: Blue Checkmark -->
+            <td style="text-align: center;">
+              <button type="button" (click)="viewAuditDetails(row)" matTooltip="View Audit Details" style="background: none; border: none; cursor: pointer; color: #0d6efd; padding: 2px;">
+                <span class="material-icons" style="font-size: 18px;">check</span>
+              </button>
+            </td>
+
+            <!-- Report: Blue File Document Icon -->
+            <td style="text-align: center;">
+              <button type="button" (click)="viewReport(row)" matTooltip="View / Download Report" style="background: none; border: none; cursor: pointer; color: #0d6efd; padding: 2px;">
+                <span class="material-icons" style="font-size: 18px;">description</span>
+              </button>
+            </td>
+
+            <!-- Attachments: Blue Paperclip Icon -->
+            <td style="text-align: center;">
+              <button type="button" (click)="viewAttachments(row)" matTooltip="View Attachments" style="background: none; border: none; cursor: pointer; color: #0d6efd; padding: 2px;">
+                <span class="material-icons" style="font-size: 18px;">attach_file</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

@@ -1,90 +1,210 @@
-<div class="wamis-section-title">
-  Awarding
-</div>
+<div class="awarding-page-container">
+  <!-- Section Title -->
+  <div class="wamis-section-title">
+    Awarding
+  </div>
 
-<div class="wamis-card">
-  <form [formGroup]="searchForm" (ngSubmit)="executeSearch()">
-    <div class="wamis-form-grid">
-      <!-- Col 1 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">AOC Created Date (yyyyMMdd) <span class="required">*</span></label>
-        <input type="text" class="wamis-form-control" formControlName="createdDate" placeholder="e.g. 20230818" />
+  <div class="awarding-card">
+    <!-- Top Search Bar Matching Image 4 -->
+    <div class="search-contract-bar">
+      <input
+        type="text"
+        [(ngModel)]="searchContractQuery"
+        placeholder="Search Contract"
+        class="search-contract-input" />
+      <span class="material-icons search-contract-icon">search</span>
+    </div>
+
+    <!-- Contract Records Table with Horizontal Scrollbar & Pale Blue Header -->
+    <div class="wamis-table-container">
+      <table class="wamis-table">
+        <thead>
+          <tr>
+            <th style="min-width: 120px;">Registration<br/>No.</th>
+            <th style="min-width: 90px;">Status</th>
+            <th style="min-width: 150px;">Contract/Agreement<br/>No</th>
+            <th style="min-width: 120px; text-align: right;">AA Amount (₹)</th>
+            <th style="min-width: 120px; text-align: right;">TS Amount (₹)</th>
+            <th style="min-width: 160px; text-align: right;">Total Amount<br/>(Exclusive of GST) (₹)</th>
+            <th style="min-width: 140px; text-align: right;">Total Amt.<br/>with GST (₹)</th>
+            <th style="min-width: 120px;">Item</th>
+            <th style="min-width: 80px; text-align: center;">Actions</th>
+            <th style="min-width: 110px; text-align: center;">Audit Details</th>
+            <th style="min-width: 110px; text-align: center;">Attachments</th>
+            <th style="min-width: 80px; text-align: center;">Report</th>
+            <th style="min-width: 100px; text-align: center;">Amendment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Empty State Banner Matching Image 4 Exactly -->
+          <tr *ngIf="contractRecords.length === 0">
+            <td colspan="13" class="empty-contract-banner">
+              No Contract records to display!
+            </td>
+          </tr>
+
+          <!-- Render records if any present -->
+          <tr *ngFor="let row of contractRecords; let i = index">
+            <td style="font-weight: 600;">
+              <a href="javascript:void(0)" (click)="viewContractDetails(row)" style="color: #0d6efd; text-decoration: none;">
+                {{ row.registrationNo }}
+              </a>
+            </td>
+            <td><app-status-chip [status]="row.status"></app-status-chip></td>
+            <td>{{ row.contractAgreementNo }}</td>
+            <td style="text-align: right;">₹ {{ row.aaAmount | number:'1.2-2' }}</td>
+            <td style="text-align: right;">₹ {{ row.tsAmount | number:'1.2-2' }}</td>
+            <td style="text-align: right;">₹ {{ row.totalAmountExclusiveGst | number:'1.2-2' }}</td>
+            <td style="text-align: right; font-weight: 700; color: #16a34a;">₹ {{ row.totalAmountWithGst | number:'1.2-2' }}</td>
+            <td>{{ row.item }}</td>
+            <td style="text-align: center;">
+              <button type="button" class="action-icon-btn" (click)="viewContractDetails(row)" title="View Details">
+                <span class="material-icons">visibility</span>
+              </button>
+            </td>
+            <td style="text-align: center;">
+              <button type="button" class="action-icon-btn" title="Audit Details">
+                <span class="material-icons">check</span>
+              </button>
+            </td>
+            <td style="text-align: center;">
+              <button type="button" class="action-icon-btn" title="Attachments">
+                <span class="material-icons">attach_file</span>
+              </button>
+            </td>
+            <td style="text-align: center;">
+              <button type="button" class="action-icon-btn" title="Report">
+                <span class="material-icons">description</span>
+              </button>
+            </td>
+            <td style="text-align: center;">
+              <button type="button" class="action-icon-btn" title="Amendment">
+                <span class="material-icons">edit_note</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer Bar: Document Icon on Left, Pagination Controls on Right (Matches Image 4) -->
+    <div class="awarding-footer-bar">
+      <!-- Left: Document Icon -->
+      <div>
+        <button
+          type="button"
+          (click)="exportContractCsv()"
+          title="Export Contract Document"
+          class="doc-export-btn">
+          <span class="material-icons">description</span>
+        </button>
       </div>
 
-      <!-- Col 2 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Tender Reference (Optional)</label>
-        <input type="text" class="wamis-form-control" formControlName="tenderReference" placeholder="e.g. WAMIS-TND-..." />
-      </div>
+      <!-- Right: Pagination Controls matching image 4 -->
+      <div class="pagination-controls">
+        <!-- Refresh Button -->
+        <button
+          type="button"
+          (click)="refreshContracts()"
+          title="Refresh Records"
+          class="pag-icon-btn refresh-btn">
+          <span class="material-icons">refresh</span>
+        </button>
 
-      <!-- Col 3 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Contract Number / Award Ref</label>
-        <input type="text" class="wamis-form-control" placeholder="e.g. CA-2026-PWD-01" />
+        <!-- Page Size Dropdown -->
+        <div class="pag-select-wrapper">
+          <select [(ngModel)]="contractPageSize" class="pag-select">
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+          </select>
+        </div>
+
+        <!-- Counter: 0 of 0 -->
+        <span class="pag-count">
+          {{ contractRecords.length === 0 ? '0 of 0' : '1 - ' + contractRecords.length + ' of ' + contractRecords.length }}
+        </span>
+
+        <!-- Navigation Chevrons: |< < > >| -->
+        <div class="pag-nav-group">
+          <button type="button" disabled class="pag-nav-btn"><span class="material-icons">first_page</span></button>
+          <button type="button" disabled class="pag-nav-btn"><span class="material-icons">chevron_left</span></button>
+          <button type="button" disabled class="pag-nav-btn"><span class="material-icons">chevron_right</span></button>
+          <button type="button" disabled class="pag-nav-btn"><span class="material-icons">last_page</span></button>
+        </div>
       </div>
     </div>
 
-    <div style="margin-top: 14px;">
-      <button type="submit" class="wamis-btn-primary" [disabled]="searching" matTooltip="Query AOC details from GePNIC">
-        {{ searching ? 'Searching...' : 'Pull AOC Records' }}
+    <!-- Add Awarding Navy Blue Button at Bottom Left Matching Image 4 -->
+    <div style="margin-top: 10px;">
+      <button
+        type="button"
+        (click)="onAddAwarding()"
+        class="add-awarding-navy-btn">
+        Add Awarding
       </button>
     </div>
-  </form>
-</div>
-
-<!-- AOC Results Cards/Table -->
-<div class="wamis-card" *ngFor="let aoc of aocResults">
-  <div class="wamis-card-title">
-    <span>Contract: {{ aoc.contractNumber }} ({{ aoc.tenderReference }})</span>
-    <span class="wamis-status-chip wamis-status-success">{{ aoc.status }}</span>
   </div>
 
-  <div class="wamis-form-grid" style="margin-bottom: 16px;">
-    <div>
-      <span style="font-size: 12px; color: #64748b;">Awarded Bidder:</span>
-      <div style="font-weight: 600; font-size: 14px;">{{ aoc.awardedBidderName }}</div>
-    </div>
-    <div>
-      <span style="font-size: 12px; color: #64748b;">Awarded Contract Value:</span>
-      <div style="font-weight: 700; font-size: 15px; color: var(--wamis-navy);">₹ {{ aoc.awardedValue | number:'1.2-2' }}</div>
-    </div>
-    <div>
-      <span style="font-size: 12px; color: #64748b;">Award Date:</span>
-      <div>{{ aoc.awardDate | date:'yyyy-MM-dd HH:mm' }}</div>
-    </div>
-  </div>
+  <!-- Contract Details View Modal -->
+  <div class="custom-modal-backdrop" *ngIf="showContractDetailsModal" (click)="closeContractDetails()">
+    <div class="custom-modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-header-title">
+          <span class="material-icons">description</span>
+          <span>Contract Awarding Details</span>
+        </div>
+        <button type="button" (click)="closeContractDetails()" class="modal-close-btn">✕</button>
+      </div>
 
-  <!-- AOC Documents Download Table (Matches Screenshot 4 Table) -->
-  <div style="font-weight: 600; font-size: 13px; color: var(--wamis-navy); margin-bottom: 6px;">
-    Attached Contract Documents (BOQ / LOA / Nego)
-  </div>
-  <div class="wamis-table-container">
-    <table class="wamis-table">
-      <thead>
-        <tr>
-          <th style="width: 50px; text-align: center;">Sr No.</th>
-          <th>Doc Type</th>
-          <th>Bid ID</th>
-          <th>Doc Code</th>
-          <th>File Name</th>
-          <th style="width: 120px; text-align: center;">Download</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let doc of aoc.documents; let i = index">
-          <td style="text-align: center; font-weight: 500;">{{ i + 1 }}</td>
-          <td><span class="wamis-badge-pill">{{ doc.docType }}</span></td>
-          <td>{{ doc.bId }}</td>
-          <td><strong>{{ doc.docCode }}</strong></td>
-          <td>{{ doc.fileName }}</td>
-          <td style="text-align: center;">
-            <button class="wamis-btn-secondary" style="padding: 4px 10px; font-size: 11.5px;" (click)="downloadDocument(doc)"
-                    matTooltip="Download file from postAOCFileDownloadDetailsService">
-              <span class="material-icons" style="font-size: 14px; vertical-align: middle;">download</span> Download
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="modal-body" *ngIf="selectedContractRecord">
+        <table class="modal-details-table">
+          <tbody>
+            <tr>
+              <td class="prop-label">Registration No.</td>
+              <td class="prop-val">{{ selectedContractRecord.registrationNo }}</td>
+            </tr>
+            <tr>
+              <td class="prop-label">Status</td>
+              <td><app-status-chip [status]="selectedContractRecord.status"></app-status-chip></td>
+            </tr>
+            <tr>
+              <td class="prop-label">Contract/Agreement No.</td>
+              <td class="prop-val">{{ selectedContractRecord.contractAgreementNo }}</td>
+            </tr>
+            <tr>
+              <td class="prop-label">AA Amount (₹)</td>
+              <td class="prop-val">₹ {{ selectedContractRecord.aaAmount | number:'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td class="prop-label">TS Amount (₹)</td>
+              <td class="prop-val">₹ {{ selectedContractRecord.tsAmount | number:'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td class="prop-label">Total Amount (Exclusive of GST)</td>
+              <td class="prop-val">₹ {{ selectedContractRecord.totalAmountExclusiveGst | number:'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td class="prop-label">Total Amt. with GST (₹)</td>
+              <td class="prop-val-highlight">₹ {{ selectedContractRecord.totalAmountWithGst | number:'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td class="prop-label">Item</td>
+              <td class="prop-val">{{ selectedContractRecord.item }}</td>
+            </tr>
+            <tr>
+              <td class="prop-label">Audit Details</td>
+              <td class="prop-val">{{ selectedContractRecord.auditDetails }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+          <button type="button" class="wamis-btn-primary" (click)="closeContractDetails()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -43,14 +43,13 @@ import { WorkSearchComponent } from './features/gepnic/components/work-search/wo
 import { RequestResponseViewerComponent } from './features/gepnic/components/request-response-viewer/request-response-viewer.component';
 import { ValidationResultsComponent } from './features/gepnic/components/validation-results/validation-results.component';
 import { TransactionTableComponent } from './features/gepnic/components/transaction-table/transaction-table.component';
+import { WorkDetailTableComponent } from './features/gepnic/components/work-detail-table/work-detail-table.component';
 
 // Feature Pages
 import { PretenderPageComponent } from './features/gepnic/pages/pretender-page/pretender-page.component';
 import { TenderPushComponent } from './features/gepnic/pages/tender-push/tender-push.component';
-import { DocumentManagementComponent } from './features/gepnic/pages/document-management/document-management.component';
 import { TenderCorrigendumPullComponent } from './features/gepnic/pages/tender-corrigendum-pull/tender-corrigendum-pull.component';
 import { AocManagementComponent } from './features/gepnic/pages/aoc-management/aoc-management.component';
-import { SystemDiagnosticsComponent } from './features/gepnic/pages/system-diagnostics/system-diagnostics.component';
 
 @NgModule({
   declarations: [
@@ -79,13 +78,12 @@ import { SystemDiagnosticsComponent } from './features/gepnic/pages/system-diagn
     RequestResponseViewerComponent,
     ValidationResultsComponent,
     TransactionTableComponent,
+    WorkDetailTableComponent,
     // Feature pages
     PretenderPageComponent,
     TenderPushComponent,
-    DocumentManagementComponent,
     TenderCorrigendumPullComponent,
-    AocManagementComponent,
-    SystemDiagnosticsComponent
+    AocManagementComponent
   ],
   imports: [
     BrowserModule,

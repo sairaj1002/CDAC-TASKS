@@ -1,0 +1,114 @@
+<div class="work-detail-table-card">
+  <div class="table-scroll-container">
+    <table class="work-detail-table">
+      <thead>
+        <tr>
+          <th style="min-width: 140px;">Work<br/>Registration<br/>Number</th>
+          <th style="min-width: 280px;">Name of Work</th>
+          <th style="min-width: 100px;">Work Type</th>
+          <th style="min-width: 110px;">Work Status</th>
+          <th style="min-width: 110px;">Work GIS Code</th>
+          <th style="min-width: 100px;">Budget Year</th>
+          <th style="min-width: 90px;">Status</th>
+          <th style="min-width: 110px; text-align: center;">Action</th>
+          <th style="min-width: 70px; text-align: center;">Close</th>
+          <th style="min-width: 100px; text-align: center;">Attachments</th>
+          <th style="min-width: 90px; text-align: center;">Sub Works</th>
+          <th style="min-width: 80px; text-align: center;">Overview</th>
+          <th style="min-width: 100px; text-align: center;">Audit Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of works">
+          <!-- Work Registration Number (blue link) -->
+          <td>
+            <a href="javascript:void(0)" class="work-reg-link" (click)="onSelect(item)">
+              {{ item.workRegistrationNumber }}
+            </a>
+          </td>
+
+          <!-- Name of Work -->
+          <td class="work-name-cell">
+            {{ item.nameOfWork }}
+          </td>
+
+          <!-- Work Type -->
+          <td>
+            {{ item.workType }}
+          </td>
+
+          <!-- Work Status -->
+          <td>
+            {{ item.workStatus }}
+          </td>
+
+          <!-- Work GIS Code -->
+          <td>
+            {{ item.workGisCode || '' }}
+          </td>
+
+          <!-- Budget Year -->
+          <td>
+            {{ item.budgetYear }}
+          </td>
+
+          <!-- Status (blue text/link) -->
+          <td>
+            <span class="status-approved-link">{{ item.status }}</span>
+          </td>
+
+          <!-- Action: Edit (pencil), Delete (trash), Circle Checkmark -->
+          <td style="text-align: center; white-space: nowrap;">
+            <div class="actions-group">
+              <button type="button" class="icon-btn edit-btn" (click)="onEdit(item)" title="Edit">
+                <span class="material-icons">edit</span>
+              </button>
+              <button type="button" class="icon-btn delete-btn" (click)="onDelete(item)" title="Delete">
+                <span class="material-icons">delete</span>
+              </button>
+              <button type="button" class="icon-btn verify-btn" (click)="onSelect(item)" title="Verify">
+                <span class="material-icons">check_circle</span>
+              </button>
+            </div>
+          </td>
+
+          <!-- Close: Blue X -->
+          <td style="text-align: center;">
+            <button type="button" class="icon-btn close-btn" (click)="onClose(item)" title="Close">
+              <span class="material-icons">close</span>
+            </button>
+          </td>
+
+          <!-- Attachments: Blue Paperclip -->
+          <td style="text-align: center;">
+            <button type="button" class="icon-btn feature-btn" (click)="onAttachment(item)" title="Attachments">
+              <span class="material-icons">attach_file</span>
+            </button>
+          </td>
+
+          <!-- Sub Works: Blue Table Grid Icon -->
+          <td style="text-align: center;">
+            <button type="button" class="icon-btn feature-btn" (click)="onSubWorks(item)" title="Sub Works">
+              <span class="material-icons">table_chart</span>
+            </button>
+          </td>
+
+          <!-- Overview: Blue Doc Icon -->
+          <td style="text-align: center;">
+            <button type="button" class="icon-btn feature-btn" (click)="onOverview(item)" title="Overview">
+              <span class="material-icons">article</span>
+            </button>
+          </td>
+
+          <!-- Audit Details: Blue Checkmark -->
+          <td style="text-align: center;">
+            <button type="button" class="icon-btn feature-btn" (click)="onAuditDetails(item)" title="Audit Details">
+              <span class="material-icons">check</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
