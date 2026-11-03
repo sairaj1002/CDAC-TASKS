@@ -1,0 +1,16 @@
+<div class="wamis-dialog-card">
+  <button type="button" class="wamis-dialog-close-btn" (click)="onCancel()" aria-label="Close">✕</button>
+  <div class="wamis-dialog-body">
+    <h3 class="wamis-dialog-title">{{ data.title }}</h3>
+    <p class="wamis-dialog-subtitle">{{ data.message }}</p>
+    <div class="wamis-dialog-actions">
+      <button type="button" class="btn-dialog-ok" (click)="onConfirm()">
+        {{ data.confirmButtonText || 'Confirm' }}
+      </button>
+      <button type="button" class="btn-dialog-cancel" (click)="onCancel()">
+        {{ data.cancelButtonText || 'Cancel' }}
+      </button>
+    </div>
+  </div>
+</div>
+

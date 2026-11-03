@@ -2435,3 +2435,3084 @@ select.wamis-wms-select:focus {
 
 
 
+
+
+
+/* =========================================================
+   SCOPE OF WORK BADGES & UTILITIES
+   ========================================================= */
+.scope-badge-road {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #bae6fd;
+}
+
+.scope-badge-bridge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #fde68a;
+}
+
+.scope-badge-building {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #dcfce7;
+  color: #15803d;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #bbf7d0;
+}
+
+.scope-badge-others {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #e9d5ff;
+}
+
+
+/* =========================================================
+   ROAD & BRIDGE WORK MANAGEMENT SYSTEM - GLOBAL STYLES
+   Clean, organized styling for Road, Bridge, and Dropdown Admin.
+   ========================================================= */
+
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
+:root {
+  /* Core Design Tokens */
+  --brand-navy: #0b2e6e;
+  --brand-blue: #1976d2;
+  --header-bg: #e8f4fc;
+  --header-text: #2c3e50;
+  --table-border: #c4d8e7;
+  --row-alt-bg: #f8fbfe;
+  --row-hover-bg: #eaf3fb;
+  --field-bg: #ffffff;
+  --field-text: #4a4a4a;
+  --field-hover-border: #9aa3ad;
+  --icon-muted: #9e9e9e;
+  --icon-delete: #e53935;
+
+  /* Surfaces & Backgrounds */
+  --surface-white: #ffffff;
+  --panel-bg: #fbfdff;
+
+  /* Typography / Text Colors */
+  --text-primary: #1f1f1f;
+  --text-secondary: #53606d;
+  --text-muted: #64748b;
+  --text-dark: #1e293b;
+  --text-body: #334155;
+  --text-close: #333333;
+  --readonly-text: #ffeeee;
+
+  /* Borders & Dividers */
+  --border-divider: #d5dbe3;
+  --border-light: #c8d8e6;
+  --border-muted: #c7c7c7;
+
+  /* Brand States & Highlights */
+  --brand-navy-hover: #082457;
+  --brand-navy-dark: #071f4c;
+  --brand-navy-subtle: #f0f5fc;
+  --badge-entry-bg: #3b5998;
+
+  /* Icons & Actions */
+  --icon-edit: #2563eb;
+  --icon-add: #2563eb;
+  --icon-cancel: #757575;
+  --icon-disabled: #c4c4c4;
+  --btn-disabled-bg: #b8c2d4;
+  --btn-danger-bg: #f04438;
+  --btn-danger-hover: #d92d20;
+  --color-error: #d32f2f;
+
+  /* Notifications & Alerts */
+
+  /* Status Badges */
+  --status-active-bg: #e8f5e9;
+  --status-active-text: #1b5e20;
+  --status-active-border: #c8e6c9;
+  --status-inactive-bg: #f1f5f9;
+  --status-inactive-text: #64748b;
+  --status-inactive-border: #cbd5e1;
+}
+
+/* =========================================================
+   2. CARD & GLOBAL SHELL LAYOUT
+   ========================================================= */
+.component-card {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: var(--surface-white);
+}
+
+.component-card>mat-card-header {
+  padding: 12px 16px;
+}
+
+.component-card mat-card-title {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.component-card mat-card-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0;
+}
+
+.component-card>mat-card-content {
+  padding: 12px !important;
+}
+
+.component-card mat-card-content>hr {
+  border: 0;
+  border-top: 1px solid var(--border-divider);
+  margin: 0 0 16px;
+}
+
+.component-add-card,
+.component-shell-card {
+  border: 1px solid var(--table-border);
+}
+
+/* =========================================================
+   3. ENTITY NAVIGATION SELECTOR (Road / Bridge / Dropdown Master)
+   ========================================================= */
+.component-entity-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.component-entity-selector button {
+  min-width: 120px;
+  font-weight: 600;
+  border-color: var(--table-border);
+  transition: all 0.2s ease;
+}
+
+.component-entity-selector button.component-entity-active {
+  background-color: var(--brand-navy) !important;
+  color: var(--surface-white) !important;
+  border-color: var(--brand-navy) !important;
+}
+
+.component-entity-content {
+  width: 100%;
+}
+
+/* =========================================================
+   4. FORM TABLE (Road & Bridge Inline Entry & Display Table)
+   ========================================================= */
+.component-form-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--table-border);
+  background: var(--surface-white);
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.component-form-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: auto;
+  background: var(--surface-white);
+  color: var(--field-text);
+  font-size: 14px;
+}
+
+/* Header Cells */
+.component-form-table thead th {
+  height: 50px;
+  padding: 12px 10px;
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  border: 1px solid var(--table-border);
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  box-sizing: border-box;
+}
+
+.component-form-table th[scope='col'] {
+  background-color: var(--header-bg);
+  font-weight: 700;
+}
+
+/* Body Cells */
+.component-form-table tbody td {
+  padding: 12px 10px;
+  border: 1px solid var(--table-border);
+  text-align: center;
+  vertical-align: middle;
+  background-color: var(--surface-white);
+  box-sizing: border-box;
+}
+
+.component-form-table tbody tr td {
+  background-color: var(--surface-white);
+}
+
+.component-form-table tbody td:hover {
+  background-color: var(--row-hover-bg);
+}
+
+/* First Column & Serial Number */
+.component-form-table th:first-child,
+.component-form-table td:first-child,
+.component-serial-number {
+  min-width: 70px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  color: var(--header-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* New Entry Pill Badge */
+.serial-badge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.new-entry-pill,
+.new-entry-label {
+  display: inline-block;
+  min-width: 0;
+  margin: 2px auto 0;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background-color: var(--badge-entry-bg);
+  color: var(--surface-white);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  box-shadow: 0 1px 3px rgba(59, 89, 152, 0.4);
+}
+
+/* Form Fields inside Table Cells */
+.component-form-table mat-form-field {
+  display: block;
+  width: 100%;
+  min-width: 150px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.component-form-table .mat-mdc-form-field {
+  --mdc-outlined-text-field-container-shape: 4px;
+  --mdc-outlined-text-field-outline-color: transparent;
+  --mdc-outlined-text-field-hover-outline-color: transparent;
+  --mdc-outlined-text-field-focus-outline-color: transparent;
+  --mdc-outlined-text-field-input-text-color: var(--field-text);
+  --mdc-outlined-text-field-label-text-color: var(--surface-white);
+  --mdc-outlined-text-field-focus-label-text-color: var(--brand-navy);
+  --mdc-outlined-text-field-error-focus-label-text-color: var(--color-error);
+  width: 100%;
+  margin: 0;
+}
+
+.component-form-table .mat-mdc-text-field-wrapper {
+  min-height: 48px;
+  border-radius: 4px;
+  background-color: var(--field-bg);
+}
+
+.component-form-table .mat-mdc-form-field-infix {
+  min-height: 48px;
+  padding-top: 14px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.component-form-table .mat-mdc-input-element {
+  font-size: 14px;
+  color: var(--field-text);
+}
+
+.component-form-table .mat-mdc-select {
+  font-size: 14px;
+}
+
+.component-form-table .mat-mdc-select-value,
+.component-form-table .mat-mdc-select-arrow {
+  color: var(--field-text);
+}
+
+.component-form-table .mat-mdc-form-field-subscript-wrapper {
+  font-size: 12px;
+}
+
+.component-form-table mat-error {
+  white-space: normal;
+  line-height: 1.4;
+}
+
+/* Action Icon Buttons */
+.component-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.component-row-actions button[mat-icon-button] {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  line-height: 1 !important;
+  background: transparent !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.component-row-actions button[mat-icon-button]:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  transform: scale(1.08);
+}
+
+.component-row-actions button[mat-icon-button] mat-icon {
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 22px !important;
+  line-height: 22px !important;
+  font-weight: 500;
+}
+
+/* Action button color variants */
+.btn-action-edit mat-icon,
+.component-row-actions button[aria-label*='Edit'] mat-icon {
+  color: var(--icon-edit) !important;
+}
+
+.btn-action-delete mat-icon,
+.component-row-actions button[aria-label*='Delete'] mat-icon,
+.component-row-actions button[aria-label*='Clear'] mat-icon {
+  color: var(--icon-delete) !important;
+}
+
+.btn-action-view mat-icon,
+.component-row-actions button[aria-label*='View'] mat-icon {
+  color: var(--brand-blue) !important;
+}
+
+.btn-action-add mat-icon,
+.component-row-actions button[aria-label*='Add'] mat-icon {
+  color: var(--icon-add) !important;
+  font-weight: 700;
+}
+
+.btn-action-save mat-icon,
+.component-row-actions button[aria-label*='Save'] mat-icon {
+  color: var(--brand-blue) !important;
+}
+
+.btn-action-cancel mat-icon,
+.component-row-actions button[aria-label*='Cancel'] mat-icon {
+  color: var(--icon-cancel) !important;
+}
+
+.component-row-actions button[mat-icon-button]:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 2px;
+}
+
+/* Actions Column Alignment */
+.component-form-table th:last-child,
+.component-form-table td[headers='options-heading'],
+.component-form-table td[headers='road-actions-heading'] {
+  min-width: 120px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Audit Details Column (Circular checkmark) */
+.component-form-table th[id*='audit'],
+.component-form-table td[headers*='audit'],
+.component-audit-cell {
+  width: 100px;
+  min-width: 90px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.component-audit-cell button[mat-icon-button] {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.audit-check-icon,
+.component-audit-cell button mat-icon,
+.component-form-table td[headers*='audit'] button mat-icon {
+  font-size: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  color: var(--icon-muted) !important;
+  transition:
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.audit-check-icon.audit-icon-active,
+.component-audit-cell button mat-icon.audit-icon-active {
+  color: var(--icon-edit) !important;
+}
+
+.component-audit-cell button[mat-icon-button]:hover .audit-check-icon,
+.component-audit-cell button[mat-icon-button]:hover mat-icon {
+  transform: scale(1.15);
+}
+
+/* =========================================================
+   5. GENERAL BUTTONS
+   ========================================================= */
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button {
+  min-width: 96px;
+  min-height: 40px;
+  border-radius: 4px;
+  background-color: var(--brand-navy) !important;
+  color: var(--surface-white) !important;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none !important;
+}
+
+.mat-mdc-unelevated-button:hover:not([disabled]) {
+  background-color: var(--brand-navy-hover) !important;
+}
+
+.mat-mdc-unelevated-button[disabled] {
+  background-color: var(--btn-disabled-bg) !important;
+  color: var(--surface-white) !important;
+}
+
+.btn-primary-action {
+  height: 48px;
+  padding: 0 18px;
+}
+
+/* =========================================================
+   6. DIALOGS & POPUPS (Shared Base Shell)
+   ========================================================= */
+.cdk-overlay-pane.component-dialog {
+  width: 2000px !important;
+  max-width: 95vw !important;
+}
+
+.component-dialog .mat-mdc-dialog-surface {
+  width: 100%;
+  max-width: 2000px;
+  padding: 16px;
+  border-radius: 4px;
+  background-color: var(--surface-white);
+}
+
+.component-dialog-title {
+  margin: 0;
+  padding: 0 0 12px;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.component-dialog-content {
+  max-height: calc(75vh - 110px);
+  padding: 0;
+}
+
+.component-dialog-actions {
+  padding: 12px 0 0;
+}
+
+/* =========================================================
+   7. VIEW DETAILS MODAL
+   ========================================================= */
+.component-details-panel {
+  padding: 16px;
+  border: 1px solid var(--table-border);
+  background: var(--surface-white);
+  border-radius: 4px;
+}
+
+.component-view-details-fields,
+.component-search-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  border: 1px solid var(--table-border);
+  gap: 12px 16px;
+}
+
+.component-search-field {
+  min-width: 0;
+  position: relative;
+}
+
+.component-search-field>label {
+  display: block;
+  margin: 0 0 2px;
+  color: var(--brand-navy);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.component-search-controls {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.component-search-controls mat-form-field {
+  width: 100%;
+  margin: 0;
+  --mdc-outlined-text-field-outline-color: transparent;
+  --mdc-outlined-text-field-hover-outline-color: var(--field-hover-border);
+  --mdc-outlined-text-field-focus-outline-color: var(--brand-navy);
+  --mdc-outlined-text-field-input-text-color: var(--field-text);
+}
+
+.component-search-controls .component-search-input {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.component-search-controls .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.component-search-controls .mat-mdc-text-field-wrapper {
+  min-height: 48px;
+  border-radius: 4px;
+  background-color: var(--field-bg);
+}
+
+.component-view-details-fields input[readonly],
+.component-view-details-fields textarea[readonly] {
+  cursor: pointer;
+  color: var(--readonly-text);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  transition: all 0.2s ease-in-out;
+}
+
+.component-view-details-fields .mat-mdc-form-field {
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  border-radius: 10px;
+}
+
+.component-view-details-fields .mat-mdc-form-field:hover {
+  background-color: var(--brand-navy-subtle) !important;
+  box-shadow: 0 2px 6px rgba(11, 46, 110, 0.12);
+}
+
+.component-view-details-fields .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+.component-view-details-fields .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+.component-view-details-fields .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+  border-color: var(--brand-blue) !important;
+  border-width: 1.5px !important;
+}
+
+/* Tooltip */
+.mdc-tooltip__surface,
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  max-width: 320px;
+  padding: 8px 14px !important;
+  border: 1px solid var(--border-muted);
+  border-radius: 6px !important;
+  background-color: var(--surface-white) !important;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  line-height: 1.4;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+}
+
+.component-field-tooltip {
+  max-width: 650px !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  padding: 8px 14px !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  background-color: var(--surface-white) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-muted) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* =========================================================
+   8. AUDIT DETAILS MODAL & PAGINATOR
+   ========================================================= */
+.audit-details-title {
+  margin: 0;
+  padding: 0 0 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.component-audit-details-content {
+  padding: 16px 0 !important;
+}
+
+.audit-loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.component-audit-details-table-wrapper {
+  max-height: 400px;
+  overflow: auto;
+  border: 1px solid var(--table-border);
+  border-radius: 4px;
+  background: var(--surface-white);
+}
+
+.component-audit-details-table {
+  width: 100%;
+}
+
+.component-audit-details-table th.mat-mdc-header-cell {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.component-audit-details-table td.mat-mdc-cell {
+  color: var(--field-text);
+  font-size: 14px;
+}
+
+.component-audit-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* Paginator Layout */
+.mat-mdc-paginator {
+  background: transparent;
+  color: var(--header-text);
+  font-size: 14px;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-container {
+  min-height: 48px;
+  padding: 0 8px;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-range-label {
+  margin: 0 8px;
+  color: var(--header-text);
+  font-size: 14px;
+}
+
+.mat-mdc-paginator-page-size-select {
+  width: 72px;
+  margin: 0;
+}
+
+.mat-mdc-paginator-page-size-select .mat-mdc-text-field-wrapper {
+  min-height: 36px;
+  padding: 0 8px;
+  border-radius: 4px;
+  background-color: var(--field-bg);
+}
+
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__leading,
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__notch,
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__trailing {
+  border-color: var(--table-border) !important;
+}
+
+.mat-mdc-paginator-page-size-select .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.mat-mdc-paginator .mat-mdc-select-value,
+.mat-mdc-paginator .mat-mdc-select-arrow {
+  color: var(--header-text);
+}
+
+.mat-mdc-paginator .mat-mdc-icon-button mat-icon {
+  color: var(--header-text);
+}
+
+.mat-mdc-paginator .mat-mdc-icon-button[disabled] mat-icon {
+  color: var(--icon-disabled);
+}
+
+/* =========================================================
+   9. DELETE CONFIRMATION MODAL
+   ========================================================= */
+.confirm-dialog-overlay-panel .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid var(--border-light) !important;
+  background: var(--surface-white) !important;
+  overflow: hidden !important;
+}
+
+.confirm-dialog-card {
+  position: relative;
+  padding: 28px 24px 22px;
+  background: var(--surface-white);
+  text-align: center;
+  min-width: 330px;
+  max-width: 420px;
+  box-sizing: border-box;
+}
+
+.confirm-dialog-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-close);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.confirm-dialog-close:hover {
+  background-color: var(--status-inactive-bg);
+}
+
+.confirm-dialog-title {
+  margin: 4px 0 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.confirm-dialog-prompt {
+  margin: 0 0 22px;
+  font-size: 15px;
+  color: var(--text-body);
+  font-weight: 500;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Navy Blue Ok Button */
+.btn-dialog-ok {
+  min-width: 88px;
+  height: 36px;
+  padding: 0 20px;
+  background-color: var(--brand-navy);
+  color: var(--surface-white);
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-dialog-ok:hover {
+  background-color: var(--brand-navy-dark);
+  box-shadow: 0 2px 6px rgba(11, 46, 110, 0.35);
+}
+
+/* Bright Red Cancel Button */
+.btn-dialog-cancel {
+  min-width: 88px;
+  height: 36px;
+  padding: 0 20px;
+  background-color: var(--btn-danger-bg);
+  color: var(--surface-white);
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-dialog-cancel:hover {
+  background-color: var(--btn-danger-hover);
+  box-shadow: 0 2px 6px rgba(240, 68, 56, 0.35);
+}
+
+/* =========================================================
+   10. FEEDBACK NOTIFICATIONS
+   ========================================================= */
+.cdk-global-overlay-wrapper {
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   11. DROPDOWN ADMIN MASTER DATA MODULE
+   ========================================================= */
+.dropdown-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.dropdown-category-select {
+  min-width: 240px;
+}
+
+.dropdown-search-input {
+  min-width: 260px;
+  flex: 1 1 auto;
+}
+
+.dropdown-form-panel {
+  padding: 20px;
+  border: 1px solid var(--table-border);
+  background: var(--panel-bg);
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.dropdown-form-title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.dropdown-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  align-items: center;
+}
+
+.dropdown-active-toggle-wrap {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--header-text);
+}
+
+.toggle-label input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.dropdown-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.status-pill-active {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: var(--status-active-bg);
+  color: var(--status-active-text);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--status-active-border);
+}
+
+.status-pill-inactive {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: var(--status-inactive-bg);
+  color: var(--status-inactive-text);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--status-inactive-border);
+}
+
+/* =========================================================
+   12. RESPONSIVE BREAKPOINTS
+   ========================================================= */
+@media (max-width: 768px) {
+  .component-card>mat-card-content {
+    padding: 8px !important;
+  }
+
+  .component-search-field>label {
+    font-size: 14px;
+  }
+
+  .component-form-table {
+    min-width: 1100px;
+  }
+
+  .component-form-table thead th {
+    height: 48px;
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .component-form-table tbody td {
+    padding: 8px 6px;
+  }
+
+  .component-form-table .mat-mdc-text-field-wrapper {
+    min-height: 44px;
+  }
+
+  .component-form-table .mat-mdc-form-field-infix {
+    min-height: 42px;
+  }
+}
+
+/* =========================================================
+   BUILDING & OTHERS STYLES (FROM VIVEK)
+   ========================================================= */
+
+/* You can add global styles to this file, and also import other style files */
+/* neutralized global html font-size */
+
+/* neutralized global body bg */
+
+.required {
+    color: red;
+    margin-left: 0.313rem;
+}
+
+.mat-mdc-select,
+.mat-select {
+    font-size: 1rem !important;
+}
+
+mat-panel-title {
+    color: #022a72 !important;
+}
+
+.mat-expansion-panel-header-title {
+    font-weight: 550;
+    font-size: 1rem;
+}
+
+textarea::placeholder {
+    font-size: 1rem;
+}
+
+.mat-mdc-raised-button,
+.mat-raised-button {
+    border-radius: 0.313rem !important;
+}
+
+.orgLogo {
+    height: 100px;
+    width: 100px;
+}
+
+.form-label-span {
+    color: #505050 !important;
+    font-weight: 550 !important;
+    font-size: 1rem !important;
+}
+
+.button-color {
+    background: #022a72;
+    margin-left: 0.625rem !important;
+    color: white;
+    margin-top: 0.313rem !important;
+}
+
+.cancel-button-color {
+    background: #f44336;
+    margin-left: 0.625rem !important;
+    color: white;
+    margin-top: 0.313rem !important;
+}
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+    z-index: 9999 !important;
+}
+
+.modal-sm {
+    max-width: 50%;
+}
+
+.mat-mdc-tab-link,
+.mat-tab-link {
+    height: 48px;
+    padding: 0 40px !important;
+    cursor: pointer;
+    box-sizing: border-box;
+    opacity: 2 !important;
+    color: #505050 !important;
+    min-width: 0px !important;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    vertical-align: top;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.mat-mdc-tab-link.mdc-tab--active,
+.mat-tab-label-active {
+    color: rgba(1, 1, 1, 1) !important;
+}
+
+.mat-mdc-tab-nav-bar.mat-primary .mdc-tab-indicator__content,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: #022a72;
+}
+
+
+.custom-display-alert {
+    padding: .50rem !important;
+    background-color: #f8d674 !important;
+    color: #505050 !important;
+    font-size: 0.875rem !important;
+    width: max-content !important;
+    text-align: center;
+    margin-top: 0.313rem !important;
+}
+
+
+
+
+.mat-mdc-form-field,
+.mat-form-field {
+    width: 100%;
+}
+
+/*table*/
+
+.mat-mdc-table,
+.mat-table {
+    border-spacing: 0 15px !important;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: 1px;
+}
+
+.custom-scrollable-div {
+    height: 60ex;
+    overflow-y: auto;
+}
+
+.mat-mdc-row:nth-child(2n),
+.mat-row:nth-child(2n) {
+    background-color: #f2fbff;
+}
+
+.mat-mdc-header-cell
+{
+    font-size: 0.875rem;
+    background-color: #e1f6fb !important;
+    color: #505050 !important;
+    justify-content: center;
+    min-width: 6.875rem;
+    text-align: center !important;
+}
+
+.mat-mdc-row,
+.mat-row {
+    min-width: 48.125rem;
+    background-color: #fcfeff;
+}
+
+.mat-mdc-cell.mat-cell-lg,
+.mat-cell-lg {
+    min-width: 6.875rem;
+    border: 0.5px solid #e1f6fb;
+    justify-content: center !important;
+}
+
+.mat-mdc-header-cell:first-child,
+.mat-header-cell:first-child {
+    border-top-left-radius: 0.625rem;
+}
+
+.mat-mdc-header-cell:last-child,
+.mat-header-cell:last-child {
+    border-top-right-radius: 0.625rem;
+}
+
+.margin {
+    margin-bottom: 0.625rem;
+}
+
+.right-margin {
+    margin-right: 0.625rem;
+}
+
+.left-margin {
+    margin-left: 0.625rem;
+}
+
+.top-margin {
+    margin-top: 0.625rem;
+}
+
+.form {
+    min-width: 9.375rem;
+    max-width: 31.25rem;
+    width: 100%;
+}
+
+.card {
+    max-width: 80%;
+    margin: 2em auto;
+    text-align: center;
+}
+
+.datepickerColor {
+    background-color: #004085;
+    color: #FFF;
+}
+
+.panel {
+    background: rgb(176, 176, 228);
+
+}
+
+.ripple {
+    background: #f8f9fa !important;
+}
+
+.form-element {
+    padding: 0.313rem 0rem 1.563rem 0.125rem;
+    width: 100%;
+}
+
+.buttons {
+    width: 6.25rem;
+    margin: 0 auto;
+    display: inline;
+    margin-right: 0.5rem;
+}
+
+.action_btn {
+    width: 6.25rem;
+    margin: 0 auto;
+    display: inline;
+    background-color: darkgrey;
+}
+
+.icon {
+    font-size: 1.25rem !important;
+    color: #1e1e26;
+}
+
+.view-icon {
+    font-size: 1.25rem !important;
+}
+
+.icon:hover {
+    color: #224584;
+}
+
+.mat-mdc-select-placeholder,
+mat-select-placeholder {
+    color: rgba(228, 241, 240, 0.918);
+    font-size: 0.875rem;
+}
+
+.align-left-text {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.align-center-text {
+    text-align: center !important;
+}
+
+.justify-left-text {
+    justify-content: left;
+}
+
+.table-padding {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+}
+
+.prefix {
+    width: 15% !important;
+}
+
+.suffix {
+    width: 85% !important;
+}
+
+.search-icon {
+    margin-top: 1.25rem !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper,
+.mat-form-field-disabled .mat-form-field-flex {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Text colour only. The 0.8rem/0.4em padding that used to live here was the
+   upgrade's mis-translation of v14's `.mat-form-field-appearance-legacy
+   .mat-form-field-infix { padding: .8rem 0 .4em }` - in v14 that padded the
+   infix CONTAINER and only for legacy appearance, which these outline fields
+   never were. Re-pointed at .mdc-text-field__input it stacked on top of MDC's
+   own 16px infix padding, inflating every field from 56px to 75px. */
+.mat-mdc-form-field.mat-form-field-appearance-outline .mdc-text-field__input,
+.mat-mdc-form-field.mat-form-field-appearance-fill .mdc-text-field__input {
+    color: #201f1d;
+}
+
+.mdc-text-field__input:disabled,
+.mat-input-element:disabled,
+.mat-mdc-input-element:disabled {
+    color: rgba(0, 0, 0, 0.90) !important;
+    -webkit-text-fill-color: rgba(0, 0, 0, 0.90) !important;
+    opacity: 1 !important;
+}
+
+.custom-padding {
+    padding: 0.6% 0.3% 2.6% 0.6% !important;
+}
+
+.mat-expansion-panel-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 998 !important;
+}
+
+/* Material 14 laid tables out with flexbox, so `justify-content: center` on a
+   cell centred its content. Material 22 uses a real CSS table (table-layout:
+   auto, cells are display: table-cell), where justify-content does nothing -
+   leaving data left-aligned under centred headers. text-align is the table-
+   model equivalent. Declared after .align-left-text so it wins on source order
+   without needing !important. */
+.text-align {
+    justify-content: center !important;
+    text-align: center;
+}
+
+.inspect-btn-lg {
+    margin-top: 0.313rem !important;
+    font-size: 0.625rem !important;
+    padding-left: 31.25rem !important;
+}
+
+.file-field {
+    border: 0.125rem !important;
+    border-style: groove !important;
+    border-color: #ced4da !important;
+    opacity: inherit !important;
+    border-radius: 0.313rem !important;
+    margin-right: 0.625rem !important;
+    margin-left: 0.625rem !important;
+    margin-top: 1.50rem !important;
+    margin-bottom: 1.375rem !important;
+    border-width: thin !important;
+    display: block !important;
+    position: relative !important;
+    flex: auto !important;
+    min-width: 0 !important;
+    width: 11.25rem !important;
+    height: 53px !important;
+}
+
+.file-field-1 {
+    padding-top: 0.313rem !important;
+    padding-bottom: 0.313rem !important;
+}
+
+.file-field:hover {
+    border: 0.125rem solid black !important;
+    border-radius: 0.313rem !important;
+}
+
+.custom-btn {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+table {
+    width: 100% !important;
+}
+
+.table-bordered td {
+    padding-left: 0.5em !important;
+    padding-right: 0.5em !important;
+}
+
+table td:first-child {
+    border-spacing: 0 0 !important;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 0.001rem solid !important;
+    border-color: #c2c2d6 !important
+}
+
+/*LOGIN AVTAR*/
+.profile-img {
+    margin-top: 0.188rem !important;
+}
+
+.uxg-caption {
+    font: 400 0.75rem/1.125rem Roboto, roboto, "Helvetica Neue", sans-serif !important;
+    letter-spacing: normal;
+}
+
+.mat-typography {
+    font: 0 !important;
+    letter-spacing: normal !important;
+}
+
+.avatar-title {
+    margin: 0.125rem 0.125rem 0.125rem;
+}
+
+.h6-caption-padding {
+    margin-top: 0.375rem;
+    margin-left: 0.188rem;
+    margin-right: 0.5rem;
+}
+
+.custom-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.custom-row>* {
+    flex-shrink: 0 !important;
+}
+
+.uxg-h6,
+.uxg-typography {
+    font-weight: 600 !important;
+    letter-spacing: normal;
+    margin-bottom: 0rem !important;
+}
+
+.uxg-user-profile .uxg-menu-header,
+.uxg-user-profile .uxg-menu-footer {
+    padding: 0.625rem;
+}
+
+.login-name {
+    color: #505050;
+}
+
+.avatar {
+    height: 3rem;
+    width: 3rem;
+    margin: 0.25rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-logout-button {
+    width: 100%;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__thumb,
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: #3f51b5 !important;
+}
+
+.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track,
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: rgb(102, 100, 212) !important;
+}
+
+.profile-logout-icon {
+    color: #ffffff !important;
+}
+
+.profile-unit-icon {
+    padding-top: 1.4375rem;
+    padding-left: .3125rem;
+}
+
+.title-center {
+    flex: 1 1 auto;
+    text-align: end;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.item-details-row {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.margin-left-right-zero {
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+}
+
+.padding-left-20 {
+    padding-left: 1.25rem;
+}
+
+.mat-card-padding {
+    padding: 5px;
+}
+
+.dialog-content {
+    font-size: 15px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+    padding: 2px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.close-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-weight: 900;
+    background-color: #180085;
+    color: rgb(15, 10, 10);
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.search {
+    display: flex;
+    margin-top: 0.5rem;
+    margin-bottom: 0rem;
+    border-radius: 3.125rem;
+    background: #f5f8fd;
+    margin-right: 0.125rem;
+    margin-left: 0.125rem;
+    height: 1.875rem;
+}
+
+.search-div-width-content {
+    width: 70% !important;
+    padding-top: 0.313rem !important;
+    color: #505050 !important;
+
+    padding-left: 1rem;
+}
+
+.search-div-width-icon {
+    width: 30% !important;
+    padding-top: 0.313rem !important;
+    padding-right: 0.5rem;
+}
+
+.margin-left-20 {
+    margin-left: 1.25rem;
+}
+
+.padding-left-0 {
+    padding-left: 0rem !important;
+}
+
+.padding-right-0 {
+    padding-right: 0rem !important;
+}
+
+.margin-top-10 {
+    margin-top: 0.625rem !important;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 0.625rem !important;
+}
+
+.margin-left-60 {
+    margin-left: 3.75rem;
+}
+
+.width-90-per {
+    width: 90% !important;
+}
+
+.pointer-cursor {
+    cursor: pointer;
+}
+
+span.alert-link:hover {
+    text-decoration: underline !important;
+}
+
+.modal-lg,
+.modal-xl {
+    --bs-modal-width: 95% !important;
+}
+
+.left-float {
+    float: left;
+}
+
+.mat-mdc-dialog-container,
+.mat-dialog-container {
+    overflow: hidden !important;
+    padding: 0.375rem !important;
+}
+
+.width-100 {
+    width: 6.25rem;
+}
+
+.mat-mdc-radio-button .mdc-label,
+.mat-radio-label {
+    cursor: pointer;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.mdc-radio__outer-circle,
+mat-radio-outer-circle {
+    border-color: #022a72;
+}
+
+.mdc-radio__inner-circle,
+mat-radio-inner-circle {
+    border-color: #022a72;
+}
+
+.popover-header {
+    margin-bottom: 0rem !important;
+}
+
+.left-padding {
+    padding-left: 0.675rem;
+}
+
+.tab-css mat-tab-label-active {
+    background-color: rgb(102, 100, 212);
+}
+
+.mat-mdc-select-disabled .mat-mdc-select-value,
+.mat-select-disabled .mat-select-value {
+    color: rgb(30, 27, 27);
+}
+
+/*------------------------*/
+
+@media(max-width: 41.25rem) {
+
+    mat-radio-outer-circle {
+        border-color: #022a72;
+    }
+
+    mat-radio-inner-circle {
+        border-color: #022a72;
+    }
+
+    .mobile-label {
+        color: #464646 !important;
+        float: inline-start;
+        padding-left: 0.625rem;
+        min-width: 10.625rem;
+        padding-right: 0.625rem;
+        font-weight: initial;
+        width: min-content;
+        text-align: left;
+    }
+
+    .help-mobile-label {
+        display: flex;
+        color: #150f0f !important;
+        float: inline-start;
+        text-align: right;
+        padding-left: 0.625rem;
+        min-width: 10.625rem;
+        padding-right: 0.625rem;
+
+    }
+
+    mat-cell:first-of-type,
+    mat-header-cell:first-of-type,
+    mat-footer-cell:first-of-type,
+    .mat-mdc-cell:first-of-type,
+    .mat-mdc-header-cell:first-of-type,
+    .mat-mdc-footer-cell:first-of-type {
+        padding-left: 0rem !important;
+    }
+
+    .mat-mdc-cell,
+    .mat-cell {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .button-margin {
+        margin-left: 10px;
+    }
+
+    td.mat-mdc-cell,
+    td.mat-cell {
+        padding-left: 5px !important;
+        text-align: center !important;
+        border-bottom-width: 0rem !important;
+    }
+
+    .mat-mdc-row,
+    .mat-row {
+        /* Material 22 rows are display: table-row, so the flex card layout
+           below needs the row switched back to flex explicitly. */
+        display: flex;
+        min-height: 1.563rem;
+        flex-direction: column;
+        align-items: start;
+        padding: 0.5rem 1.5rem;
+        padding-left: 0rem;
+        padding-right: 0rem;
+        width: 100%;
+        min-width: 100%;
+        background-color: #fcfeff;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    }
+
+    /* .mat-header-cell {
+        background-color: #e1f6fb !important;
+    } */
+
+    .custom-mat-icon {
+        font-size: 1.25rem !important;
+    }
+
+    .mat-card-padding {
+        padding: 5px;
+    }
+
+    .dialog-content {
+        font-size: 15px;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        font-weight: 500;
+        padding: 2px;
+    }
+
+    .spacer {
+        flex: 1 1 auto;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        font-weight: 900;
+        background-color: #180085;
+        color: rgb(15, 10, 10);
+        border-radius: 50%;
+        padding: 2px;
+    }
+
+    .cell-data {
+        width: 80%;
+        text-align: left;
+    }
+
+    .modal-footer {
+        justify-content: flex-start !important;
+    }
+
+    .mat-mdc-row:nth-child(2n),
+    .mat-row:nth-child(2n) {
+        background-color: #f2fbff;
+    }
+
+    .mat-mdc-header-row,
+    .mat-header-row {
+        display: none;
+    }
+
+    .align-text {
+        justify-content: right;
+    }
+
+    .mobile-label-data {
+        color: #022a72 !important
+    }
+
+    .footer-margin {
+        margin-bottom: 50px !important;
+    }
+
+    .view-icon {
+        font-size: 1.25rem !important;
+    }
+
+    .mat-mdc-table,
+    .mat-table {
+        border-collapse: separate;
+        border-spacing: 0 15px !important;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .panel-body .mat-expansion-panel-body {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .option {
+        width: 20%;
+    }
+
+    .option-inside-icon-padding {
+        padding-left: 15px !important;
+    }
+
+    .option-inside-icon-title-padding {
+        padding-left: 20px !important;
+    }
+    .mat-mdc-icon-button,
+    .mat-icon-button {
+        padding: 0;
+        min-width: 0;
+        flex-shrink: 0;
+        line-height: 2.5rem;
+        border-radius: 50%;
+        width: 0rem;
+    }
+
+    .mat-icon {
+        width: fit-content !important;
+    }
+
+    .table-border-spacing {
+        border-collapse: separate;
+        border-spacing: 0 25px !important;
+    }
+
+    .height-400 {
+        height: 25rem;
+    }
+
+
+    .none-border {
+        border: none !important;
+
+    }
+
+    .mobile-action {
+        text-align: left !important;
+        font-size: medium;
+        padding-top: 0.625rem;
+        padding-bottom: 0.313rem;
+    }
+
+
+    .transactionl-details-row {
+        height: fit-content !important;
+        padding: 0.313rem !important;
+    }
+
+
+    .modal-lg,
+    .modal-xl {
+        --bs-modal-width: 95% !important;
+    }
+
+    .button-padding-50 {
+        padding-bottom: 3.125rem !important;
+    }
+
+    .padding-left-1 {
+        padding-left: 0.0625rem;
+    }
+
+    .mat-mdc-radio-button .mdc-label,
+    .mat-radio-label {
+        cursor: pointer;
+        white-space: nowrap;
+        padding-right: 10px;
+    }
+
+}
+
+.margin-all-10 {
+    margin: 0.625rem !important;
+}
+
+.zoomIcon {
+    display: inline-block;
+}
+
+.heading-title {
+    display: inline-block;
+    margin-left: 1.25rem !important;
+}
+
+.component-border {
+    border: 0.125rem solid rgb(151, 134, 212);
+    border-radius: 0.625rem;
+}
+
+.margin-left-10 {
+    margin-left: 0.625rem !important;
+}
+
+.text-alignment {
+    text-align: center !important;
+}
+
+.margin-top-60 {
+    margin-top: 3.75rem;
+}
+
+.icon-with-input {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.icon-with-input mat-icon {
+    margin-right: 0.5rem !important;
+}
+
+.custom-list {
+    font-weight: 550 !important;
+    font-size: 14px !important;
+}
+
+
+.upperDiv {
+    border: 0.063rem solid #3293E8;
+    margin: 0.313rem 0.313rem 0.313rem 0.313rem;
+    background-color: #f7fafb;
+    width: 99%
+}
+
+.lowerDiv {
+    width: 100%;
+    padding: 0.313rem 0.313rem 0.313rem 0.313rem;
+    background-color: white;
+    border-top: 0.063rem #3293E8;
+    border-left: 0.063rem #3293E8;
+    border-right: 0.063rem #3293E8;
+}
+
+.div-heading-align {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-button-container {
+    position: relative;
+}
+
+.filter-button-container button {
+    margin-left: auto;
+}
+
+.chartSize {
+    height: 21rem !important;
+}
+
+.searchIcon {
+    font-size: 1.125rem !important;
+}
+
+.display-contents-custom {
+    display: contents !important;
+}
+
+.float-right-custom {
+    float: right !important;
+}
+
+.text-align-padding-top-custom {
+    text-align: right !important;
+    padding-top: 20px !important;
+}
+
+.text-align-end-custom {
+    text-align: end !important;
+}
+
+.justify-content-word-wrap-white-space-custom {
+    justify-content: center !important;
+    text-align: center;
+    word-wrap: anywhere !important;
+    white-space: normal !important;
+}
+
+.padding-top-custom {
+    padding-top: 0rem !important;
+}
+
+.white-space-font-size-custom {
+    white-space: pre-line !important;
+    font-size: large !important;
+}
+
+.margin-top-custom {
+    margin-top: 0.938rem;
+}
+
+.title-name-custom {
+    margin-top: -0.563rem !important;
+    margin-bottom: -0.563rem !important;
+    margin-left: -0.563rem !important;
+}
+
+.close {
+    background: #dee2e6;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.mat-column-srno {
+    width: 4.688rem !important;
+    text-align: center !important;
+}
+
+.overflow-overlay-custom {
+    overflow: overlay !important;
+}
+
+/* =========================================================================
+   Material 14 -> 22 visual compatibility layer
+
+   Angular Material 15+ replaced the legacy components with MDC ones. The MDC
+   specification introduces letter-spacing ("tracking") on every text element
+   and enlarges several control metrics. Material 14 had neither, so without
+   this block every label, button and menu item renders wider and looser than
+   it did before the upgrade.
+
+   Tokens are declared on `html` by the prebuilt theme, which the bundler
+   inlines above these rules - so an `html` block here wins on source order.
+   ========================================================================= */
+
+html {
+    /* --- MDC tracking: Material 14 used normal letter-spacing throughout --- */
+    --mat-bottom-sheet-container-text-tracking: normal;
+    --mat-button-filled-label-text-tracking: normal;
+    --mat-button-outlined-label-text-tracking: normal;
+    --mat-button-protected-label-text-tracking: normal;
+    --mat-button-text-label-text-tracking: normal;
+    --mat-button-toggle-label-text-tracking: normal;
+    --mat-button-toggle-legacy-label-text-tracking: normal;
+    --mat-button-tonal-label-text-tracking: normal;
+    --mat-card-subtitle-text-tracking: normal;
+    --mat-card-title-text-tracking: normal;
+    --mat-checkbox-label-text-tracking: normal;
+    --mat-chip-label-text-tracking: normal;
+    --mat-dialog-subhead-tracking: normal;
+    --mat-dialog-supporting-text-tracking: normal;
+    --mat-expansion-container-text-tracking: normal;
+    --mat-expansion-header-text-tracking: normal;
+    --mat-fab-extended-label-text-tracking: normal;
+    --mat-form-field-container-text-tracking: normal;
+    --mat-form-field-filled-label-text-tracking: normal;
+    --mat-form-field-outlined-label-text-tracking: normal;
+    --mat-form-field-subscript-text-tracking: normal;
+    --mat-list-list-item-label-text-tracking: normal;
+    --mat-list-list-item-supporting-text-tracking: normal;
+    --mat-list-list-item-trailing-supporting-text-tracking: normal;
+    --mat-menu-item-label-text-tracking: normal;
+    --mat-optgroup-label-text-tracking: normal;
+    --mat-option-label-text-tracking: normal;
+    --mat-paginator-container-text-tracking: normal;
+    --mat-radio-label-text-tracking: normal;
+    --mat-select-trigger-text-tracking: normal;
+    --mat-slide-toggle-label-text-tracking: normal;
+    --mat-slider-label-label-text-tracking: normal;
+    --mat-tab-label-text-tracking: normal;
+    --mat-table-footer-supporting-text-tracking: normal;
+    --mat-table-header-headline-tracking: normal;
+    --mat-table-row-item-label-text-tracking: normal;
+    --mat-toolbar-title-text-tracking: normal;
+    --mat-tooltip-supporting-text-tracking: normal;
+
+    /* --- control metrics returned to their Material 14 values --- */
+    --mat-table-row-item-container-height: 48px; /* v22 ships 52px */
+    --mat-list-list-item-one-line-container-height: 40px;  /* v14 dense */
+    --mat-list-list-item-two-line-container-height: 48px;
+}
+
+/* The 48px icon-button size is declared on .mat-mdc-icon-button.mat-mdc-button-base,
+   not on html, so it has to be overridden at the same specificity. v14 used 40px. */
+.mat-mdc-icon-button.mat-mdc-button-base {
+    --mat-icon-button-state-layer-size: 40px;
+    /* Material hardcodes `padding: 12px` on this selector, which is correct for
+       its own 48px box but leaves a 16px content area once the box is 40px -
+       the 24px icon then sits at the top of that area and overflows downward,
+       landing 4px below the centre of the field. (40 - 24) / 2 = 8px. */
+    padding: 8px;
+}
+
+/* =========================================================================
+   MDC behaviour fixes (Material 14 -> 22)
+   ========================================================================= */
+
+/* 1. Tab bars. Material 22 defaults `stretchTabs` to true, so
+      .mat-mdc-tab-link gets `flex-grow: 1` and the Add/View links spread
+      across the full width. Material 14 sized them to their content. */
+.mat-mdc-tab-links {
+    flex: 0 1 auto !important;
+    justify-content: flex-start !important;
+}
+
+.mat-mdc-tab-link {
+    flex-grow: 0 !important;
+}
+
+/* 2. Slide toggle. The MDC switch paints its handle through design tokens on
+      .mdc-switch__handle::after, not via background-color on .mdc-switch__thumb,
+      so the old override missed and the theme accent (#ff4081 pink) showed
+      through. The pink is declared on `.mat-mdc-slide-toggle.mat-accent`, so the
+      accent selector has to be matched exactly to win on source order. */
+.mat-mdc-slide-toggle,
+.mat-mdc-slide-toggle.mat-accent {
+    --mat-slide-toggle-selected-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-hover-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-focus-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-pressed-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-hover-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-focus-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-pressed-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-track-outline-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-focus-state-layer-color: #3f51b5;
+    --mat-slide-toggle-selected-hover-state-layer-color: #3f51b5;
+    --mat-slide-toggle-selected-pressed-state-layer-color: #3f51b5;
+    --mat-slide-toggle-selected-icon-color: #ffffff;
+}
+
+/* 3. Raised buttons. Material 22 paints them from
+      `.mat-mdc-raised-button:not(:disabled)` - specificity (0,2,0), which beats
+      `.button-color` (0,1,0), so the app background was being overridden. Set
+      the tokens instead of escalating specificity: custom properties inherit,
+      so MDC's own rule reads these values. The disabled state uses separate
+      `-disabled-` tokens and is left on the Material default, matching v14. */
+.button-color {
+    --mat-button-protected-container-color: #022a72;
+    --mat-button-protected-label-text-color: #ffffff;
+}
+
+.cancel-button-color {
+    --mat-button-protected-container-color: #f44336;
+    --mat-button-protected-label-text-color: #ffffff;
+}
+
+.profile-logout-button {
+    --mat-button-filled-container-color: #3f51b5;
+    --mat-button-filled-label-text-color: #ffffff;
+}
+
+/* matInput used outside a mat-form-field (read-only <textarea matInput> in
+   table cells). Material 14 reset .mat-input-element globally; Material 22
+   scopes its reset to .mdc-text-field__input inside .mat-mdc-form-field, so a
+   bare matInput falls back to the browser default border/background. */
+.mat-mdc-input-element:not(.mdc-text-field__input) {
+    border: none;
+    background: transparent;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    resize: none;
+    outline: none;
+    width: 100%;
+}
+
+/* Material font stack. Material requests `Roboto, sans-serif`, but Roboto is
+   not bundled or linked anywhere, so every Material component silently fell
+   back to Arial while the rest of the app renders in Bootstrap's system stack
+   (Segoe UI on Windows) - two typefaces side by side. Point Material at the
+   same stack the app body uses so the UI reads as one font. */
+html {
+    --mat-badge-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-bottom-sheet-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-filled-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-outlined-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-protected-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-text-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-toggle-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-toggle-legacy-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-tonal-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-card-subtitle-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-card-title-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-checkbox-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-chip-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-datepicker-calendar-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-dialog-subhead-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-dialog-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-expansion-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-expansion-header-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-fab-extended-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-filled-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-outlined-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-subscript-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-list-list-item-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-list-list-item-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-list-list-item-trailing-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-menu-item-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-optgroup-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-option-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-paginator-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-radio-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-select-trigger-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-slide-toggle-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-slider-label-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-snack-bar-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-stepper-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-stepper-header-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-tab-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-table-footer-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-table-header-headline-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-table-row-item-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-toolbar-title-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-tooltip-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-tree-node-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+}
+
+/* MIS dashboard chart-type-dropdown icon triggers. These three selects use
+   `display: contents` on the form field so only the icon shows in the panel
+   toolbar. Material 22 wraps the control in .mat-mdc-text-field-wrapper with
+   16px horizontal padding, which left 12.5px of a 44.5px box for a 24px
+   mat-icon - the icons were clipped away. Strip the MDC chrome for these
+   fields only (higher specificity than Material's own single-class rules,
+   so no !important needed). */
+.display-contents-custom .mat-mdc-text-field-wrapper {
+    padding: 0;
+}
+
+.display-contents-custom .mat-mdc-form-field-infix {
+    padding: 0;
+    min-height: 0;
+    width: auto;
+    min-width: 24px;
+}
+
+.display-contents-custom .mat-mdc-form-field-subscript-wrapper,
+.display-contents-custom .mdc-notched-outline {
+    display: none;
+}
+
+/* Panel for the chart-type icon triggers above. Material sizes a select panel
+   to the width of its form field, and those fields are only 24px wide (icon
+   only), so the options were clipped to a single character. Scoped via
+   panelClass so other select panels keep Material's default sizing. */
+.cdk-overlay-pane:has(.chart-type-panel),
+.mat-mdc-select-panel.chart-type-panel {
+    min-width: max-content;
+}
+
+/* Checkbox colour. Material 22 paints the box from
+   `.mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background`
+   - specificity (0,4,0), which outranks the app rule at (0,3,0), so the
+   #022a72 override never applied. Indeterminate has no host class at all in
+   v22 (it is driven by the input's :indeterminate pseudo-class), so the old
+   .mat-checkbox-indeterminate selector could never match either. Setting the
+   tokens covers both states without a specificity fight. */
+.mat-mdc-checkbox,
+.mat-mdc-checkbox.mat-accent {
+    --mat-checkbox-selected-icon-color: #022a72;
+    --mat-checkbox-selected-hover-icon-color: #022a72;
+    --mat-checkbox-selected-focus-icon-color: #022a72;
+    --mat-checkbox-selected-pressed-icon-color: #022a72;
+    --mat-checkbox-selected-focus-state-layer-color: #022a72;
+    --mat-checkbox-selected-hover-state-layer-color: #022a72;
+    --mat-checkbox-selected-pressed-state-layer-color: #022a72;
+    --mat-checkbox-selected-checkmark-color: #ffffff;
+}
+
+/* Drawer navigation labels. menu-bar and submenu-bar wrap each label in a bare
+   <ul> inside a <mat-list-item>. The browser UA stylesheet gives <ul> a
+   margin-block-end of 16px; Material 14 absorbed it, but Material 22 renders
+   .mdc-list-item__content as display:block, so that margin pushed every label
+   to the top of its 40px row and left a 16px gap underneath. Zeroing the block
+   margin restores vertical centring. Horizontal padding is left alone - it is
+   what indents submodule entries under their parent. */
+.mat-mdc-list-item ul {
+    margin-block: 0;
+}
+
+/* mat-error / hint strip. Material 14 rendered this as
+   `position: absolute; overflow: hidden`, so a long message was clipped to a
+   single line and never pushed the rest of the form down. Material 22 puts it
+   in normal flow, so a wrapping error grows the field and shifts everything
+   below it. Total field height already matches v14 (56px + 22px); the only
+   difference was the wrapping, so cap the strip at one line and clip - v14
+   clipped the subscript the same way. max-height (not height) is used so
+   fields that reserve no subscript space, such as the paginator page-size
+   select, are unaffected. */
+.mat-mdc-form-field-subscript-wrapper {
+    max-height: 22px;
+    overflow: hidden;
+}
+
+/* Table cell centring, specificity note. `.text-align` and `.mdc-data-table__cell`
+   are both single-class selectors, but Material 22 ships the latter as a
+   component style - Angular injects component styles into <head> AFTER the
+   linked styles.css, so `.mdc-data-table__cell { text-align: start }` won on
+   source order and the cells stayed left-aligned under centred headers.
+   Pairing with .mat-mdc-cell raises these to (0,2,0) so they win on specificity
+   rather than needing !important. */
+.mat-mdc-cell.text-align,
+.mat-mdc-cell.justify-content-word-wrap-white-space-custom {
+    text-align: center;
+}
+
+/* Header account avatar button. Material 14 gave icon buttons
+   `padding: 0; line-height: 40px`, which let the Bootstrap `.rounded-circle`
+   initials div fill the full 40x40 button and render as a circle. Material 22
+   drops the line-height and relies on padding, so the div was squeezed to
+   24px wide by the content box while its text forced 32px of height - a 24x32
+   box at border-radius 50% is an ellipse. Scoped to the account avatar button
+   so the 8px padding that centres ordinary suffix icons stays untouched. */
+.login-name .mat-mdc-icon-button.mat-mdc-button-base {
+    padding: 0;
+    line-height: 40px;
+}
+
+/* Icon-button glyph centring. Bootstrap's reboot applies
+   `button { line-height: inherit }`, so a Material icon button inherits its
+   ancestor's line-height. Where that is the unitless 1.5 (Bootstrap's body
+   default) it resolves against the button's own 24px font to 36px, and the
+   glyph is pushed ~4px below centre - visible in the Assign Operations tree
+   and on any icon button also carrying Bootstrap's .btn. Table cells set a
+   length line-height, which is why those were unaffected. Pinning to 1 makes
+   the line box match the glyph regardless of context. */
+.mat-mdc-icon-button.mat-mdc-button-base {
+    line-height: 1;
+}
+
+/* Confirmation dialog card spacing. Material 14 shipped
+   `.mat-card-content { margin-bottom: 16px }` with no padding; Material 22 uses
+   `padding: 0 16px` plus 16px top and bottom as first/last child - 32px of new
+   vertical space. The confirmation dialogs open at a hardcoded height (200px),
+   so that extra space pushed the content past the surface and produced a
+   scrollbar inside a two-line Are-you-sure box. Restores the v14 geometry,
+   scoped to dialogs so cards elsewhere keep Material 22 spacing.
+   Material also sets `:first-child { padding-top: 16px }` and
+   `:last-child { padding-bottom: 16px }` at the same (0,2,0) specificity as a
+   plain descendant rule, and its component styles are injected after
+   styles.css - so those pseudo-class variants have to be matched explicitly to
+   win. */
+.mat-mdc-dialog-surface .mat-mdc-card-content,
+.mat-mdc-dialog-surface .mat-mdc-card-content:first-child,
+.mat-mdc-dialog-surface .mat-mdc-card-content:last-child {
+    padding: 0;
+    margin-bottom: 16px;
+}
+
+/* =========================================
+   WAMIS BUILDING MANAGEMENT
+   ========================================= */
+
+.building-section {
+  margin: 4px;
+  padding: 8px;
+  border: 1px solid #3293e8;
+  background: #fff;
+}
+
+.section-title {
+  margin: 4px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.building-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.building-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.building-entry-table th {
+  padding: 12px 8px;
+  border: 1px solid #c2c2d6;
+  background: #e1f6fb;
+  color: #505050;
+  text-align: center;
+  white-space: normal;
+}
+
+.building-entry-table td {
+  padding: 8px;
+  border: 1px solid #c2c2d6;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.building-entry-table tbody tr:nth-child(even) {
+  background: #f2fbff;
+}
+
+.building-entry-table mat-form-field {
+  width: 100%;
+  min-width: 110px;
+}
+
+.add-building-table {
+  min-width: 1200px;
+}
+
+.results-table {
+  min-width: 1000px;
+}
+
+.building-actions {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.building-actions button {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  margin: 0 2px;
+  padding: 0;
+}
+
+.building-actions .save-icon {
+  color: #4054c5;
+}
+
+.building-actions .delete-icon {
+  color: #f44336;
+}
+
+.building-actions button mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 22px;
+}
+
+.building-actions .btn-action-add mat-icon,
+.others-container .building-actions .btn-action-add mat-icon {
+  color: var(--icon-add);
+  font-weight: 700;
+}
+
+.building-actions .btn-action-edit mat-icon,
+.others-container .building-actions .btn-action-edit mat-icon {
+  color: var(--icon-edit);
+}
+
+.building-actions .btn-action-delete mat-icon,
+.others-container .building-actions .btn-action-delete mat-icon {
+  color: var(--icon-delete);
+}
+
+.building-actions .btn-action-save mat-icon,
+.others-container .building-actions .btn-action-save mat-icon {
+  color: var(--brand-blue);
+}
+
+.building-actions .btn-action-cancel mat-icon,
+.others-container .building-actions .btn-action-cancel mat-icon {
+  color: var(--icon-cancel);
+}
+
+.component-audit-cell .audit-check-icon {
+  color: var(--icon-edit) !important;
+}
+
+.inline-status,
+.inline-error {
+  margin: 8px 0;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.inline-status {
+  background: #f5f8fd;
+  color: #505050;
+}
+
+.inline-error {
+  background: #f8d7da;
+  color: #842029;
+}
+
+/* Search heading */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  margin-bottom: 8px;
+  padding: 0 10px;
+  border-radius: 24px;
+  background: #f5f8fd;
+  color: #505050;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.search-bar button {
+  color: #222;
+}
+
+.building-search-form {
+  margin: 8px 0 12px;
+  padding: 4px 8px 8px;
+}
+
+.building-search-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 16px;
+}
+
+.building-search-grid mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.numeric-search {
+  min-width: 0;
+}
+
+.numeric-search > label {
+  display: block;
+  margin-bottom: 4px;
+  color: #505050;
+  font-size: 14px;
+}
+
+.numeric-search-controls {
+  display: grid;
+  grid-template-columns: minmax(80px, 0.8fr) minmax(100px, 1.2fr);
+  gap: 8px;
+}
+
+.numeric-search-controls mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+
+/* Results should follow the search form without a large blank gap */
+
+.view-building-section .results-wrapper {
+  margin-top: 4px;
+}
+
+/* CSV menu */
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 4px 8px;
+}
+
+.csv-menu-wrap {
+  position: relative;
+}
+
+.csv-trigger {
+  color: #334bbd;
+}
+
+.csv-menu {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  z-index: 1000;
+  min-width: 160px;
+  padding: 4px 0;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 25%);
+}
+
+.csv-menu button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  background: #fff;
+  color: #333;
+  text-align: left;
+  cursor: pointer;
+}
+
+.csv-menu button:hover {
+  background: #f2f5fa;
+}
+
+.csv-menu mat-icon {
+  color: #333;
+}
+
+/* Pagination */
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px;
+  color: #555;
+  font-size: 13px;
+}
+
+.page-size-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 12px;
+}
+
+.page-size-label select {
+  padding: 5px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.page-summary {
+  margin: 0 8px;
+  white-space: nowrap;
+}
+
+.table-message {
+  padding: 20px !important;
+  text-align: center !important;
+  color: #666;
+}
+
+/* Responsive search layout */
+
+@media (max-width: 900px) {
+  .building-search-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .table-footer {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .building-search-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .table-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination-controls {
+    justify-content: flex-start;
+  }
+
+  .add-building-table,
+  .results-table {
+    min-width: 1000px;
+  }
+}
+
+.building-actions .delete-icon,
+.building-actions .delete-icon mat-icon {
+  color: #f44336 !important;
+}
+
+.building-actions .delete-icon:disabled {
+  opacity: 1 !important;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.search-bar:hover {
+  background: #edf3fc;
+}
+
+.search-bar mat-icon {
+  margin-right: 8px;
+}
+
+
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+}
+
+
+.audit-table th {
+  background: #e7f4f8;
+  font-weight: 600;
+}
+
+.audit-table tbody tr:nth-child(even) {
+  background: #f4fafc;
+}
+
+
+
+.empty-state {
+  text-align: center !important;
+  padding: 16px !important;
+}
+
+.audit-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.audit-pagination select {
+  padding: 5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: white;
+}
+
+.audit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .audit-table-container {
+    overflow-x: auto;
+  }
+
+  .audit-pagination {
+    justify-content: flex-start;
+  }
+}
+
+.audit-details-dialog .mat-mdc-dialog-surface {
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.audit-details-dialog .mat-mdc-dialog-content {
+  max-height: none;
+}
+
+.audit-dialog {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.audit-dialog h2 {
+  margin: 0 0 14px;
+  padding: 0;
+  line-height: 1.4;
+  font-size: 22px;
+}
+
+.audit-table-container {
+  width: 100%;
+  max-height: 300px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.audit-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+}
+
+.audit-table th,
+.audit-table td {
+  padding: 12px 10px;
+  border: 1px solid #d5dce2;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.audit-table th:nth-child(1) { width: 14%; }
+.audit-table th:nth-child(2) { width: 14%; }
+.audit-table th:nth-child(3) { width: 22%; }
+.audit-table th:nth-child(4) { width: 18%; }
+.audit-table th:nth-child(5) { width: 32%; }
+
+
+.audit-details-dialog .mat-mdc-dialog-surface {
+  box-sizing: border-box;
+  padding: 24px;
+  overflow: auto;
+}
+
+/* Scope Navigation */
+.scope-navigation {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ccc;
+}
+
+.scope-navigation a {
+  display: inline-block;
+  padding: 8px 18px;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.scope-navigation a:hover {
+  background-color: #f2f2f2;
+}
+
+.scope-navigation a.active {
+  background-color: #dcecf5;
+  border-color: #6b9db8;
+  font-weight: 600;
+}
+
+/* Others Component */
+.others-container {
+  width: 100%;
+  padding: 16px;
+}
+
+.others-container .building-section {
+  margin-bottom: 20px;
+}
+
+/* Form */
+.others-container .others-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.others-container .others-form mat-form-field {
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.others-container .others-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+/* Tables */
+.others-container .building-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.others-container .building-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.others-container .building-entry-table th,
+.others-container .building-entry-table td {
+  border: 1px solid #d3dce0;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.others-container .building-entry-table thead th {
+  background-color: #e1f6fb;
+  color: #111;
+  font-weight: 600;
+}
+
+.others-container .building-entry-table tbody tr:nth-child(even) {
+  background-color: #f3fafc;
+}
+
+.others-container .building-entry-table tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.others-container .building-entry-table mat-form-field {
+  width: 100%;
+  min-width: 130px;
+}
+
+/* Actions */
+.others-container .building-actions {
+  white-space: nowrap;
+}
+
+.others-container .building-actions button {
+  color: #37474f;
+}
+
+.others-container .building-actions .save-icon {
+  color: #1976d2;
+}
+
+.others-container .building-actions .delete-icon {
+  color: #d32f2f;
+}
+
+/* Keep Building and Others entry tables consistent with the road/bridge forms. */
+.building-entry-table.component-form-table {
+  color: var(--field-text);
+  font-size: 14px;
+}
+
+.building-entry-table.component-form-table thead th,
+.others-container .building-entry-table.component-form-table thead th {
+  padding: 12px 10px;
+  background: var(--header-bg);
+  color: var(--header-text);
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.building-entry-table.component-form-table tbody td,
+.others-container .building-entry-table.component-form-table tbody td {
+  padding: 12px 10px;
+  background: var(--surface-white);
+  color: var(--field-text);
+  text-align: center;
+}
+
+.building-entry-table.component-form-table .mat-mdc-text-field-wrapper,
+.others-container .building-entry-table.component-form-table .mat-mdc-text-field-wrapper {
+  background: var(--field-bg);
+}
+
+/* Pagination */
+.others-container .table-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 0;
+}
+
+.others-container .pagination-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.others-container .page-size-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.others-container .page-size-label select {
+  padding: 5px 8px;
+}
+
+/* Messages */
+.others-container .table-message {
+  padding: 18px;
+  text-align: center;
+}
+
+.others-container .success-message {
+  color: #216e39;
+}
+
+.others-container .error-message {
+  color: #b42318;
+}
+
+.others-container .required {
+  color: #d32f2f;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .others-container .others-form {
+    flex-direction: column;
+  }
+
+  .others-container .others-form mat-form-field {
+    width: 100%;
+  }
+
+  .others-container .others-form-actions {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .others-container .pagination-controls {
+    justify-content: flex-end;
+  }
+}
+.custom-feedback-snackbar .mdc-snackbar__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.delete-confirm-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 2px !important;
+  background: #fff !important;
+  box-shadow: 0 8px 24px #0003 !important;
+}
+
+.delete-confirm-panel .mat-mdc-dialog-content {
+  color: #333 !important;
+}
+
+
+/* =========================================================
+   APPLICATION NAVIGATION BAR (CONSOLIDATED)
+   ========================================================= */
+.main-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ccc;
+  background-color: #ffffff;
+}
+
+.main-navigation a {
+  padding: 8px 18px;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.main-navigation a:hover {
+  background-color: #f0f4f8;
+}
+
+.main-navigation a.active {
+  background: #dcecf5;
+  border-color: #6b9db8;
+  font-weight: 600;
+}
+
+.content-container {
+  padding: 16px;
+}
+

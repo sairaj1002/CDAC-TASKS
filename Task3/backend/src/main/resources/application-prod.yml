@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/wamis}
+    username: ${DB_USERNAME:wamis}
+    password: ${DB_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+integration:
+  gepnic:
+    enabled: ${GEPNIC_ENABLED:true}
+    environment: prod
+    base-url: ${GEPNIC_BASE_URL:https://eproc.nic.in}
+    connect-timeout: 10s
+    read-timeout: 60s
+    unique-user-id: ${GEPNIC_UNIQUE_USER_ID}
+    key-id: ${GEPNIC_KEY_ID}
+    key-store-location: ${GEPNIC_KEYSTORE_LOCATION}
+    key-store-password: ${GEPNIC_KEYSTORE_PASSWORD}
+    trust-store-location: ${GEPNIC_TRUSTSTORE_LOCATION}
+    trust-store-password: ${GEPNIC_TRUSTSTORE_PASSWORD}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+

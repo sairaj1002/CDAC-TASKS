@@ -6,6 +6,7 @@ export const GEPNIC_CONSTANTS = {
 
   ROUTES: {
     SUB_WORK: 'sub-work',
+    TENDER: 'tender',
     PRE_TENDER: 'pretender',
     TENDER_PUSH: 'tender-push',
     TENDER_CORRIGENDUM_PULL: 'tender-corrigendum-pull',
@@ -25,14 +26,14 @@ export const GEPNIC_CONSTANTS = {
 
   // Integration Module Submenu Items (Under "Gepnic")
   GEPNIC_NAV_ITEMS: [
-    { label: 'Tender Push', route: '/tender-push', icon: 'send' },
-    { label: 'Tender & Corrigendum', route: '/tender-corrigendum-pull', icon: 'sync_alt' },
-    { label: 'Awarding', route: '/awarding', icon: 'workspace_premium' }
+    { label: 'Pretender', route: '/tender-push', icon: 'send' },
+    { label: 'Post Tender & Corrigendum', route: '/tender-corrigendum-pull', icon: 'sync_alt' }
   ],
 
   // WMS Module Submenu Items (Under "Works")
   WMS_NAV_ITEMS: [
-    { label: 'Sub Work', route: '/sub-work', icon: 'assignment' }
+    { label: 'Sub Work', route: '/sub-work', icon: 'assignment' },
+    { label: 'Tender', route: '/tender', icon: 'description' }
   ],
 
   // Sub Work Details Reusable Options
@@ -54,10 +55,10 @@ export const GEPNIC_CONSTANTS = {
     ],
     SECONDARY_TABS: [
       'Work Type',
+      'Scope',
       'Account Heads',
       'AA & ES',
       'Technical Sanction',
-      'Pretender',
       'Awarding',
       'Work Balances',
       'Audit Details'

@@ -111,6 +111,25 @@
   border-color: #16a34a;
 }
 
+/* Action: Delete Button */
+.action-btn.delete-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: background 150ms ease;
+}
+
+.action-btn.delete-btn:hover {
+  background: #fecaca;
+}
+
 /* Action: Push Button */
 .action-btn.push-btn {
   background: #0b2e59;
@@ -616,5 +635,46 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+}
+
+/* ==================== PRE-TENDER DETAILS MODAL DIALOG (Matches Image 1) ==================== */
+.pretender-details-modal-dialog {
+  width: 92vw;
+  max-width: 1040px;
+  max-height: 90vh;
+}
+
+.ptd-section-header {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f2744;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid #e2e8f0;
+}
+
+.ptd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-bottom: 6px;
+}
+
+.ptd-table td {
+  padding: 6px 12px;
+  vertical-align: top;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ptd-label {
+  font-weight: 600;
+  color: #1e293b;
+  width: 22%;
+  background: #fbfcfd;
+}
+
+.ptd-value {
+  color: #475569;
+  width: 28%;
 }
 

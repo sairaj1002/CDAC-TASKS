@@ -1,0 +1,5518 @@
+/* ==========================================================================
+   WAMIS - Works & Accounts Management System
+   Centre for Development of Advanced Computing (C-DAC Pune)
+   GePNIC Integration Module Master Global Stylesheet
+   ========================================================================== */
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+:root {
+  --wamis-topbar-bg: #0f4a74;
+  --wamis-subbar-bg: #ffffff;
+  --wamis-sidebar-rail-bg: #0c4873;
+  --wamis-sidebar-rail-active: rgba(255, 255, 255, 0.2);
+  --wamis-footer-bg: #083250;
+  
+  --wamis-navy: #0a2558;
+  --wamis-navy-dark: #071a3d;
+  --wamis-navy-light: #163e82;
+  --wamis-blue: #1565c0;
+  --wamis-blue-light: #1976d2;
+  --wamis-label-blue: #0f3d64;
+  
+  --wamis-table-header-bg: #e8f4f8;
+  --wamis-table-header-color: #0f2744;
+  --wamis-table-border: #d0dfe8;
+  --wamis-row-hover: #f5f9fc;
+  
+  --wamis-input-bg: #f2f5f8;
+  --wamis-input-disabled: #e9ecef;
+  --wamis-input-border: #c8d4df;
+  
+  --wamis-danger: #e53935;
+  --wamis-danger-hover: #c62828;
+  --wamis-success: #2e7d32;
+  --wamis-warning: #ed6c02;
+  --wamis-text-main: #1f2937;
+  --wamis-text-muted: #64748b;
+  --wamis-bg: #f8fafc;
+  --wamis-card-bg: #ffffff;
+  --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  background-color: var(--wamis-bg);
+  color: var(--wamis-text-main);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   1. MASTER TOP GOVERNMENT & C-DAC BANNER (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-topbar {
+  background-color: var(--wamis-topbar-bg);
+  color: #ffffff;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.wamis-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wamis-emblem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.wamis-emblem-svg {
+  width: 26px;
+  height: 26px;
+  fill: #ffffff;
+}
+
+.wamis-topbar-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.wamis-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.wamis-topbar-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.wamis-topbar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.wamis-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #0084d1;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   2. SUB-HEADER BAR WITH DIVISION OFFICE PILL (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-subbar {
+  background-color: var(--wamis-subbar-bg);
+  border-bottom: 1px solid #d0dfe8;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 48px;
+  z-index: 1000;
+}
+
+.wamis-subbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wamis-hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.15s;
+}
+
+.wamis-hamburger-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-division-container {
+  position: relative;
+}
+
+.wamis-division-pill {
+  background-color: #ffffff;
+  border: 1px solid #c8d4df;
+  border-radius: 4px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f2744;
+  transition: border-color 0.2s;
+}
+
+.wamis-division-pill:hover {
+  border-color: var(--wamis-blue);
+}
+
+.wamis-division-name {
+  white-space: nowrap;
+}
+
+.wamis-clear-cross {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.wamis-clear-cross:hover {
+  color: #0f2744;
+}
+
+.wamis-division-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 260px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 1010;
+  overflow: hidden;
+}
+
+.wamis-division-option {
+  padding: 9px 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.wamis-division-option:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-division-option.selected {
+  background-color: #e2f0fb;
+  color: var(--wamis-navy);
+  font-weight: 600;
+}
+
+.wamis-subbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.wamis-env-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ==========================================================================
+   3. SIDEBAR NAVIGATION SYSTEM (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-layout-container {
+  display: flex;
+  min-height: calc(100vh - 92px - 32px);
+  padding-bottom: 32px;
+}
+
+.wamis-sidebar-wrapper {
+  display: flex;
+  position: sticky;
+  top: 92px;
+  height: calc(100vh - 92px - 32px);
+  z-index: 900;
+}
+
+/* Deep Blue Vertical Rail */
+.wamis-sidebar-rail {
+  width: 72px;
+  background-color: var(--wamis-sidebar-rail-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar {
+  width: 4px;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.wamis-sidebar-rail::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.wamis-rail-items {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.wamis-rail-item {
+  width: 62px;
+  padding: 8px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.wamis-rail-item:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.wamis-rail-item.active {
+  background-color: var(--wamis-sidebar-rail-active);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.wamis-rail-icon {
+  font-size: 22px;
+  margin-bottom: 3px;
+  color: #ffffff;
+}
+
+.wamis-rail-label {
+  font-size: 10.5px;
+  font-weight: 500;
+  text-align: center;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+/* GePNIC Module Drawer under Integration (Closable) */
+.wamis-sidebar-drawer {
+  width: 220px;
+  background-color: #ffffff;
+  border-right: 1px solid #d0dfe8;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.25s ease, opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.wamis-sidebar-drawer.collapsed {
+  width: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+.wamis-drawer-header {
+  padding: 12px 14px 10px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wamis-drawer-header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.wamis-drawer-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--wamis-navy);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.wamis-drawer-subtitle {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.wamis-drawer-close-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.wamis-drawer-close-btn:hover {
+  background-color: #e2e8f0;
+  color: #0f2744;
+}
+
+.wamis-drawer-nav {
+  list-style: none;
+  padding: 8px 0;
+}
+
+.wamis-drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.wamis-drawer-item:hover {
+  background-color: #f1f5f9;
+  color: var(--wamis-blue);
+}
+
+.wamis-drawer-item.active {
+  background-color: #e8f4fc;
+  color: var(--wamis-navy);
+  font-weight: 600;
+  border-left-color: var(--wamis-navy);
+}
+
+.wamis-drawer-icon {
+  font-size: 18px;
+}
+
+/* Main Content Area */
+.wamis-content {
+  flex: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  min-height: calc(100vh - 92px - 32px);
+}
+
+/* ==========================================================================
+   4. BOTTOM FOOTER BAR (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background-color: var(--wamis-footer-bg);
+  color: #d0e0ec;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1002;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wamis-footer-left {
+  font-weight: 500;
+}
+
+.wamis-footer-right {
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   5. SUB WORK DETAILS & AUTHENTIC WAMIS FORM (Matches Screenshots 1 & 2)
+   ========================================================================== */
+.wamis-subwork-container {
+  background: #ffffff;
+}
+
+.wamis-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2744;
+  margin-bottom: 14px;
+}
+
+/* Primary Tabs (Add | View) */
+.wamis-primary-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid #d0dfe8;
+  margin-bottom: 20px;
+}
+
+.wamis-primary-tab {
+  background: none;
+  border: none;
+  padding: 6px 12px 10px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.wamis-primary-tab:hover {
+  color: var(--wamis-navy);
+}
+
+.wamis-primary-tab.active {
+  color: var(--wamis-navy);
+  font-weight: 700;
+  border-bottom-color: var(--wamis-navy);
+}
+
+/* Responsive Grid Configuration:
+   - When second menu is open: 3 input components per row
+   - On max screen / when second menu is closed: 4 input components per row
+   - Responsive breakpoints for tablet and mobile
+*/
+.wamis-wms-form-grid,
+.wamis-form-grid,
+.wamis-nit-grid,
+.wamis-3col-grid {
+  display: grid !important;
+  column-gap: 20px !important;
+  row-gap: 16px !important;
+  margin-bottom: 24px;
+}
+
+/* 4 input components in a single row */
+.wamis-wms-form-grid,
+.wamis-form-grid,
+.wamis-nit-grid,
+.second-menu-open .wamis-wms-form-grid,
+.second-menu-open .wamis-form-grid,
+.second-menu-open .wamis-nit-grid,
+.second-menu-closed .wamis-wms-form-grid,
+.second-menu-closed .wamis-form-grid,
+.second-menu-closed .wamis-nit-grid {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+
+@media (min-width: 1600px) {
+  .second-menu-closed .wamis-wms-form-grid,
+  .second-menu-closed .wamis-form-grid,
+  .second-menu-closed .wamis-nit-grid,
+  .second-menu-closed .wamis-3col-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .wamis-wms-form-grid,
+  .wamis-form-grid,
+  .wamis-nit-grid,
+  .wamis-3col-grid,
+  .second-menu-open .wamis-wms-form-grid,
+  .second-menu-open .wamis-form-grid,
+  .second-menu-closed .wamis-wms-form-grid,
+  .second-menu-closed .wamis-form-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .wamis-wms-form-grid,
+  .wamis-form-grid,
+  .wamis-nit-grid,
+  .wamis-3col-grid,
+  .second-menu-open .wamis-wms-form-grid,
+  .second-menu-open .wamis-form-grid,
+  .second-menu-closed .wamis-wms-form-grid,
+  .second-menu-closed .wamis-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.wamis-wms-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wamis-wms-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wamis-wms-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wamis-wms-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--wamis-label-blue);
+}
+
+.wamis-wms-label .required {
+  color: #c62828;
+  margin-left: 2px;
+}
+
+.wamis-wms-counter {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.wamis-wms-disabled-box {
+  background-color: var(--wamis-input-disabled);
+  border: 1px solid var(--wamis-table-border);
+  border-radius: 3px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  color: #64748b;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+}
+
+.wamis-wms-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.wamis-wms-input, .wamis-wms-select {
+  width: 100%;
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 3px;
+  padding: 7px 28px 7px 10px;
+  font-size: 13px;
+  color: #1e293b;
+  background-color: #ffffff;
+  min-height: 34px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.wamis-wms-input:focus, .wamis-wms-select:focus {
+  border-color: var(--wamis-blue);
+}
+
+.wamis-wms-select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.wamis-wms-clear-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.wamis-wms-clear-btn:hover {
+  color: #0f2744;
+}
+
+/* Checkboxes (Emergency, Departmental, Lumpsum) */
+.wamis-wms-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.wamis-wms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--wamis-label-blue);
+  user-select: none;
+}
+
+.wamis-wms-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--wamis-navy);
+}
+
+/* Secondary Child Tabs (Work Type, Account Heads, etc.) */
+.wamis-secondary-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #d0dfe8;
+  margin-top: 12px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.wamis-secondary-tab {
+  background: none;
+  border: none;
+  padding: 6px 4px 10px 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0f2744;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.wamis-secondary-tab:hover {
+  color: var(--wamis-navy);
+}
+
+.wamis-secondary-tab.active {
+  color: var(--wamis-navy);
+  font-weight: 700;
+  border-bottom-color: var(--wamis-navy);
+}
+
+.wamis-child-section {
+  margin-bottom: 20px;
+}
+
+.wamis-rounded-input {
+  border-radius: 4px !important;
+  background-color: #ffffff;
+}
+
+.wamis-tab-placeholder {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 4px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Bottom Action Buttons (Save [Disabled] & Reset [Navy Blue]) */
+.wamis-form-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.wamis-btn-save {
+  background-color: #d9d9d9;
+  color: #8c8c8c;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: not-allowed;
+  transition: all 0.2s;
+}
+
+.wamis-btn-save:not([disabled]) {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.wamis-btn-save:not([disabled]):hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+.wamis-btn-reset {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.wamis-btn-reset:hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+/* ==========================================================================
+   6. TABLES SYSTEM (Matches User Image 2)
+   ========================================================================== */
+.wamis-table-container,
+.wamis-scrollable-table,
+.mat-mdc-table-container {
+  width: 100%;
+  overflow-x: auto !important;
+  border: 1px solid #d0dfe8;
+  border-radius: 4px;
+  background: #ffffff;
+  margin-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #888888 #eef2f5;
+}
+
+/* Custom styled horizontal scrollbar with arrow buttons matching Image 2 */
+.wamis-table-container::-webkit-scrollbar,
+.wamis-scrollable-table::-webkit-scrollbar,
+.mat-mdc-table-container::-webkit-scrollbar {
+  height: 12px !important;
+  background-color: #eef2f5;
+}
+
+.wamis-table-container::-webkit-scrollbar-track,
+.wamis-scrollable-table::-webkit-scrollbar-track,
+.mat-mdc-table-container::-webkit-scrollbar-track {
+  background: #eef2f5;
+  border-top: 1px solid #d0dfe8;
+}
+
+.wamis-table-container::-webkit-scrollbar-thumb,
+.wamis-scrollable-table::-webkit-scrollbar-thumb,
+.mat-mdc-table-container::-webkit-scrollbar-thumb {
+  background-color: #888888;
+  border-radius: 4px;
+  border: 2px solid #eef2f5;
+}
+
+.wamis-table-container::-webkit-scrollbar-thumb:hover,
+.wamis-scrollable-table::-webkit-scrollbar-thumb:hover,
+.mat-mdc-table-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555555;
+}
+
+.wamis-table-container::-webkit-scrollbar-button:single-button:horizontal:decrement,
+.wamis-scrollable-table::-webkit-scrollbar-button:single-button:horizontal:decrement {
+  background-color: #e2e8f0;
+  display: block;
+  width: 16px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23555555'%3e%3cpath d='M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z'/%3e%3c/svg%3e");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wamis-table-container::-webkit-scrollbar-button:single-button:horizontal:increment,
+.wamis-scrollable-table::-webkit-scrollbar-button:single-button:horizontal:increment {
+  background-color: #e2e8f0;
+  display: block;
+  width: 16px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23555555'%3e%3cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/%3e%3c/svg%3e");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wamis-table,
+table.mat-mdc-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: #ffffff;
+}
+
+.wamis-table th,
+table.mat-mdc-table th.mat-mdc-header-cell {
+  background-color: #e6f2f7 !important; /* Matches User Image 2 light ice-blue tint */
+  color: #0f2744 !important;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-right: 1px solid #d0dfe8;
+  border-bottom: 1px solid #d0dfe8;
+  white-space: nowrap;
+}
+
+.wamis-table th:last-child,
+table.mat-mdc-table th.mat-mdc-header-cell:last-child {
+  border-right: none;
+}
+
+.wamis-table td,
+table.mat-mdc-table td.mat-mdc-cell {
+  padding: 10px 14px;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 12.5px;
+  color: #1f293b;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.wamis-table td:last-child,
+table.mat-mdc-table td.mat-mdc-cell:last-child {
+  border-right: none;
+}
+
+.wamis-table tr:hover td,
+table.mat-mdc-table tr.mat-mdc-row:hover td {
+  background-color: #f8fafc;
+}
+
+.wamis-status-chip.wamis-status-success,
+.wamis-status-pill.success {
+  background-color: #def7ec !important;
+  color: #03543f !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  padding: 3px 10px !important;
+  font-size: 11px !important;
+  display: inline-block !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+}
+
+.wamis-table-empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--wamis-text-muted);
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* Table Inputs & Boxes (Matches Screenshot 1 & 2) */
+.wamis-input-box {
+  background-color: var(--wamis-input-bg);
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 12.5px;
+  color: #1e293b;
+  width: 100%;
+}
+
+.wamis-table-select {
+  background-color: var(--wamis-input-bg);
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 12.5px;
+  color: #1e293b;
+  width: 100%;
+  cursor: pointer;
+}
+
+.wamis-table-select:focus, .wamis-input-box:focus {
+  outline: none;
+  border-color: var(--wamis-blue);
+  background-color: #ffffff;
+}
+
+.wamis-field-invalid {
+  border: 1.5px solid var(--wamis-danger) !important;
+  background-color: #fff8f8 !important;
+}
+
+.wamis-error-text {
+  color: var(--wamis-danger);
+  font-size: 11px;
+  margin-top: 3px;
+  display: block;
+}
+
+.wamis-radio-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.wamis-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 12.5px;
+}
+
+/* ==========================================================================
+   7. ACTION ICONS & AUDIT DETAILS (Matches Screenshots 1, 3, 4, 5)
+   ========================================================================== */
+.wamis-actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.wamis-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.wamis-action-btn:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.wamis-icon-edit {
+  color: var(--wamis-blue);
+  font-size: 18px;
+}
+
+.wamis-icon-delete {
+  color: var(--wamis-danger);
+  font-size: 18px;
+}
+
+.wamis-icon-add {
+  color: var(--wamis-blue);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.wamis-icon-check {
+  color: var(--wamis-blue);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.wamis-icon-close {
+  color: var(--wamis-blue);
+  font-size: 18px;
+}
+
+.wamis-icon-circle-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+}
+
+.wamis-icon-circle-check.active {
+  background-color: var(--wamis-blue);
+  color: #ffffff;
+}
+
+.wamis-icon-circle-check.inactive {
+  background-color: #94a3b8;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   8. BUTTONS & CHIPS
+   ========================================================================== */
+.wamis-btn-primary {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s;
+}
+
+.wamis-btn-primary:hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+.wamis-btn-secondary {
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.wamis-btn-secondary:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-note {
+  color: var(--wamis-danger);
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wamis-badge-pill {
+  background-color: #1a237e;
+  color: #ffffff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.wamis-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.wamis-status-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.wamis-status-failed {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.wamis-status-pending {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+.wamis-status-progress {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+/* ==========================================================================
+   9. CONFIRMATION DIALOG (Matches Screenshot 3)
+   ========================================================================== */
+.wamis-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.wamis-dialog-card {
+  background: #ffffff;
+  border-radius: 4px;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: wamisFadeIn 0.2s ease-out;
+}
+
+@keyframes wamisFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.wamis-dialog-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.wamis-dialog-close-btn:hover {
+  color: #1e293b;
+}
+
+.wamis-dialog-body {
+  padding: 28px 24px 20px 24px;
+  text-align: center;
+}
+
+.wamis-dialog-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.wamis-dialog-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.wamis-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 24px 24px 24px;
+}
+
+/* Modals & Dialogs */
+.wamis-modal-large {
+  width: 780px !important;
+  max-width: 95vw !important;
+}
+
+.wamis-modal-header {
+  padding: 14px 18px;
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wamis-modal-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.wamis-modal-body {
+  padding: 20px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+/* Standard WAMIS Card */
+.wamis-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.wamis-card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--wamis-navy);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wamis-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.wamis-page-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wamis-navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wamis-page-subtitle {
+  font-size: 12.5px;
+  color: var(--wamis-text-muted);
+  margin-top: 2px;
+}
+
+.wamis-tabs-bar {
+  display: flex;
+  border-bottom: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 0 12px;
+  margin-bottom: 18px;
+  gap: 4px;
+}
+
+.wamis-tab-item {
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.wamis-tab-item:hover {
+  color: var(--wamis-blue);
+  background: #f8fafc;
+}
+
+.wamis-tab-item.active {
+  color: var(--wamis-navy);
+  border-bottom-color: var(--wamis-navy);
+  background: #ffffff;
+}
+
+.wamis-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.wamis-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.wamis-form-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+.wamis-form-label .required {
+  color: var(--wamis-danger);
+}
+
+.wamis-form-control {
+  border: 1px solid var(--wamis-input-border);
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  color: #1e293b;
+  background-color: #ffffff;
+  transition: border-color 0.2s;
+}
+
+.wamis-form-control:focus {
+  outline: none;
+  border-color: var(--wamis-blue);
+  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.15);
+}
+
+select.wamis-form-control,
+select.wamis-table-select,
+select.wamis-wms-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231565c0'%3e%3cpath d='M7 14l5-5 5 5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px 14px;
+  padding-right: 30px !important;
+  cursor: pointer;
+}
+
+select.wamis-form-control:focus,
+select.wamis-table-select:focus,
+select.wamis-wms-select:focus {
+  border-color: #1565c0 !important;
+  border-bottom: 2px solid #1565c0 !important;
+}
+
+.wamis-json-box {
+  background-color: #1e293b;
+  color: #38bdf8;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  padding: 14px;
+  border-radius: 4px;
+  overflow-x: auto;
+  max-height: 400px;
+  white-space: pre-wrap;
+  border: 1px solid #334155;
+}
+
+/* ==========================================================================
+   10. NIT (NOTICE INVITING TENDER) & FILE UPLOAD STYLING (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-nit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 24px;
+  row-gap: 16px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 992px) {
+  .wamis-nit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wamis-disabled-input {
+  background-color: var(--wamis-input-disabled) !important;
+  color: #64748b !important;
+  border: 1px solid var(--wamis-table-border) !important;
+}
+
+.wamis-date-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.wamis-date-input-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.wamis-date-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 17px;
+  color: #475569;
+  pointer-events: none;
+}
+
+.wamis-date-hint {
+  font-size: 10.5px;
+  color: #8c8c8c;
+  margin-top: 3px;
+  font-weight: 500;
+  display: block;
+}
+
+.wamis-file-upload-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.wamis-paperclip-icon {
+  font-size: 22px;
+  color: #1e293b;
+  transform: rotate(45deg);
+}
+
+.wamis-file-input-custom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wamis-file-btn {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 6px 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wamis-file-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.wamis-file-name-badge {
+  font-size: 12.5px;
+  color: var(--wamis-navy);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.wamis-btn-view-nit {
+  background-color: var(--wamis-navy);
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.wamis-btn-view-nit:hover {
+  background-color: var(--wamis-navy-dark);
+}
+
+/* ==========================================================================
+   BOQ ITEM DETAILS SCREEN (Matches Screenshot 2)
+   ========================================================================== */
+.wamis-boq-item-details-box {
+  background: #ffffff;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  padding: 16px 20px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.wamis-boq-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.wamis-boq-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #071a3d;
+}
+
+.wamis-boq-close-btn {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #1f2937;
+  background: transparent;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.wamis-boq-close-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.wamis-boq-subtabs {
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid #cbd5e1;
+  margin-bottom: 16px;
+}
+
+.wamis-boq-subtab {
+  padding: 8px 4px 10px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s ease;
+}
+
+.wamis-boq-subtab.active {
+  color: #071a3d;
+  font-weight: 700;
+}
+
+.wamis-boq-subtab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #0a2558;
+}
+
+.wamis-boq-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.wamis-boq-group-left,
+.wamis-boq-group-right {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.wamis-boq-label-blue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.wamis-boq-inline-input {
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  outline: none;
+  background-color: #ffffff;
+  min-width: 220px;
+}
+
+.wamis-boq-inline-input:focus {
+  border-color: #1565c0;
+}
+
+.wamis-boq-btn-navy {
+  height: 34px;
+  background-color: #071a3d;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  padding: 0 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.wamis-boq-btn-navy:hover {
+  background-color: #0a2558;
+}
+
+.wamis-boq-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+}
+
+.wamis-boq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  background: #ffffff;
+}
+
+.wamis-boq-table th {
+  background-color: #e0f2fe;
+  color: #0f2744;
+  font-weight: 700;
+  padding: 10px 8px;
+  text-align: left;
+  border-right: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+
+.wamis-boq-table th .req {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.wamis-boq-table td {
+  padding: 8px 6px;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.wamis-boq-cell-input {
+  width: 100%;
+  height: 32px;
+  padding: 4px 8px;
+  font-size: 12.5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  outline: none;
+  background-color: #ffffff;
+}
+
+.wamis-boq-cell-input:focus {
+  border-color: #2563eb;
+}
+
+.wamis-boq-cell-select {
+  width: 100%;
+  height: 32px;
+  padding: 4px 6px;
+  font-size: 12.5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  outline: none;
+  background-color: #ffffff;
+}
+
+.wamis-boq-btn-doc {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wamis-boq-btn-doc:hover {
+  color: #1d4ed8;
+}
+
+.wamis-boq-pagination-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: #475569;
+  padding: 10px 4px 14px 4px;
+}
+
+.wamis-boq-actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.wamis-boq-btn-save-items {
+  height: 34px;
+  background-color: #94a3b8;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  padding: 0 16px;
+  cursor: not-allowed;
+}
+
+.wamis-boq-btn-save-items.active {
+  background-color: #0f4a74;
+  cursor: pointer;
+}
+
+.wamis-boq-banner-strip {
+  background-color: #e0f2fe;
+  padding: 9px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0369a1;
+  border-radius: 2px;
+  margin-top: 14px;
+  margin-bottom: 18px;
+}
+
+.wamis-boq-btn-bottom-save {
+  background-color: #071a3d;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  border: none;
+  border-radius: 3px;
+  padding: 8px 26px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.wamis-boq-btn-bottom-save:hover {
+  background-color: #0a2558;
+}
+
+/* ==========================================================================
+   CUSTOM TWO-TONED TOOLTIP (Matches User Image 2)
+   ========================================================================== */
+.mat-mdc-tooltip .mdc-tooltip__surface,
+.wamis-tooltip-twotone {
+  background: linear-gradient(to bottom, #e2e8f0 0%, #e2e8f0 26px, #cbd5e1 26px, #cbd5e1 27px, #ffffff 27px, #ffffff 100%) !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  padding: 5px 14px 18px 14px !important;
+  font-family: var(--font-family) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  min-width: 90px !important;
+  max-width: 260px !important;
+  text-align: center !important;
+  letter-spacing: 0.1px !important;
+}
+
+.mat-mdc-tooltip .mdc-tooltip__caret {
+  display: none !important;
+}
+
+/* ==========================================================================
+   CUSTOM SELECT DROPDOWN COMPONENT (Matches User Image 1)
+   ========================================================================== */
+.wamis-custom-select-container {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+.wamis-custom-select-box {
+  background-color: #ffffff;
+  border: 1px solid #c8d4df;
+  border-radius: 4px;
+  min-height: 46px;
+  padding: 5px 10px 5px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.wamis-custom-select-box:hover {
+  border-color: #1565c0;
+}
+
+.wamis-custom-select-box.active {
+  background-color: #f1f5f9;
+  border-color: #1565c0;
+  border-bottom: 2px solid #1565c0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.wamis-custom-select-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.wamis-custom-select-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0a2558;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.wamis-custom-select-label .required {
+  color: #dc2626;
+  margin-left: 2px;
+  font-weight: 700;
+}
+
+.wamis-custom-select-display {
+  font-size: 13.5px;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.wamis-custom-select-display.placeholder {
+  color: #64748b;
+  font-weight: 400;
+}
+
+.wamis-custom-select-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.wamis-custom-select-caret {
+  color: #1565c0;
+  font-size: 10px;
+  line-height: 1;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+
+.wamis-custom-select-caret.open {
+  transform: rotate(0deg);
+}
+
+.wamis-custom-select-clear-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+  padding: 2px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.wamis-custom-select-clear-btn:hover {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.08);
+}
+
+.wamis-custom-select-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.wamis-custom-select-option {
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: #0f172a;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.wamis-custom-select-option:hover,
+.wamis-custom-select-option.hovered {
+  background-color: #e2e8f0;
+}
+
+.wamis-custom-select-option.selected {
+  background-color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   CUSTOM SNACKBAR STYLING (Matches User Image 1)
+   ========================================================================== */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  padding: 10px 16px !important;
+  min-height: 44px !important;
+  font-family: var(--font-family) !important;
+}
+
+/* Error Snackbar: Soft pastel pink background with crimson text & action (Matches Image 1) */
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mdc-snackbar__surface {
+  background-color: #fde8e8 !important;
+  border: 1px solid #f8b4b4 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mdc-snackbar__label {
+  color: #c81e1e !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1px !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mat-mdc-button,
+.mat-mdc-snack-bar-container.wamis-snackbar-error .mat-mdc-snack-bar-action {
+  color: #c81e1e !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+/* Success Snackbar */
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mdc-snackbar__surface {
+  background-color: #def7ec !important;
+  border: 1px solid #bcf0da !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mdc-snackbar__label {
+  color: #03543f !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mat-mdc-button,
+.mat-mdc-snack-bar-container.wamis-snackbar-success .mat-mdc-snack-bar-action {
+  color: #03543f !important;
+  font-weight: 600 !important;
+}
+
+/* Info Snackbar */
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mdc-snackbar__surface {
+  background-color: #e1effe !important;
+  border: 1px solid #b4c6fc !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mdc-snackbar__label {
+  color: #1e429f !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mat-mdc-button,
+.mat-mdc-snack-bar-container.wamis-snackbar-info .mat-mdc-snack-bar-action {
+  color: #1e429f !important;
+  font-weight: 600 !important;
+}
+
+/* Warning Snackbar */
+.mat-mdc-snack-bar-container.wamis-snackbar-warning .mdc-snackbar__surface {
+  background-color: #fef08a !important;
+  border: 1px solid #fde047 !important;
+}
+
+.mat-mdc-snack-bar-container.wamis-snackbar-warning .mdc-snackbar__label {
+  color: #713f12 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+/* ==========================================================================
+   SECOND MENU DRAWER (Matches User Image 3)
+   ========================================================================== */
+.wamis-second-menu-v3 {
+  width: 220px;
+  background-color: #eceff1 !important;
+  border-right: 1px solid #cfd8dc;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.wamis-drawer-header-v3 {
+  background-color: #004b87;
+  height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.wamis-drawer-title-v3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.wamis-drawer-collapse-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.wamis-drawer-collapse-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.wamis-drawer-body-v3 {
+  flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #888888 #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar {
+  width: 14px;
+  background-color: #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar-thumb {
+  background-color: #888888;
+  border-radius: 6px;
+  border: 2px solid #e0e0e0;
+}
+
+.wamis-drawer-body-v3::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-color: #e0e0e0;
+  display: block;
+  height: 14px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666666'%3e%3cpath d='M7 14l5-5 5 5z'/%3e%3c/svg%3e");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wamis-accordion-group {
+  border-bottom: 1px solid #d0dfe8;
+}
+
+.wamis-accordion-header {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease;
+  background-color: #eceff1;
+}
+
+.wamis-accordion-header:hover {
+  background-color: #e2e8f0;
+}
+
+.wamis-accordion-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #003366;
+  letter-spacing: 0.1px;
+}
+
+.wamis-accordion-chevron {
+  font-size: 18px;
+  color: #475569;
+  transition: transform 0.2s ease;
+}
+
+.wamis-accordion-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #f1f5f9;
+}
+
+.wamis-accordion-subitem {
+  display: block;
+  padding: 8px 18px 8px 24px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border-left: 3px solid transparent;
+}
+
+.wamis-accordion-subitem:hover {
+  background-color: #e2e8f0;
+  color: #003366;
+}
+
+.wamis-accordion-subitem.active {
+  background-color: #e0f2fe;
+  color: #0284c7;
+  font-weight: 700;
+  border-left-color: #0284c7;
+}
+
+/* ==========================================================================
+   ANGULAR MATERIAL UI COMPONENT OVERRIDES (Zero-Boilerplate Standard Theming)
+   ========================================================================== */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-select-panel {
+  background-color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16) !important;
+  border-radius: 4px !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.mat-mdc-option {
+  font-size: 13px !important;
+  color: #0f172a !important;
+  min-height: 38px !important;
+  padding: 8px 14px !important;
+}
+
+.mat-mdc-option:hover,
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple) {
+  background-color: #e2e8f0 !important;
+}
+
+.mat-mdc-card {
+  border-radius: 4px !important;
+  border: 1px solid #cbd5e1 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ==========================================================================
+   CUSTOM TWO-TONED FIELD TOOLTIP (Matches User Screenshot)
+   ========================================================================== */
+.wamis-field-tooltip-box {
+  position: absolute;
+  z-index: 10000;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  min-width: 120px;
+  max-width: 320px;
+  pointer-events: none;
+  font-family: var(--font-family);
+  overflow: visible;
+  animation: wamisTooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes wamisTooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wamis-field-tooltip-header {
+  background-color: #e9ecef; /* Cool light grey header */
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1e293b;
+  border-bottom: 1px solid #cbd5e1;
+  border-radius: 5px 5px 0 0;
+  text-align: left;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.wamis-field-tooltip-body {
+  background-color: #ffffff; /* Clean white body */
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #334155;
+  min-height: 24px;
+  border-radius: 0 0 5px 5px;
+  text-align: left;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+/* Downward Arrow Caret pointing at the input */
+.wamis-field-tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #cbd5e1;
+}
+
+.wamis-field-tooltip-arrow::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: -6px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #ffffff;
+}
+
+/* When flipped below input */
+.wamis-field-tooltip-box.wamis-tooltip-below .wamis-field-tooltip-arrow {
+  top: auto;
+  bottom: 100%;
+  border-top: none;
+  border-bottom: 7px solid #cbd5e1;
+}
+
+.wamis-field-tooltip-box.wamis-tooltip-below .wamis-field-tooltip-arrow::after {
+  bottom: auto;
+  top: 1px;
+  border-top: none;
+  border-bottom: 6px solid #e9ecef;
+}
+
+/* ==========================================================================
+   WAMIS - WORK TYPE CARD (Matches User Screenshot)
+   ========================================================================== */
+.wamis-work-type-card {
+  background: #eaf6fc;
+  border: 1px solid #bfe4f6;
+  border-radius: 4px;
+  padding: 18px 20px 24px;
+  margin-top: 14px;
+  margin-bottom: 24px;
+}
+
+.wamis-work-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+
+.wamis-work-type-col {
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wamis-work-type-col:first-child {
+  border-right: 1px solid #c8e6f7;
+}
+
+.wamis-work-type-header {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e3a5f;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.wamis-work-type-input-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+}
+
+.wamis-work-type-input {
+  width: 100%;
+  height: 38px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 8px 36px 8px 12px;
+  font-size: 13px;
+  color: #1e293b;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+.wamis-work-type-input:focus {
+  border-color: #155a96;
+}
+
+.wamis-work-type-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wamis-work-type-clear:hover {
+  color: #0f172a;
+}
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   SCOPE OF WORK BADGES & UTILITIES
+   ========================================================= */
+.scope-badge-road {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #bae6fd;
+}
+
+.scope-badge-bridge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #fde68a;
+}
+
+.scope-badge-building {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #dcfce7;
+  color: #15803d;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #bbf7d0;
+}
+
+.scope-badge-others {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid #e9d5ff;
+}
+
+
+/* =========================================================
+   ROAD & BRIDGE WORK MANAGEMENT SYSTEM - GLOBAL STYLES
+   Clean, organized styling for Road, Bridge, and Dropdown Admin.
+   ========================================================= */
+
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
+:root {
+  /* Core Design Tokens */
+  --brand-navy: #0b2e6e;
+  --brand-blue: #1976d2;
+  --header-bg: #e8f4fc;
+  --header-text: #2c3e50;
+  --table-border: #c4d8e7;
+  --row-alt-bg: #f8fbfe;
+  --row-hover-bg: #eaf3fb;
+  --field-bg: #ffffff;
+  --field-text: #4a4a4a;
+  --field-hover-border: #9aa3ad;
+  --icon-muted: #9e9e9e;
+  --icon-delete: #e53935;
+
+  /* Surfaces & Backgrounds */
+  --surface-white: #ffffff;
+  --panel-bg: #fbfdff;
+
+  /* Typography / Text Colors */
+  --text-primary: #1f1f1f;
+  --text-secondary: #53606d;
+  --text-muted: #64748b;
+  --text-dark: #1e293b;
+  --text-body: #334155;
+  --text-close: #333333;
+  --readonly-text: #ffeeee;
+
+  /* Borders & Dividers */
+  --border-divider: #d5dbe3;
+  --border-light: #c8d8e6;
+  --border-muted: #c7c7c7;
+
+  /* Brand States & Highlights */
+  --brand-navy-hover: #082457;
+  --brand-navy-dark: #071f4c;
+  --brand-navy-subtle: #f0f5fc;
+  --badge-entry-bg: #3b5998;
+
+  /* Icons & Actions */
+  --icon-edit: #2563eb;
+  --icon-add: #2563eb;
+  --icon-cancel: #757575;
+  --icon-disabled: #c4c4c4;
+  --btn-disabled-bg: #b8c2d4;
+  --btn-danger-bg: #f04438;
+  --btn-danger-hover: #d92d20;
+  --color-error: #d32f2f;
+
+  /* Notifications & Alerts */
+
+  /* Status Badges */
+  --status-active-bg: #e8f5e9;
+  --status-active-text: #1b5e20;
+  --status-active-border: #c8e6c9;
+  --status-inactive-bg: #f1f5f9;
+  --status-inactive-text: #64748b;
+  --status-inactive-border: #cbd5e1;
+}
+
+/* =========================================================
+   2. CARD & GLOBAL SHELL LAYOUT
+   ========================================================= */
+.component-card {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: var(--surface-white);
+}
+
+.component-card>mat-card-header {
+  padding: 12px 16px;
+}
+
+.component-card mat-card-title {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.component-card mat-card-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0;
+}
+
+.component-card>mat-card-content {
+  padding: 12px !important;
+}
+
+.component-card mat-card-content>hr {
+  border: 0;
+  border-top: 1px solid var(--border-divider);
+  margin: 0 0 16px;
+}
+
+.component-add-card,
+.component-shell-card {
+  border: 1px solid var(--table-border);
+}
+
+/* =========================================================
+   3. ENTITY NAVIGATION SELECTOR (Road / Bridge / Dropdown Master)
+   ========================================================= */
+.component-entity-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.component-entity-selector button {
+  min-width: 120px;
+  font-weight: 600;
+  border-color: var(--table-border);
+  transition: all 0.2s ease;
+}
+
+.component-entity-selector button.component-entity-active {
+  background-color: var(--brand-navy) !important;
+  color: var(--surface-white) !important;
+  border-color: var(--brand-navy) !important;
+}
+
+.component-entity-content {
+  width: 100%;
+}
+
+/* =========================================================
+   4. FORM TABLE (Road & Bridge Inline Entry & Display Table)
+   ========================================================= */
+.component-form-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--table-border);
+  background: var(--surface-white);
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.component-form-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: auto;
+  background: var(--surface-white);
+  color: var(--field-text);
+  font-size: 14px;
+}
+
+/* Header Cells */
+.component-form-table thead th {
+  height: 50px;
+  padding: 12px 10px;
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  border: 1px solid var(--table-border);
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  box-sizing: border-box;
+}
+
+.component-form-table th[scope='col'] {
+  background-color: var(--header-bg);
+  font-weight: 700;
+}
+
+/* Body Cells */
+.component-form-table tbody td {
+  padding: 12px 10px;
+  border: 1px solid var(--table-border);
+  text-align: center;
+  vertical-align: middle;
+  background-color: var(--surface-white);
+  box-sizing: border-box;
+}
+
+.component-form-table tbody tr td {
+  background-color: var(--surface-white);
+}
+
+.component-form-table tbody td:hover {
+  background-color: var(--row-hover-bg);
+}
+
+/* First Column & Serial Number */
+.component-form-table th:first-child,
+.component-form-table td:first-child,
+.component-serial-number {
+  min-width: 70px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  color: var(--header-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* New Entry Pill Badge */
+.serial-badge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.new-entry-pill,
+.new-entry-label {
+  display: inline-block;
+  min-width: 0;
+  margin: 2px auto 0;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background-color: var(--badge-entry-bg);
+  color: var(--surface-white);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  box-shadow: 0 1px 3px rgba(59, 89, 152, 0.4);
+}
+
+/* Form Fields inside Table Cells */
+.component-form-table mat-form-field {
+  display: block;
+  width: 100%;
+  min-width: 150px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.component-form-table .mat-mdc-form-field {
+  --mdc-outlined-text-field-container-shape: 4px;
+  --mdc-outlined-text-field-outline-color: transparent;
+  --mdc-outlined-text-field-hover-outline-color: transparent;
+  --mdc-outlined-text-field-focus-outline-color: transparent;
+  --mdc-outlined-text-field-input-text-color: var(--field-text);
+  --mdc-outlined-text-field-label-text-color: var(--surface-white);
+  --mdc-outlined-text-field-focus-label-text-color: var(--brand-navy);
+  --mdc-outlined-text-field-error-focus-label-text-color: var(--color-error);
+  width: 100%;
+  margin: 0;
+}
+
+.component-form-table .mat-mdc-text-field-wrapper {
+  min-height: 48px;
+  border-radius: 4px;
+  background-color: var(--field-bg);
+}
+
+.component-form-table .mat-mdc-form-field-infix {
+  min-height: 48px;
+  padding-top: 14px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.component-form-table .mat-mdc-input-element {
+  font-size: 14px;
+  color: var(--field-text);
+}
+
+.component-form-table .mat-mdc-select {
+  font-size: 14px;
+}
+
+.component-form-table .mat-mdc-select-value,
+.component-form-table .mat-mdc-select-arrow {
+  color: var(--field-text);
+}
+
+.component-form-table .mat-mdc-form-field-subscript-wrapper {
+  font-size: 12px;
+}
+
+.component-form-table mat-error {
+  white-space: normal;
+  line-height: 1.4;
+}
+
+/* Action Icon Buttons */
+.component-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.component-row-actions button[mat-icon-button] {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  line-height: 1 !important;
+  background: transparent !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.component-row-actions button[mat-icon-button]:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  transform: scale(1.08);
+}
+
+.component-row-actions button[mat-icon-button] mat-icon {
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 22px !important;
+  line-height: 22px !important;
+  font-weight: 500;
+}
+
+/* Action button color variants */
+.btn-action-edit mat-icon,
+.component-row-actions button[aria-label*='Edit'] mat-icon {
+  color: var(--icon-edit) !important;
+}
+
+.btn-action-delete mat-icon,
+.component-row-actions button[aria-label*='Delete'] mat-icon,
+.component-row-actions button[aria-label*='Clear'] mat-icon {
+  color: var(--icon-delete) !important;
+}
+
+.btn-action-view mat-icon,
+.component-row-actions button[aria-label*='View'] mat-icon {
+  color: var(--brand-blue) !important;
+}
+
+.btn-action-add mat-icon,
+.component-row-actions button[aria-label*='Add'] mat-icon {
+  color: var(--icon-add) !important;
+  font-weight: 700;
+}
+
+.btn-action-save mat-icon,
+.component-row-actions button[aria-label*='Save'] mat-icon {
+  color: var(--brand-blue) !important;
+}
+
+.btn-action-cancel mat-icon,
+.component-row-actions button[aria-label*='Cancel'] mat-icon {
+  color: var(--icon-cancel) !important;
+}
+
+.component-row-actions button[mat-icon-button]:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 2px;
+}
+
+/* Actions Column Alignment */
+.component-form-table th:last-child,
+.component-form-table td[headers='options-heading'],
+.component-form-table td[headers='road-actions-heading'] {
+  min-width: 120px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Audit Details Column (Circular checkmark) */
+.component-form-table th[id*='audit'],
+.component-form-table td[headers*='audit'],
+.component-audit-cell {
+  width: 100px;
+  min-width: 90px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.component-audit-cell button[mat-icon-button] {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.audit-check-icon,
+.component-audit-cell button mat-icon,
+.component-form-table td[headers*='audit'] button mat-icon {
+  font-size: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  color: var(--icon-muted) !important;
+  transition:
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.audit-check-icon.audit-icon-active,
+.component-audit-cell button mat-icon.audit-icon-active {
+  color: var(--icon-edit) !important;
+}
+
+.component-audit-cell button[mat-icon-button]:hover .audit-check-icon,
+.component-audit-cell button[mat-icon-button]:hover mat-icon {
+  transform: scale(1.15);
+}
+
+/* =========================================================
+   5. GENERAL BUTTONS
+   ========================================================= */
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button {
+  min-width: 96px;
+  min-height: 40px;
+  border-radius: 4px;
+  background-color: var(--brand-navy) !important;
+  color: var(--surface-white) !important;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none !important;
+}
+
+.mat-mdc-unelevated-button:hover:not([disabled]) {
+  background-color: var(--brand-navy-hover) !important;
+}
+
+.mat-mdc-unelevated-button[disabled] {
+  background-color: var(--btn-disabled-bg) !important;
+  color: var(--surface-white) !important;
+}
+
+.btn-primary-action {
+  height: 48px;
+  padding: 0 18px;
+}
+
+/* =========================================================
+   6. DIALOGS & POPUPS (Shared Base Shell)
+   ========================================================= */
+.cdk-overlay-pane.component-dialog {
+  width: 2000px !important;
+  max-width: 95vw !important;
+}
+
+.component-dialog .mat-mdc-dialog-surface {
+  width: 100%;
+  max-width: 2000px;
+  padding: 16px;
+  border-radius: 4px;
+  background-color: var(--surface-white);
+}
+
+.component-dialog-title {
+  margin: 0;
+  padding: 0 0 12px;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.component-dialog-content {
+  max-height: calc(75vh - 110px);
+  padding: 0;
+}
+
+.component-dialog-actions {
+  padding: 12px 0 0;
+}
+
+/* =========================================================
+   7. VIEW DETAILS MODAL
+   ========================================================= */
+.component-details-panel {
+  padding: 16px;
+  border: 1px solid var(--table-border);
+  background: var(--surface-white);
+  border-radius: 4px;
+}
+
+.component-view-details-fields,
+.component-search-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  border: 1px solid var(--table-border);
+  gap: 12px 16px;
+}
+
+.component-search-field {
+  min-width: 0;
+  position: relative;
+}
+
+.component-search-field>label {
+  display: block;
+  margin: 0 0 2px;
+  color: var(--brand-navy);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.component-search-controls {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.component-search-controls mat-form-field {
+  width: 100%;
+  margin: 0;
+  --mdc-outlined-text-field-outline-color: transparent;
+  --mdc-outlined-text-field-hover-outline-color: var(--field-hover-border);
+  --mdc-outlined-text-field-focus-outline-color: var(--brand-navy);
+  --mdc-outlined-text-field-input-text-color: var(--field-text);
+}
+
+.component-search-controls .component-search-input {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.component-search-controls .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.component-search-controls .mat-mdc-text-field-wrapper {
+  min-height: 48px;
+  border-radius: 4px;
+  background-color: var(--field-bg);
+}
+
+.component-view-details-fields input[readonly],
+.component-view-details-fields textarea[readonly] {
+  cursor: pointer;
+  color: var(--readonly-text);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  transition: all 0.2s ease-in-out;
+}
+
+.component-view-details-fields .mat-mdc-form-field {
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  border-radius: 10px;
+}
+
+.component-view-details-fields .mat-mdc-form-field:hover {
+  background-color: var(--brand-navy-subtle) !important;
+  box-shadow: 0 2px 6px rgba(11, 46, 110, 0.12);
+}
+
+.component-view-details-fields .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+.component-view-details-fields .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+.component-view-details-fields .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+  border-color: var(--brand-blue) !important;
+  border-width: 1.5px !important;
+}
+
+/* Tooltip */
+.mdc-tooltip__surface,
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  max-width: 320px;
+  padding: 8px 14px !important;
+  border: 1px solid var(--border-muted);
+  border-radius: 6px !important;
+  background-color: var(--surface-white) !important;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  line-height: 1.4;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+}
+
+.component-field-tooltip {
+  max-width: 650px !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  padding: 8px 14px !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  background-color: var(--surface-white) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-muted) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* =========================================================
+   8. AUDIT DETAILS MODAL & PAGINATOR
+   ========================================================= */
+.audit-details-title {
+  margin: 0;
+  padding: 0 0 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.component-audit-details-content {
+  padding: 16px 0 !important;
+}
+
+.audit-loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.component-audit-details-table-wrapper {
+  max-height: 400px;
+  overflow: auto;
+  border: 1px solid var(--table-border);
+  border-radius: 4px;
+  background: var(--surface-white);
+}
+
+.component-audit-details-table {
+  width: 100%;
+}
+
+.component-audit-details-table th.mat-mdc-header-cell {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.component-audit-details-table td.mat-mdc-cell {
+  color: var(--field-text);
+  font-size: 14px;
+}
+
+.component-audit-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* Paginator Layout */
+.mat-mdc-paginator {
+  background: transparent;
+  color: var(--header-text);
+  font-size: 14px;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-container {
+  min-height: 48px;
+  padding: 0 8px;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-range-label {
+  margin: 0 8px;
+  color: var(--header-text);
+  font-size: 14px;
+}
+
+.mat-mdc-paginator-page-size-select {
+  width: 72px;
+  margin: 0;
+}
+
+.mat-mdc-paginator-page-size-select .mat-mdc-text-field-wrapper {
+  min-height: 36px;
+  padding: 0 8px;
+  border-radius: 4px;
+  background-color: var(--field-bg);
+}
+
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__leading,
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__notch,
+.mat-mdc-paginator-page-size-select .mdc-notched-outline__trailing {
+  border-color: var(--table-border) !important;
+}
+
+.mat-mdc-paginator-page-size-select .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.mat-mdc-paginator .mat-mdc-select-value,
+.mat-mdc-paginator .mat-mdc-select-arrow {
+  color: var(--header-text);
+}
+
+.mat-mdc-paginator .mat-mdc-icon-button mat-icon {
+  color: var(--header-text);
+}
+
+.mat-mdc-paginator .mat-mdc-icon-button[disabled] mat-icon {
+  color: var(--icon-disabled);
+}
+
+/* =========================================================
+   9. DELETE CONFIRMATION MODAL
+   ========================================================= */
+.confirm-dialog-overlay-panel .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid var(--border-light) !important;
+  background: var(--surface-white) !important;
+  overflow: hidden !important;
+}
+
+.confirm-dialog-card {
+  position: relative;
+  padding: 28px 24px 22px;
+  background: var(--surface-white);
+  text-align: center;
+  min-width: 330px;
+  max-width: 420px;
+  box-sizing: border-box;
+}
+
+.confirm-dialog-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-close);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.confirm-dialog-close:hover {
+  background-color: var(--status-inactive-bg);
+}
+
+.confirm-dialog-title {
+  margin: 4px 0 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.confirm-dialog-prompt {
+  margin: 0 0 22px;
+  font-size: 15px;
+  color: var(--text-body);
+  font-weight: 500;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Navy Blue Ok Button */
+.btn-dialog-ok {
+  min-width: 88px;
+  height: 36px;
+  padding: 0 20px;
+  background-color: var(--brand-navy);
+  color: var(--surface-white);
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-dialog-ok:hover {
+  background-color: var(--brand-navy-dark);
+  box-shadow: 0 2px 6px rgba(11, 46, 110, 0.35);
+}
+
+/* Bright Red Cancel Button */
+.btn-dialog-cancel {
+  min-width: 88px;
+  height: 36px;
+  padding: 0 20px;
+  background-color: var(--btn-danger-bg);
+  color: var(--surface-white);
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-dialog-cancel:hover {
+  background-color: var(--btn-danger-hover);
+  box-shadow: 0 2px 6px rgba(240, 68, 56, 0.35);
+}
+
+/* =========================================================
+   10. FEEDBACK NOTIFICATIONS
+   ========================================================= */
+.cdk-global-overlay-wrapper {
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   11. DROPDOWN ADMIN MASTER DATA MODULE
+   ========================================================= */
+.dropdown-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.dropdown-category-select {
+  min-width: 240px;
+}
+
+.dropdown-search-input {
+  min-width: 260px;
+  flex: 1 1 auto;
+}
+
+.dropdown-form-panel {
+  padding: 20px;
+  border: 1px solid var(--table-border);
+  background: var(--panel-bg);
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.dropdown-form-title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.dropdown-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  align-items: center;
+}
+
+.dropdown-active-toggle-wrap {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--header-text);
+}
+
+.toggle-label input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.dropdown-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.status-pill-active {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: var(--status-active-bg);
+  color: var(--status-active-text);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--status-active-border);
+}
+
+.status-pill-inactive {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: var(--status-inactive-bg);
+  color: var(--status-inactive-text);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--status-inactive-border);
+}
+
+/* =========================================================
+   12. RESPONSIVE BREAKPOINTS
+   ========================================================= */
+@media (max-width: 768px) {
+  .component-card>mat-card-content {
+    padding: 8px !important;
+  }
+
+  .component-search-field>label {
+    font-size: 14px;
+  }
+
+  .component-form-table {
+    min-width: 1100px;
+  }
+
+  .component-form-table thead th {
+    height: 48px;
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .component-form-table tbody td {
+    padding: 8px 6px;
+  }
+
+  .component-form-table .mat-mdc-text-field-wrapper {
+    min-height: 44px;
+  }
+
+  .component-form-table .mat-mdc-form-field-infix {
+    min-height: 42px;
+  }
+}
+
+/* =========================================================
+   BUILDING & OTHERS STYLES (FROM VIVEK)
+   ========================================================= */
+
+/* You can add global styles to this file, and also import other style files */
+/* neutralized global html font-size */
+
+/* neutralized global body bg */
+
+.required {
+    color: red;
+    margin-left: 0.313rem;
+}
+
+.mat-mdc-select,
+.mat-select {
+    font-size: 1rem !important;
+}
+
+mat-panel-title {
+    color: #022a72 !important;
+}
+
+.mat-expansion-panel-header-title {
+    font-weight: 550;
+    font-size: 1rem;
+}
+
+textarea::placeholder {
+    font-size: 1rem;
+}
+
+.mat-mdc-raised-button,
+.mat-raised-button {
+    border-radius: 0.313rem !important;
+}
+
+.orgLogo {
+    height: 100px;
+    width: 100px;
+}
+
+.form-label-span {
+    color: #505050 !important;
+    font-weight: 550 !important;
+    font-size: 1rem !important;
+}
+
+.button-color {
+    background: #022a72;
+    margin-left: 0.625rem !important;
+    color: white;
+    margin-top: 0.313rem !important;
+}
+
+.cancel-button-color {
+    background: #f44336;
+    margin-left: 0.625rem !important;
+    color: white;
+    margin-top: 0.313rem !important;
+}
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+    z-index: 9999 !important;
+}
+
+.modal-sm {
+    max-width: 50%;
+}
+
+.mat-mdc-tab-link,
+.mat-tab-link {
+    height: 48px;
+    padding: 0 40px !important;
+    cursor: pointer;
+    box-sizing: border-box;
+    opacity: 2 !important;
+    color: #505050 !important;
+    min-width: 0px !important;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    vertical-align: top;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.mat-mdc-tab-link.mdc-tab--active,
+.mat-tab-label-active {
+    color: rgba(1, 1, 1, 1) !important;
+}
+
+.mat-mdc-tab-nav-bar.mat-primary .mdc-tab-indicator__content,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: #022a72;
+}
+
+
+.custom-display-alert {
+    padding: .50rem !important;
+    background-color: #f8d674 !important;
+    color: #505050 !important;
+    font-size: 0.875rem !important;
+    width: max-content !important;
+    text-align: center;
+    margin-top: 0.313rem !important;
+}
+
+
+
+
+.mat-mdc-form-field,
+.mat-form-field {
+    width: 100%;
+}
+
+/*table*/
+
+.mat-mdc-table,
+.mat-table {
+    border-spacing: 0 15px !important;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: 1px;
+}
+
+.custom-scrollable-div {
+    height: 60ex;
+    overflow-y: auto;
+}
+
+.mat-mdc-row:nth-child(2n),
+.mat-row:nth-child(2n) {
+    background-color: #f2fbff;
+}
+
+.mat-mdc-header-cell
+{
+    font-size: 0.875rem;
+    background-color: #e1f6fb !important;
+    color: #505050 !important;
+    justify-content: center;
+    min-width: 6.875rem;
+    text-align: center !important;
+}
+
+.mat-mdc-row,
+.mat-row {
+    min-width: 48.125rem;
+    background-color: #fcfeff;
+}
+
+.mat-mdc-cell.mat-cell-lg,
+.mat-cell-lg {
+    min-width: 6.875rem;
+    border: 0.5px solid #e1f6fb;
+    justify-content: center !important;
+}
+
+.mat-mdc-header-cell:first-child,
+.mat-header-cell:first-child {
+    border-top-left-radius: 0.625rem;
+}
+
+.mat-mdc-header-cell:last-child,
+.mat-header-cell:last-child {
+    border-top-right-radius: 0.625rem;
+}
+
+.margin {
+    margin-bottom: 0.625rem;
+}
+
+.right-margin {
+    margin-right: 0.625rem;
+}
+
+.left-margin {
+    margin-left: 0.625rem;
+}
+
+.top-margin {
+    margin-top: 0.625rem;
+}
+
+.form {
+    min-width: 9.375rem;
+    max-width: 31.25rem;
+    width: 100%;
+}
+
+.card {
+    max-width: 80%;
+    margin: 2em auto;
+    text-align: center;
+}
+
+.datepickerColor {
+    background-color: #004085;
+    color: #FFF;
+}
+
+.panel {
+    background: rgb(176, 176, 228);
+
+}
+
+.ripple {
+    background: #f8f9fa !important;
+}
+
+.form-element {
+    padding: 0.313rem 0rem 1.563rem 0.125rem;
+    width: 100%;
+}
+
+.buttons {
+    width: 6.25rem;
+    margin: 0 auto;
+    display: inline;
+    margin-right: 0.5rem;
+}
+
+.action_btn {
+    width: 6.25rem;
+    margin: 0 auto;
+    display: inline;
+    background-color: darkgrey;
+}
+
+.icon {
+    font-size: 1.25rem !important;
+    color: #1e1e26;
+}
+
+.view-icon {
+    font-size: 1.25rem !important;
+}
+
+.icon:hover {
+    color: #224584;
+}
+
+.mat-mdc-select-placeholder,
+mat-select-placeholder {
+    color: rgba(228, 241, 240, 0.918);
+    font-size: 0.875rem;
+}
+
+.align-left-text {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.align-center-text {
+    text-align: center !important;
+}
+
+.justify-left-text {
+    justify-content: left;
+}
+
+.table-padding {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+}
+
+.prefix {
+    width: 15% !important;
+}
+
+.suffix {
+    width: 85% !important;
+}
+
+.search-icon {
+    margin-top: 1.25rem !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper,
+.mat-form-field-disabled .mat-form-field-flex {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Text colour only. The 0.8rem/0.4em padding that used to live here was the
+   upgrade's mis-translation of v14's `.mat-form-field-appearance-legacy
+   .mat-form-field-infix { padding: .8rem 0 .4em }` - in v14 that padded the
+   infix CONTAINER and only for legacy appearance, which these outline fields
+   never were. Re-pointed at .mdc-text-field__input it stacked on top of MDC's
+   own 16px infix padding, inflating every field from 56px to 75px. */
+.mat-mdc-form-field.mat-form-field-appearance-outline .mdc-text-field__input,
+.mat-mdc-form-field.mat-form-field-appearance-fill .mdc-text-field__input {
+    color: #201f1d;
+}
+
+.mdc-text-field__input:disabled,
+.mat-input-element:disabled,
+.mat-mdc-input-element:disabled {
+    color: rgba(0, 0, 0, 0.90) !important;
+    -webkit-text-fill-color: rgba(0, 0, 0, 0.90) !important;
+    opacity: 1 !important;
+}
+
+.custom-padding {
+    padding: 0.6% 0.3% 2.6% 0.6% !important;
+}
+
+.mat-expansion-panel-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 998 !important;
+}
+
+/* Material 14 laid tables out with flexbox, so `justify-content: center` on a
+   cell centred its content. Material 22 uses a real CSS table (table-layout:
+   auto, cells are display: table-cell), where justify-content does nothing -
+   leaving data left-aligned under centred headers. text-align is the table-
+   model equivalent. Declared after .align-left-text so it wins on source order
+   without needing !important. */
+.text-align {
+    justify-content: center !important;
+    text-align: center;
+}
+
+.inspect-btn-lg {
+    margin-top: 0.313rem !important;
+    font-size: 0.625rem !important;
+    padding-left: 31.25rem !important;
+}
+
+.file-field {
+    border: 0.125rem !important;
+    border-style: groove !important;
+    border-color: #ced4da !important;
+    opacity: inherit !important;
+    border-radius: 0.313rem !important;
+    margin-right: 0.625rem !important;
+    margin-left: 0.625rem !important;
+    margin-top: 1.50rem !important;
+    margin-bottom: 1.375rem !important;
+    border-width: thin !important;
+    display: block !important;
+    position: relative !important;
+    flex: auto !important;
+    min-width: 0 !important;
+    width: 11.25rem !important;
+    height: 53px !important;
+}
+
+.file-field-1 {
+    padding-top: 0.313rem !important;
+    padding-bottom: 0.313rem !important;
+}
+
+.file-field:hover {
+    border: 0.125rem solid black !important;
+    border-radius: 0.313rem !important;
+}
+
+.custom-btn {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+table {
+    width: 100% !important;
+}
+
+.table-bordered td {
+    padding-left: 0.5em !important;
+    padding-right: 0.5em !important;
+}
+
+table td:first-child {
+    border-spacing: 0 0 !important;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 0.001rem solid !important;
+    border-color: #c2c2d6 !important
+}
+
+/*LOGIN AVTAR*/
+.profile-img {
+    margin-top: 0.188rem !important;
+}
+
+.uxg-caption {
+    font: 400 0.75rem/1.125rem Roboto, roboto, "Helvetica Neue", sans-serif !important;
+    letter-spacing: normal;
+}
+
+.mat-typography {
+    font: 0 !important;
+    letter-spacing: normal !important;
+}
+
+.avatar-title {
+    margin: 0.125rem 0.125rem 0.125rem;
+}
+
+.h6-caption-padding {
+    margin-top: 0.375rem;
+    margin-left: 0.188rem;
+    margin-right: 0.5rem;
+}
+
+.custom-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.custom-row>* {
+    flex-shrink: 0 !important;
+}
+
+.uxg-h6,
+.uxg-typography {
+    font-weight: 600 !important;
+    letter-spacing: normal;
+    margin-bottom: 0rem !important;
+}
+
+.uxg-user-profile .uxg-menu-header,
+.uxg-user-profile .uxg-menu-footer {
+    padding: 0.625rem;
+}
+
+.login-name {
+    color: #505050;
+}
+
+.avatar {
+    height: 3rem;
+    width: 3rem;
+    margin: 0.25rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-logout-button {
+    width: 100%;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__thumb,
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: #3f51b5 !important;
+}
+
+.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track,
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: rgb(102, 100, 212) !important;
+}
+
+.profile-logout-icon {
+    color: #ffffff !important;
+}
+
+.profile-unit-icon {
+    padding-top: 1.4375rem;
+    padding-left: .3125rem;
+}
+
+.title-center {
+    flex: 1 1 auto;
+    text-align: end;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.item-details-row {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.margin-left-right-zero {
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+}
+
+.padding-left-20 {
+    padding-left: 1.25rem;
+}
+
+.mat-card-padding {
+    padding: 5px;
+}
+
+.dialog-content {
+    font-size: 15px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-weight: 500;
+    padding: 2px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.close-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-weight: 900;
+    background-color: #180085;
+    color: rgb(15, 10, 10);
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.search {
+    display: flex;
+    margin-top: 0.5rem;
+    margin-bottom: 0rem;
+    border-radius: 3.125rem;
+    background: #f5f8fd;
+    margin-right: 0.125rem;
+    margin-left: 0.125rem;
+    height: 1.875rem;
+}
+
+.search-div-width-content {
+    width: 70% !important;
+    padding-top: 0.313rem !important;
+    color: #505050 !important;
+
+    padding-left: 1rem;
+}
+
+.search-div-width-icon {
+    width: 30% !important;
+    padding-top: 0.313rem !important;
+    padding-right: 0.5rem;
+}
+
+.margin-left-20 {
+    margin-left: 1.25rem;
+}
+
+.padding-left-0 {
+    padding-left: 0rem !important;
+}
+
+.padding-right-0 {
+    padding-right: 0rem !important;
+}
+
+.margin-top-10 {
+    margin-top: 0.625rem !important;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 0.625rem !important;
+}
+
+.margin-left-60 {
+    margin-left: 3.75rem;
+}
+
+.width-90-per {
+    width: 90% !important;
+}
+
+.pointer-cursor {
+    cursor: pointer;
+}
+
+span.alert-link:hover {
+    text-decoration: underline !important;
+}
+
+.modal-lg,
+.modal-xl {
+    --bs-modal-width: 95% !important;
+}
+
+.left-float {
+    float: left;
+}
+
+.mat-mdc-dialog-container,
+.mat-dialog-container {
+    overflow: hidden !important;
+    padding: 0.375rem !important;
+}
+
+.width-100 {
+    width: 6.25rem;
+}
+
+.mat-mdc-radio-button .mdc-label,
+.mat-radio-label {
+    cursor: pointer;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.mdc-radio__outer-circle,
+mat-radio-outer-circle {
+    border-color: #022a72;
+}
+
+.mdc-radio__inner-circle,
+mat-radio-inner-circle {
+    border-color: #022a72;
+}
+
+.popover-header {
+    margin-bottom: 0rem !important;
+}
+
+.left-padding {
+    padding-left: 0.675rem;
+}
+
+.tab-css mat-tab-label-active {
+    background-color: rgb(102, 100, 212);
+}
+
+.mat-mdc-select-disabled .mat-mdc-select-value,
+.mat-select-disabled .mat-select-value {
+    color: rgb(30, 27, 27);
+}
+
+/*------------------------*/
+
+@media(max-width: 41.25rem) {
+
+    mat-radio-outer-circle {
+        border-color: #022a72;
+    }
+
+    mat-radio-inner-circle {
+        border-color: #022a72;
+    }
+
+    .mobile-label {
+        color: #464646 !important;
+        float: inline-start;
+        padding-left: 0.625rem;
+        min-width: 10.625rem;
+        padding-right: 0.625rem;
+        font-weight: initial;
+        width: min-content;
+        text-align: left;
+    }
+
+    .help-mobile-label {
+        display: flex;
+        color: #150f0f !important;
+        float: inline-start;
+        text-align: right;
+        padding-left: 0.625rem;
+        min-width: 10.625rem;
+        padding-right: 0.625rem;
+
+    }
+
+    mat-cell:first-of-type,
+    mat-header-cell:first-of-type,
+    mat-footer-cell:first-of-type,
+    .mat-mdc-cell:first-of-type,
+    .mat-mdc-header-cell:first-of-type,
+    .mat-mdc-footer-cell:first-of-type {
+        padding-left: 0rem !important;
+    }
+
+    .mat-mdc-cell,
+    .mat-cell {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .button-margin {
+        margin-left: 10px;
+    }
+
+    td.mat-mdc-cell,
+    td.mat-cell {
+        padding-left: 5px !important;
+        text-align: center !important;
+        border-bottom-width: 0rem !important;
+    }
+
+    .mat-mdc-row,
+    .mat-row {
+        /* Material 22 rows are display: table-row, so the flex card layout
+           below needs the row switched back to flex explicitly. */
+        display: flex;
+        min-height: 1.563rem;
+        flex-direction: column;
+        align-items: start;
+        padding: 0.5rem 1.5rem;
+        padding-left: 0rem;
+        padding-right: 0rem;
+        width: 100%;
+        min-width: 100%;
+        background-color: #fcfeff;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    }
+
+    /* .mat-header-cell {
+        background-color: #e1f6fb !important;
+    } */
+
+    .custom-mat-icon {
+        font-size: 1.25rem !important;
+    }
+
+    .mat-card-padding {
+        padding: 5px;
+    }
+
+    .dialog-content {
+        font-size: 15px;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        font-weight: 500;
+        padding: 2px;
+    }
+
+    .spacer {
+        flex: 1 1 auto;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        font-weight: 900;
+        background-color: #180085;
+        color: rgb(15, 10, 10);
+        border-radius: 50%;
+        padding: 2px;
+    }
+
+    .cell-data {
+        width: 80%;
+        text-align: left;
+    }
+
+    .modal-footer {
+        justify-content: flex-start !important;
+    }
+
+    .mat-mdc-row:nth-child(2n),
+    .mat-row:nth-child(2n) {
+        background-color: #f2fbff;
+    }
+
+    .mat-mdc-header-row,
+    .mat-header-row {
+        display: none;
+    }
+
+    .align-text {
+        justify-content: right;
+    }
+
+    .mobile-label-data {
+        color: #022a72 !important
+    }
+
+    .footer-margin {
+        margin-bottom: 50px !important;
+    }
+
+    .view-icon {
+        font-size: 1.25rem !important;
+    }
+
+    .mat-mdc-table,
+    .mat-table {
+        border-collapse: separate;
+        border-spacing: 0 15px !important;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .panel-body .mat-expansion-panel-body {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .option {
+        width: 20%;
+    }
+
+    .option-inside-icon-padding {
+        padding-left: 15px !important;
+    }
+
+    .option-inside-icon-title-padding {
+        padding-left: 20px !important;
+    }
+    .mat-mdc-icon-button,
+    .mat-icon-button {
+        padding: 0;
+        min-width: 0;
+        flex-shrink: 0;
+        line-height: 2.5rem;
+        border-radius: 50%;
+        width: 0rem;
+    }
+
+    .mat-icon {
+        width: fit-content !important;
+    }
+
+    .table-border-spacing {
+        border-collapse: separate;
+        border-spacing: 0 25px !important;
+    }
+
+    .height-400 {
+        height: 25rem;
+    }
+
+
+    .none-border {
+        border: none !important;
+
+    }
+
+    .mobile-action {
+        text-align: left !important;
+        font-size: medium;
+        padding-top: 0.625rem;
+        padding-bottom: 0.313rem;
+    }
+
+
+    .transactionl-details-row {
+        height: fit-content !important;
+        padding: 0.313rem !important;
+    }
+
+
+    .modal-lg,
+    .modal-xl {
+        --bs-modal-width: 95% !important;
+    }
+
+    .button-padding-50 {
+        padding-bottom: 3.125rem !important;
+    }
+
+    .padding-left-1 {
+        padding-left: 0.0625rem;
+    }
+
+    .mat-mdc-radio-button .mdc-label,
+    .mat-radio-label {
+        cursor: pointer;
+        white-space: nowrap;
+        padding-right: 10px;
+    }
+
+}
+
+.margin-all-10 {
+    margin: 0.625rem !important;
+}
+
+.zoomIcon {
+    display: inline-block;
+}
+
+.heading-title {
+    display: inline-block;
+    margin-left: 1.25rem !important;
+}
+
+.component-border {
+    border: 0.125rem solid rgb(151, 134, 212);
+    border-radius: 0.625rem;
+}
+
+.margin-left-10 {
+    margin-left: 0.625rem !important;
+}
+
+.text-alignment {
+    text-align: center !important;
+}
+
+.margin-top-60 {
+    margin-top: 3.75rem;
+}
+
+.icon-with-input {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.icon-with-input mat-icon {
+    margin-right: 0.5rem !important;
+}
+
+.custom-list {
+    font-weight: 550 !important;
+    font-size: 14px !important;
+}
+
+
+.upperDiv {
+    border: 0.063rem solid #3293E8;
+    margin: 0.313rem 0.313rem 0.313rem 0.313rem;
+    background-color: #f7fafb;
+    width: 99%
+}
+
+.lowerDiv {
+    width: 100%;
+    padding: 0.313rem 0.313rem 0.313rem 0.313rem;
+    background-color: white;
+    border-top: 0.063rem #3293E8;
+    border-left: 0.063rem #3293E8;
+    border-right: 0.063rem #3293E8;
+}
+
+.div-heading-align {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-button-container {
+    position: relative;
+}
+
+.filter-button-container button {
+    margin-left: auto;
+}
+
+.chartSize {
+    height: 21rem !important;
+}
+
+.searchIcon {
+    font-size: 1.125rem !important;
+}
+
+.display-contents-custom {
+    display: contents !important;
+}
+
+.float-right-custom {
+    float: right !important;
+}
+
+.text-align-padding-top-custom {
+    text-align: right !important;
+    padding-top: 20px !important;
+}
+
+.text-align-end-custom {
+    text-align: end !important;
+}
+
+.justify-content-word-wrap-white-space-custom {
+    justify-content: center !important;
+    text-align: center;
+    word-wrap: anywhere !important;
+    white-space: normal !important;
+}
+
+.padding-top-custom {
+    padding-top: 0rem !important;
+}
+
+.white-space-font-size-custom {
+    white-space: pre-line !important;
+    font-size: large !important;
+}
+
+.margin-top-custom {
+    margin-top: 0.938rem;
+}
+
+.title-name-custom {
+    margin-top: -0.563rem !important;
+    margin-bottom: -0.563rem !important;
+    margin-left: -0.563rem !important;
+}
+
+.close {
+    background: #dee2e6;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.mat-column-srno {
+    width: 4.688rem !important;
+    text-align: center !important;
+}
+
+.overflow-overlay-custom {
+    overflow: overlay !important;
+}
+
+/* =========================================================================
+   Material 14 -> 22 visual compatibility layer
+
+   Angular Material 15+ replaced the legacy components with MDC ones. The MDC
+   specification introduces letter-spacing ("tracking") on every text element
+   and enlarges several control metrics. Material 14 had neither, so without
+   this block every label, button and menu item renders wider and looser than
+   it did before the upgrade.
+
+   Tokens are declared on `html` by the prebuilt theme, which the bundler
+   inlines above these rules - so an `html` block here wins on source order.
+   ========================================================================= */
+
+html {
+    /* --- MDC tracking: Material 14 used normal letter-spacing throughout --- */
+    --mat-bottom-sheet-container-text-tracking: normal;
+    --mat-button-filled-label-text-tracking: normal;
+    --mat-button-outlined-label-text-tracking: normal;
+    --mat-button-protected-label-text-tracking: normal;
+    --mat-button-text-label-text-tracking: normal;
+    --mat-button-toggle-label-text-tracking: normal;
+    --mat-button-toggle-legacy-label-text-tracking: normal;
+    --mat-button-tonal-label-text-tracking: normal;
+    --mat-card-subtitle-text-tracking: normal;
+    --mat-card-title-text-tracking: normal;
+    --mat-checkbox-label-text-tracking: normal;
+    --mat-chip-label-text-tracking: normal;
+    --mat-dialog-subhead-tracking: normal;
+    --mat-dialog-supporting-text-tracking: normal;
+    --mat-expansion-container-text-tracking: normal;
+    --mat-expansion-header-text-tracking: normal;
+    --mat-fab-extended-label-text-tracking: normal;
+    --mat-form-field-container-text-tracking: normal;
+    --mat-form-field-filled-label-text-tracking: normal;
+    --mat-form-field-outlined-label-text-tracking: normal;
+    --mat-form-field-subscript-text-tracking: normal;
+    --mat-list-list-item-label-text-tracking: normal;
+    --mat-list-list-item-supporting-text-tracking: normal;
+    --mat-list-list-item-trailing-supporting-text-tracking: normal;
+    --mat-menu-item-label-text-tracking: normal;
+    --mat-optgroup-label-text-tracking: normal;
+    --mat-option-label-text-tracking: normal;
+    --mat-paginator-container-text-tracking: normal;
+    --mat-radio-label-text-tracking: normal;
+    --mat-select-trigger-text-tracking: normal;
+    --mat-slide-toggle-label-text-tracking: normal;
+    --mat-slider-label-label-text-tracking: normal;
+    --mat-tab-label-text-tracking: normal;
+    --mat-table-footer-supporting-text-tracking: normal;
+    --mat-table-header-headline-tracking: normal;
+    --mat-table-row-item-label-text-tracking: normal;
+    --mat-toolbar-title-text-tracking: normal;
+    --mat-tooltip-supporting-text-tracking: normal;
+
+    /* --- control metrics returned to their Material 14 values --- */
+    --mat-table-row-item-container-height: 48px; /* v22 ships 52px */
+    --mat-list-list-item-one-line-container-height: 40px;  /* v14 dense */
+    --mat-list-list-item-two-line-container-height: 48px;
+}
+
+/* The 48px icon-button size is declared on .mat-mdc-icon-button.mat-mdc-button-base,
+   not on html, so it has to be overridden at the same specificity. v14 used 40px. */
+.mat-mdc-icon-button.mat-mdc-button-base {
+    --mat-icon-button-state-layer-size: 40px;
+    /* Material hardcodes `padding: 12px` on this selector, which is correct for
+       its own 48px box but leaves a 16px content area once the box is 40px -
+       the 24px icon then sits at the top of that area and overflows downward,
+       landing 4px below the centre of the field. (40 - 24) / 2 = 8px. */
+    padding: 8px;
+}
+
+/* =========================================================================
+   MDC behaviour fixes (Material 14 -> 22)
+   ========================================================================= */
+
+/* 1. Tab bars. Material 22 defaults `stretchTabs` to true, so
+      .mat-mdc-tab-link gets `flex-grow: 1` and the Add/View links spread
+      across the full width. Material 14 sized them to their content. */
+.mat-mdc-tab-links {
+    flex: 0 1 auto !important;
+    justify-content: flex-start !important;
+}
+
+.mat-mdc-tab-link {
+    flex-grow: 0 !important;
+}
+
+/* 2. Slide toggle. The MDC switch paints its handle through design tokens on
+      .mdc-switch__handle::after, not via background-color on .mdc-switch__thumb,
+      so the old override missed and the theme accent (#ff4081 pink) showed
+      through. The pink is declared on `.mat-mdc-slide-toggle.mat-accent`, so the
+      accent selector has to be matched exactly to win on source order. */
+.mat-mdc-slide-toggle,
+.mat-mdc-slide-toggle.mat-accent {
+    --mat-slide-toggle-selected-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-hover-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-focus-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-pressed-handle-color: #3f51b5;
+    --mat-slide-toggle-selected-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-hover-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-focus-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-pressed-track-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-track-outline-color: rgb(102, 100, 212);
+    --mat-slide-toggle-selected-focus-state-layer-color: #3f51b5;
+    --mat-slide-toggle-selected-hover-state-layer-color: #3f51b5;
+    --mat-slide-toggle-selected-pressed-state-layer-color: #3f51b5;
+    --mat-slide-toggle-selected-icon-color: #ffffff;
+}
+
+/* 3. Raised buttons. Material 22 paints them from
+      `.mat-mdc-raised-button:not(:disabled)` - specificity (0,2,0), which beats
+      `.button-color` (0,1,0), so the app background was being overridden. Set
+      the tokens instead of escalating specificity: custom properties inherit,
+      so MDC's own rule reads these values. The disabled state uses separate
+      `-disabled-` tokens and is left on the Material default, matching v14. */
+.button-color {
+    --mat-button-protected-container-color: #022a72;
+    --mat-button-protected-label-text-color: #ffffff;
+}
+
+.cancel-button-color {
+    --mat-button-protected-container-color: #f44336;
+    --mat-button-protected-label-text-color: #ffffff;
+}
+
+.profile-logout-button {
+    --mat-button-filled-container-color: #3f51b5;
+    --mat-button-filled-label-text-color: #ffffff;
+}
+
+/* matInput used outside a mat-form-field (read-only <textarea matInput> in
+   table cells). Material 14 reset .mat-input-element globally; Material 22
+   scopes its reset to .mdc-text-field__input inside .mat-mdc-form-field, so a
+   bare matInput falls back to the browser default border/background. */
+.mat-mdc-input-element:not(.mdc-text-field__input) {
+    border: none;
+    background: transparent;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    resize: none;
+    outline: none;
+    width: 100%;
+}
+
+/* Material font stack. Material requests `Roboto, sans-serif`, but Roboto is
+   not bundled or linked anywhere, so every Material component silently fell
+   back to Arial while the rest of the app renders in Bootstrap's system stack
+   (Segoe UI on Windows) - two typefaces side by side. Point Material at the
+   same stack the app body uses so the UI reads as one font. */
+html {
+    --mat-badge-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-bottom-sheet-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-filled-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-outlined-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-protected-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-text-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-toggle-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-toggle-legacy-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-button-tonal-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-card-subtitle-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-card-title-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-checkbox-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-chip-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-datepicker-calendar-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-dialog-subhead-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-dialog-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-expansion-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-expansion-header-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-fab-extended-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-filled-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-outlined-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-form-field-subscript-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-list-list-item-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-list-list-item-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-list-list-item-trailing-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-menu-item-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-optgroup-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-option-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-paginator-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-radio-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-select-trigger-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-slide-toggle-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-slider-label-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-snack-bar-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-stepper-container-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-stepper-header-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-tab-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-table-footer-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-table-header-headline-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-table-row-item-label-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-toolbar-title-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-tooltip-supporting-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+    --mat-tree-node-text-font: var(--bs-body-font-family, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+}
+
+/* MIS dashboard chart-type-dropdown icon triggers. These three selects use
+   `display: contents` on the form field so only the icon shows in the panel
+   toolbar. Material 22 wraps the control in .mat-mdc-text-field-wrapper with
+   16px horizontal padding, which left 12.5px of a 44.5px box for a 24px
+   mat-icon - the icons were clipped away. Strip the MDC chrome for these
+   fields only (higher specificity than Material's own single-class rules,
+   so no !important needed). */
+.display-contents-custom .mat-mdc-text-field-wrapper {
+    padding: 0;
+}
+
+.display-contents-custom .mat-mdc-form-field-infix {
+    padding: 0;
+    min-height: 0;
+    width: auto;
+    min-width: 24px;
+}
+
+.display-contents-custom .mat-mdc-form-field-subscript-wrapper,
+.display-contents-custom .mdc-notched-outline {
+    display: none;
+}
+
+/* Panel for the chart-type icon triggers above. Material sizes a select panel
+   to the width of its form field, and those fields are only 24px wide (icon
+   only), so the options were clipped to a single character. Scoped via
+   panelClass so other select panels keep Material's default sizing. */
+.cdk-overlay-pane:has(.chart-type-panel),
+.mat-mdc-select-panel.chart-type-panel {
+    min-width: max-content;
+}
+
+/* Checkbox colour. Material 22 paints the box from
+   `.mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background`
+   - specificity (0,4,0), which outranks the app rule at (0,3,0), so the
+   #022a72 override never applied. Indeterminate has no host class at all in
+   v22 (it is driven by the input's :indeterminate pseudo-class), so the old
+   .mat-checkbox-indeterminate selector could never match either. Setting the
+   tokens covers both states without a specificity fight. */
+.mat-mdc-checkbox,
+.mat-mdc-checkbox.mat-accent {
+    --mat-checkbox-selected-icon-color: #022a72;
+    --mat-checkbox-selected-hover-icon-color: #022a72;
+    --mat-checkbox-selected-focus-icon-color: #022a72;
+    --mat-checkbox-selected-pressed-icon-color: #022a72;
+    --mat-checkbox-selected-focus-state-layer-color: #022a72;
+    --mat-checkbox-selected-hover-state-layer-color: #022a72;
+    --mat-checkbox-selected-pressed-state-layer-color: #022a72;
+    --mat-checkbox-selected-checkmark-color: #ffffff;
+}
+
+/* Drawer navigation labels. menu-bar and submenu-bar wrap each label in a bare
+   <ul> inside a <mat-list-item>. The browser UA stylesheet gives <ul> a
+   margin-block-end of 16px; Material 14 absorbed it, but Material 22 renders
+   .mdc-list-item__content as display:block, so that margin pushed every label
+   to the top of its 40px row and left a 16px gap underneath. Zeroing the block
+   margin restores vertical centring. Horizontal padding is left alone - it is
+   what indents submodule entries under their parent. */
+.mat-mdc-list-item ul {
+    margin-block: 0;
+}
+
+/* mat-error / hint strip. Material 14 rendered this as
+   `position: absolute; overflow: hidden`, so a long message was clipped to a
+   single line and never pushed the rest of the form down. Material 22 puts it
+   in normal flow, so a wrapping error grows the field and shifts everything
+   below it. Total field height already matches v14 (56px + 22px); the only
+   difference was the wrapping, so cap the strip at one line and clip - v14
+   clipped the subscript the same way. max-height (not height) is used so
+   fields that reserve no subscript space, such as the paginator page-size
+   select, are unaffected. */
+.mat-mdc-form-field-subscript-wrapper {
+    max-height: 22px;
+    overflow: hidden;
+}
+
+/* Table cell centring, specificity note. `.text-align` and `.mdc-data-table__cell`
+   are both single-class selectors, but Material 22 ships the latter as a
+   component style - Angular injects component styles into <head> AFTER the
+   linked styles.css, so `.mdc-data-table__cell { text-align: start }` won on
+   source order and the cells stayed left-aligned under centred headers.
+   Pairing with .mat-mdc-cell raises these to (0,2,0) so they win on specificity
+   rather than needing !important. */
+.mat-mdc-cell.text-align,
+.mat-mdc-cell.justify-content-word-wrap-white-space-custom {
+    text-align: center;
+}
+
+/* Header account avatar button. Material 14 gave icon buttons
+   `padding: 0; line-height: 40px`, which let the Bootstrap `.rounded-circle`
+   initials div fill the full 40x40 button and render as a circle. Material 22
+   drops the line-height and relies on padding, so the div was squeezed to
+   24px wide by the content box while its text forced 32px of height - a 24x32
+   box at border-radius 50% is an ellipse. Scoped to the account avatar button
+   so the 8px padding that centres ordinary suffix icons stays untouched. */
+.login-name .mat-mdc-icon-button.mat-mdc-button-base {
+    padding: 0;
+    line-height: 40px;
+}
+
+/* Icon-button glyph centring. Bootstrap's reboot applies
+   `button { line-height: inherit }`, so a Material icon button inherits its
+   ancestor's line-height. Where that is the unitless 1.5 (Bootstrap's body
+   default) it resolves against the button's own 24px font to 36px, and the
+   glyph is pushed ~4px below centre - visible in the Assign Operations tree
+   and on any icon button also carrying Bootstrap's .btn. Table cells set a
+   length line-height, which is why those were unaffected. Pinning to 1 makes
+   the line box match the glyph regardless of context. */
+.mat-mdc-icon-button.mat-mdc-button-base {
+    line-height: 1;
+}
+
+/* Confirmation dialog card spacing. Material 14 shipped
+   `.mat-card-content { margin-bottom: 16px }` with no padding; Material 22 uses
+   `padding: 0 16px` plus 16px top and bottom as first/last child - 32px of new
+   vertical space. The confirmation dialogs open at a hardcoded height (200px),
+   so that extra space pushed the content past the surface and produced a
+   scrollbar inside a two-line Are-you-sure box. Restores the v14 geometry,
+   scoped to dialogs so cards elsewhere keep Material 22 spacing.
+   Material also sets `:first-child { padding-top: 16px }` and
+   `:last-child { padding-bottom: 16px }` at the same (0,2,0) specificity as a
+   plain descendant rule, and its component styles are injected after
+   styles.css - so those pseudo-class variants have to be matched explicitly to
+   win. */
+.mat-mdc-dialog-surface .mat-mdc-card-content,
+.mat-mdc-dialog-surface .mat-mdc-card-content:first-child,
+.mat-mdc-dialog-surface .mat-mdc-card-content:last-child {
+    padding: 0;
+    margin-bottom: 16px;
+}
+
+/* =========================================
+   WAMIS BUILDING MANAGEMENT
+   ========================================= */
+
+.building-section {
+  margin: 4px;
+  padding: 8px;
+  border: 1px solid #3293e8;
+  background: #fff;
+}
+
+.section-title {
+  margin: 4px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.building-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.building-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.building-entry-table th {
+  padding: 12px 8px;
+  border: 1px solid #c2c2d6;
+  background: #e1f6fb;
+  color: #505050;
+  text-align: center;
+  white-space: normal;
+}
+
+.building-entry-table td {
+  padding: 8px;
+  border: 1px solid #c2c2d6;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.building-entry-table tbody tr:nth-child(even) {
+  background: #f2fbff;
+}
+
+.building-entry-table mat-form-field {
+  width: 100%;
+  min-width: 110px;
+}
+
+.add-building-table {
+  min-width: 1200px;
+}
+
+.results-table {
+  min-width: 1000px;
+}
+
+.building-actions {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.building-actions button {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  margin: 0 2px;
+  padding: 0;
+}
+
+.building-actions .save-icon {
+  color: #4054c5;
+}
+
+.building-actions .delete-icon {
+  color: #f44336;
+}
+
+.building-actions button mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 22px;
+}
+
+.building-actions .btn-action-add mat-icon,
+.others-container .building-actions .btn-action-add mat-icon {
+  color: var(--icon-add);
+  font-weight: 700;
+}
+
+.building-actions .btn-action-edit mat-icon,
+.others-container .building-actions .btn-action-edit mat-icon {
+  color: var(--icon-edit);
+}
+
+.building-actions .btn-action-delete mat-icon,
+.others-container .building-actions .btn-action-delete mat-icon {
+  color: var(--icon-delete);
+}
+
+.building-actions .btn-action-save mat-icon,
+.others-container .building-actions .btn-action-save mat-icon {
+  color: var(--brand-blue);
+}
+
+.building-actions .btn-action-cancel mat-icon,
+.others-container .building-actions .btn-action-cancel mat-icon {
+  color: var(--icon-cancel);
+}
+
+.component-audit-cell .audit-check-icon {
+  color: var(--icon-edit) !important;
+}
+
+.inline-status,
+.inline-error {
+  margin: 8px 0;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.inline-status {
+  background: #f5f8fd;
+  color: #505050;
+}
+
+.inline-error {
+  background: #f8d7da;
+  color: #842029;
+}
+
+/* Search heading */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  margin-bottom: 8px;
+  padding: 0 10px;
+  border-radius: 24px;
+  background: #f5f8fd;
+  color: #505050;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.search-bar button {
+  color: #222;
+}
+
+.building-search-form {
+  margin: 8px 0 12px;
+  padding: 4px 8px 8px;
+}
+
+.building-search-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 16px;
+}
+
+.building-search-grid mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.numeric-search {
+  min-width: 0;
+}
+
+.numeric-search > label {
+  display: block;
+  margin-bottom: 4px;
+  color: #505050;
+  font-size: 14px;
+}
+
+.numeric-search-controls {
+  display: grid;
+  grid-template-columns: minmax(80px, 0.8fr) minmax(100px, 1.2fr);
+  gap: 8px;
+}
+
+.numeric-search-controls mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+
+/* Results should follow the search form without a large blank gap */
+
+.view-building-section .results-wrapper {
+  margin-top: 4px;
+}
+
+/* CSV menu */
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 4px 8px;
+}
+
+.csv-menu-wrap {
+  position: relative;
+}
+
+.csv-trigger {
+  color: #334bbd;
+}
+
+.csv-menu {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  z-index: 1000;
+  min-width: 160px;
+  padding: 4px 0;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 25%);
+}
+
+.csv-menu button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  background: #fff;
+  color: #333;
+  text-align: left;
+  cursor: pointer;
+}
+
+.csv-menu button:hover {
+  background: #f2f5fa;
+}
+
+.csv-menu mat-icon {
+  color: #333;
+}
+
+/* Pagination */
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px;
+  color: #555;
+  font-size: 13px;
+}
+
+.page-size-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 12px;
+}
+
+.page-size-label select {
+  padding: 5px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.page-summary {
+  margin: 0 8px;
+  white-space: nowrap;
+}
+
+.table-message {
+  padding: 20px !important;
+  text-align: center !important;
+  color: #666;
+}
+
+/* Responsive search layout */
+
+@media (max-width: 900px) {
+  .building-search-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .table-footer {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .building-search-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .table-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination-controls {
+    justify-content: flex-start;
+  }
+
+  .add-building-table,
+  .results-table {
+    min-width: 1000px;
+  }
+}
+
+.building-actions .delete-icon,
+.building-actions .delete-icon mat-icon {
+  color: #f44336 !important;
+}
+
+.building-actions .delete-icon:disabled {
+  opacity: 1 !important;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.search-bar:hover {
+  background: #edf3fc;
+}
+
+.search-bar mat-icon {
+  margin-right: 8px;
+}
+
+
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+}
+
+
+.audit-table th {
+  background: #e7f4f8;
+  font-weight: 600;
+}
+
+.audit-table tbody tr:nth-child(even) {
+  background: #f4fafc;
+}
+
+
+
+.empty-state {
+  text-align: center !important;
+  padding: 16px !important;
+}
+
+.audit-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.audit-pagination select {
+  padding: 5px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: white;
+}
+
+.audit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .audit-table-container {
+    overflow-x: auto;
+  }
+
+  .audit-pagination {
+    justify-content: flex-start;
+  }
+}
+
+.audit-details-dialog .mat-mdc-dialog-surface {
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.audit-details-dialog .mat-mdc-dialog-content {
+  max-height: none;
+}
+
+.audit-dialog {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.audit-dialog h2 {
+  margin: 0 0 14px;
+  padding: 0;
+  line-height: 1.4;
+  font-size: 22px;
+}
+
+.audit-table-container {
+  width: 100%;
+  max-height: 300px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.audit-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+}
+
+.audit-table th,
+.audit-table td {
+  padding: 12px 10px;
+  border: 1px solid #d5dce2;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.audit-table th:nth-child(1) { width: 14%; }
+.audit-table th:nth-child(2) { width: 14%; }
+.audit-table th:nth-child(3) { width: 22%; }
+.audit-table th:nth-child(4) { width: 18%; }
+.audit-table th:nth-child(5) { width: 32%; }
+
+
+.audit-details-dialog .mat-mdc-dialog-surface {
+  box-sizing: border-box;
+  padding: 24px;
+  overflow: auto;
+}
+
+/* Scope Navigation */
+.scope-navigation {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ccc;
+}
+
+.scope-navigation a {
+  display: inline-block;
+  padding: 8px 18px;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.scope-navigation a:hover {
+  background-color: #f2f2f2;
+}
+
+.scope-navigation a.active {
+  background-color: #dcecf5;
+  border-color: #6b9db8;
+  font-weight: 600;
+}
+
+/* Others Component */
+.others-container {
+  width: 100%;
+  padding: 16px;
+}
+
+.others-container .building-section {
+  margin-bottom: 20px;
+}
+
+/* Form */
+.others-container .others-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.others-container .others-form mat-form-field {
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.others-container .others-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+/* Tables */
+.others-container .building-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.others-container .building-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.others-container .building-entry-table th,
+.others-container .building-entry-table td {
+  border: 1px solid #d3dce0;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.others-container .building-entry-table thead th {
+  background-color: #e1f6fb;
+  color: #111;
+  font-weight: 600;
+}
+
+.others-container .building-entry-table tbody tr:nth-child(even) {
+  background-color: #f3fafc;
+}
+
+.others-container .building-entry-table tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.others-container .building-entry-table mat-form-field {
+  width: 100%;
+  min-width: 130px;
+}
+
+/* Actions */
+.others-container .building-actions {
+  white-space: nowrap;
+}
+
+.others-container .building-actions button {
+  color: #37474f;
+}
+
+.others-container .building-actions .save-icon {
+  color: #1976d2;
+}
+
+.others-container .building-actions .delete-icon {
+  color: #d32f2f;
+}
+
+/* Keep Building and Others entry tables consistent with the road/bridge forms. */
+.building-entry-table.component-form-table {
+  color: var(--field-text);
+  font-size: 14px;
+}
+
+.building-entry-table.component-form-table thead th,
+.others-container .building-entry-table.component-form-table thead th {
+  padding: 12px 10px;
+  background: var(--header-bg);
+  color: var(--header-text);
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.building-entry-table.component-form-table tbody td,
+.others-container .building-entry-table.component-form-table tbody td {
+  padding: 12px 10px;
+  background: var(--surface-white);
+  color: var(--field-text);
+  text-align: center;
+}
+
+.building-entry-table.component-form-table .mat-mdc-text-field-wrapper,
+.others-container .building-entry-table.component-form-table .mat-mdc-text-field-wrapper {
+  background: var(--field-bg);
+}
+
+/* Pagination */
+.others-container .table-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 0;
+}
+
+.others-container .pagination-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.others-container .page-size-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.others-container .page-size-label select {
+  padding: 5px 8px;
+}
+
+/* Messages */
+.others-container .table-message {
+  padding: 18px;
+  text-align: center;
+}
+
+.others-container .success-message {
+  color: #216e39;
+}
+
+.others-container .error-message {
+  color: #b42318;
+}
+
+.others-container .required {
+  color: #d32f2f;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .others-container .others-form {
+    flex-direction: column;
+  }
+
+  .others-container .others-form mat-form-field {
+    width: 100%;
+  }
+
+  .others-container .others-form-actions {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .others-container .pagination-controls {
+    justify-content: flex-end;
+  }
+}
+.custom-feedback-snackbar .mdc-snackbar__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.delete-confirm-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 2px !important;
+  background: #fff !important;
+  box-shadow: 0 8px 24px #0003 !important;
+}
+
+.delete-confirm-panel .mat-mdc-dialog-content {
+  color: #333 !important;
+}
+
+
+/* =========================================================
+   APPLICATION NAVIGATION BAR (CONSOLIDATED)
+   ========================================================= */
+.main-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ccc;
+  background-color: #ffffff;
+}
+
+.main-navigation a {
+  padding: 8px 18px;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.main-navigation a:hover {
+  background-color: #f0f4f8;
+}
+
+.main-navigation a.active {
+  background: #dcecf5;
+  border-color: #6b9db8;
+  font-weight: 600;
+}
+
+.content-container {
+  padding: 16px;
+}
+

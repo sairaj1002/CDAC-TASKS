@@ -76,6 +76,8 @@ export interface TenderRecord extends TenderDraft {
   numberOfBidOpeners: string;
   formOfContract: string;
   tendererClass: string;
+  pushStatus?: string;
+  pushedAt?: string;
 }
 
 const field = (key: MasterFieldKey, label: string, type: MasterFieldDefinition['type'] = 'text', required = true): MasterFieldDefinition => ({

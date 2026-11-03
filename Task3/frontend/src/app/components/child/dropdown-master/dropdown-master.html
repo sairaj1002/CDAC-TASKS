@@ -1,0 +1,206 @@
+<div class="wamis-subwork-container">
+  <!-- Top Bar Banner -->
+  <div class="wamis-topbar">
+    <span class="wamis-topbar-title">Master Dropdowns Configuration & Audit</span>
+    <div class="wamis-topbar-right">
+      <button type="button" class="wamis-btn-secondary" (click)="resetForm()">
+        + Reset / Add Mode
+      </button>
+    </div>
+  </div>
+
+  <!-- Master Option Form Section -->
+  <div class="component-details-panel">
+    <h3 class="wamis-detail-section-title">
+      {{ isEditMode ? 'Edit Master Dropdown Option' : 'Add New Master Dropdown Option' }}
+    </h3>
+    <form (ngSubmit)="onSubmit()">
+      <div class="wamis-3col-grid">
+        <!-- 1. Category -->
+        <mat-form-field appearance="outline">
+          <mat-label>Category *</mat-label>
+          <mat-select [(ngModel)]="formData.category" name="formCategory" [disabled]="isEditMode" required>
+            <mat-option *ngFor="let cat of categories" [value]="cat">
+              {{ cat }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- 2. Option Code -->
+        <mat-form-field appearance="outline">
+          <mat-label>Option Code *</mat-label>
+          <input matInput [(ngModel)]="formData.code" name="formCode" placeholder="e.g. NCB_01" required />
+        </mat-form-field>
+
+        <!-- 3. Display Name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Display Label *</mat-label>
+          <input matInput [(ngModel)]="formData.displayName" name="formDisplayName" placeholder="e.g. National Competitive Bid" required />
+        </mat-form-field>
+
+        <!-- 4. Description -->
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput [(ngModel)]="formData.description" name="formDescription" placeholder="Optional notes/details" />
+        </mat-form-field>
+
+        <!-- 5. Display Order -->
+        <mat-form-field appearance="outline">
+          <mat-label>Display Order</mat-label>
+          <input matInput type="number" [(ngModel)]="formData.displayOrder" name="formDisplayOrder" />
+        </mat-form-field>
+
+        <!-- 6. Active Checkbox -->
+        <div class="wamis-radio-group">
+          <mat-checkbox [(ngModel)]="formData.active" name="formActive" color="primary">
+            Active in Dropdown Menus
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div class="wamis-btn-container">
+        <button type="submit" class="wamis-btn-primary" [disabled]="saving">
+          <mat-icon>{{ isEditMode ? 'update' : 'save' }}</mat-icon>
+          {{ isEditMode ? 'Update Option' : 'Save Option' }}
+        </button>
+        <button type="button" class="wamis-btn-secondary" (click)="resetForm()" [disabled]="saving">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Filter & Table Section -->
+  <div class="component-details-panel">
+    <div class="dropdown-filter-bar">
+      <mat-form-field appearance="outline" class="dropdown-search-input">
+        <mat-label>Filter by Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange()">
+          <mat-option value="ALL">All Categories</mat-option>
+          <mat-option *ngFor="let cat of categories" [value]="cat">
+            {{ cat }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button type="button" class="wamis-btn-secondary" (click)="loadAllOptions()">
+        Refresh Masters
+      </button>
+    </div>
+
+    <!-- Master Options Table -->
+    <div class="wamis-scrollable-table">
+      <table mat-table [dataSource]="dataSource" class="wamis-table">
+        <!-- 1. Sr. No. -->
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <!-- 2. Category -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="wamis-badge-pill">{{ element.category }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 3. Code -->
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>Code</th>
+          <td mat-cell *matCellDef="let element"><strong>{{ element.code }}</strong></td>
+        </ng-container>
+
+        <!-- 4. Display Label -->
+        <ng-container matColumnDef="displayName">
+          <th mat-header-cell *matHeaderCellDef>Display Label</th>
+          <td mat-cell *matCellDef="let element">{{ element.displayName }}</td>
+        </ng-container>
+
+        <!-- 5. Display Order -->
+        <ng-container matColumnDef="displayOrder">
+          <th mat-header-cell *matHeaderCellDef>Order</th>
+          <td mat-cell *matCellDef="let element">{{ element.displayOrder }}</td>
+        </ng-container>
+
+        <!-- 6. Active Status -->
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <span
+              class="wamis-status-chip"
+              [class.wamis-status-success]="element.active"
+              [class.wamis-status-failed]="!element.active"
+            >
+              {{ element.active ? 'ACTIVE' : 'INACTIVE' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- 7. Audit -->
+        <ng-container matColumnDef="audit">
+          <th mat-header-cell *matHeaderCellDef>Audit Info</th>
+          <td mat-cell *matCellDef="let element" class="wamis-desc-cell">
+            <div>By: {{ element.createdBy || 'SYSTEM' }}</div>
+            <div>At: {{ element.createdAt || 'Initial Seed' }}</div>
+          </td>
+        </ng-container>
+
+        <!-- 8. Actions (Edit, Delete, Active Toggle - Matches Image 4) -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="wamis-actions-cell">
+              <!-- Blue Pencil (Edit) -->
+              <button
+                type="button"
+                class="wamis-action-btn"
+                (click)="onEdit(element)"
+                matTooltip="Edit Master Option"
+              >
+                <mat-icon class="wamis-icon-edit">edit</mat-icon>
+              </button>
+
+              <!-- Red Trash (Delete) -->
+              <button
+                type="button"
+                class="wamis-action-btn"
+                (click)="onDelete(element)"
+                matTooltip="Delete Master Option"
+              >
+                <mat-icon class="wamis-icon-delete">delete</mat-icon>
+              </button>
+
+              <!-- Circle Check (Toggle Active) -->
+              <button
+                type="button"
+                class="wamis-action-btn"
+                (click)="onToggleActive(element)"
+                [matTooltip]="element.active ? 'Deactivate Option' : 'Activate Option'"
+              >
+                <mat-icon
+                  class="wamis-icon-circle-check"
+                  [class.active]="element.active"
+                  [class.inactive]="!element.active"
+                >
+                  check
+                </mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <!-- Paginator -->
+    <mat-paginator
+      [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Select page of master options"
+    ></mat-paginator>
+  </div>
+</div>
+

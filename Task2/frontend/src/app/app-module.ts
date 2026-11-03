@@ -10,9 +10,18 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
+
+// Scope Feature Module
+import { ScopeModule } from './features/scope/scope-module';
 
 // Core
 import { ApiErrorInterceptor } from './core/interceptors/api-error.interceptor';
@@ -27,9 +36,7 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
 import { DetailsDialogComponent } from './shared/components/details-dialog/details-dialog.component';
 import { AuditDialogComponent } from './shared/components/audit-dialog/audit-dialog.component';
 import { JsonViewerComponent } from './shared/components/json-viewer/json-viewer.component';
-import { JsonDiffViewerComponent } from './shared/components/json-diff-viewer/json-diff-viewer.component';
 import { StatusChipComponent } from './shared/components/status-chip/status-chip.component';
-import { DataTableComponent } from './shared/components/data-table/data-table.component';
 import { CustomSelectComponent } from './shared/components/custom-select/custom-select.component';
 import { EmptyTabComponent } from './shared/components/empty-tab/empty-tab.component';
 import { FieldTooltipDirective } from './shared/directives/field-tooltip.directive';
@@ -37,16 +44,11 @@ import { FieldTooltipDirective } from './shared/directives/field-tooltip.directi
 // Feature Components
 import { SubWorkDetailsComponent } from './features/gepnic/components/sub-work-details/sub-work-details.component';
 import { BoqDetailsComponent } from './features/gepnic/components/boq-details/boq-details.component';
-import { TenderFormComponent } from './features/gepnic/components/tender-form/tender-form.component';
 import { PretenderFormComponent } from './features/gepnic/components/pretender-form/pretender-form.component';
-import { WorkSearchComponent } from './features/gepnic/components/work-search/work-search.component';
 import { RequestResponseViewerComponent } from './features/gepnic/components/request-response-viewer/request-response-viewer.component';
-import { ValidationResultsComponent } from './features/gepnic/components/validation-results/validation-results.component';
-import { TransactionTableComponent } from './features/gepnic/components/transaction-table/transaction-table.component';
-import { WorkDetailTableComponent } from './features/gepnic/components/work-detail-table/work-detail-table.component';
 
 // Feature Pages
-import { PretenderPageComponent } from './features/gepnic/pages/pretender-page/pretender-page.component';
+import { TenderPageComponent } from './features/gepnic/pages/tender-page/tender-page.component';
 import { TenderPushComponent } from './features/gepnic/pages/tender-push/tender-push.component';
 import { TenderCorrigendumPullComponent } from './features/gepnic/pages/tender-corrigendum-pull/tender-corrigendum-pull.component';
 import { AocManagementComponent } from './features/gepnic/pages/aoc-management/aoc-management.component';
@@ -63,24 +65,17 @@ import { AocManagementComponent } from './features/gepnic/pages/aoc-management/a
     DetailsDialogComponent,
     AuditDialogComponent,
     JsonViewerComponent,
-    JsonDiffViewerComponent,
     StatusChipComponent,
-    DataTableComponent,
     CustomSelectComponent,
     EmptyTabComponent,
     FieldTooltipDirective,
     // Feature components
     SubWorkDetailsComponent,
     BoqDetailsComponent,
-    TenderFormComponent,
     PretenderFormComponent,
-    WorkSearchComponent,
     RequestResponseViewerComponent,
-    ValidationResultsComponent,
-    TransactionTableComponent,
-    WorkDetailTableComponent,
     // Feature pages
-    PretenderPageComponent,
+    TenderPageComponent,
     TenderPushComponent,
     TenderCorrigendumPullComponent,
     AocManagementComponent
@@ -90,6 +85,7 @@ import { AocManagementComponent } from './features/gepnic/pages/aoc-management/a
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    ScopeModule,
     MatDialogModule,
     MatSnackBarModule,
     MatTooltipModule,
@@ -97,7 +93,13 @@ import { AocManagementComponent } from './features/gepnic/pages/aoc-management/a
     MatTableModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatTabsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

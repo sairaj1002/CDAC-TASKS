@@ -68,9 +68,9 @@ export class SubWorkDetailsComponent implements OnInit {
     asset: ''
   };
 
-  // Secondary Tabs: Work Type, Account Heads, AA & ES, Technical Sanction, Pretender, Awarding, Work Balances, Audit Details
+  // Secondary Tabs: Work Type, Scope, Account Heads, AA & ES, Technical Sanction, Awarding, Work Balances, Audit Details
   secondaryTabs: string[] = [...GEPNIC_CONSTANTS.SUB_WORK_OPTIONS.SECONDARY_TABS];
-  activeSecondaryTab: string = 'Pretender';
+  activeSecondaryTab: string = 'Work Type';
 
   // Secondary tabs slated for future build
   futureTabs: string[] = [
@@ -84,6 +84,14 @@ export class SubWorkDetailsComponent implements OnInit {
 
   // Shared Tender Push Data
   sharedTender!: SharedTenderData;
+
+  // --- Scope Tab Integration State (Road, Bridge, Building, Others) ---
+  scopeOptions: ('Road' | 'Bridge' | 'Building' | 'Others')[] = ['Road', 'Bridge', 'Building', 'Others'];
+  selectedScopeType: 'Road' | 'Bridge' | 'Building' | 'Others' | '' = '';
+
+  selectScopeType(type: 'Road' | 'Bridge' | 'Building' | 'Others' | ''): void {
+    this.selectedScopeType = type;
+  }
 
   // --- Awarding Contract Records State (Matches Image 4) ---
   searchContractQuery: string = '';
@@ -206,6 +214,21 @@ export class SubWorkDetailsComponent implements OnInit {
 
   exportContractCsv(): void {
     this.snackbar.success('Exporting contract records to CSV...');
+  }
+
+  // --- Sub Work View Details Modal State ---
+  showSubWorkDetailsModal = false;
+  selectedSubWorkView: SubWorkViewRecord | null = null;
+  linkedTenderReferenceId = 'CE/PWD/PUNE/2026/089';
+
+  openSubWorkDetails(row: SubWorkViewRecord): void {
+    this.selectedSubWorkView = row;
+    this.showSubWorkDetailsModal = true;
+  }
+
+  closeSubWorkDetails(): void {
+    this.showSubWorkDetailsModal = false;
+    this.selectedSubWorkView = null;
   }
 
   // --- Sub Work View Actions ---

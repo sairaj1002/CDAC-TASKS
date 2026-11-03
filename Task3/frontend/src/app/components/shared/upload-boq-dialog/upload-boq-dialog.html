@@ -1,0 +1,41 @@
+<div class="component-details-panel">
+  <!-- Blue Title Bar matching Screenshot 2 -->
+  <div class="wamis-topbar">
+    <div class="wamis-topbar-title">Pre Tender Details (Procurement)</div>
+    <button type="button" class="wamis-clear-cross" (click)="onCancel()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="component-audit-details-content">
+    <p class="wamis-dialog-subtitle">
+      Fields marked with an asterisk <span class="required">*</span> are required.
+    </p>
+
+    <div class="wamis-wms-form-grid">
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">
+          Upload Protected BOQ File <span class="required">*</span>
+        </label>
+        <div class="component-search-controls">
+          <input
+            type="file"
+            id="boqFileInput"
+            (change)="onFileSelected($event)"
+            accept=".xls,.xlsx"
+            aria-label="Upload Protected BOQ File"
+          />
+        </div>
+        <span class="wamis-wms-counter">{{ fileName }}</span>
+      </div>
+    </div>
+
+    <div class="wamis-dialog-actions">
+      <button type="button" class="btn-dialog-ok" (click)="onSave()" [disabled]="uploading">
+        {{ uploading ? 'Uploading...' : 'Save' }}
+      </button>
+      <button type="button" class="btn-dialog-cancel" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+

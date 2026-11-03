@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: wamis-backend
+  datasource:
+    url: jdbc:h2:mem:wamisdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+
+integration:
+  gepnic:
+    enabled: false
+    environment: demo
+    base-url: ${GEPNIC_BASE_URL:https://demoeproc.nic.in}
+    connect-timeout: 5s
+    read-timeout: 30s
+    max-upload-size: 20MB
+    unique-user-id: ${GEPNIC_UNIQUE_USER_ID:DEMO_WAMIS_USER}
+    key-id: ${GEPNIC_KEY_ID:DEMO-KEY-THUMBPRINT-001}
+    key-store-location: ${GEPNIC_KEYSTORE_LOCATION:}
+    key-store-password: ${GEPNIC_KEYSTORE_PASSWORD:}
+    trust-store-location: ${GEPNIC_TRUSTSTORE_LOCATION:}
+    trust-store-password: ${GEPNIC_TRUSTSTORE_PASSWORD:}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+

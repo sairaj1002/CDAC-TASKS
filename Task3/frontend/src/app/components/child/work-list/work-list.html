@@ -1,0 +1,219 @@
+<div class="wamis-subwork-container">
+  <!-- Blue Banner matching Screenshot 2 -->
+  <div class="wamis-topbar">
+    <span class="wamis-topbar-title">List of Works</span>
+    <div class="wamis-topbar-right">
+      <button type="button" class="wamis-btn-primary" (click)="navigateToForm.emit()">
+        + Add New Pre-Tender
+      </button>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="component-details-panel">
+    <div class="dropdown-filter-bar">
+      <mat-form-field appearance="outline" class="dropdown-search-input">
+        <mat-label>Search by Work Number, Title or Reference</mat-label>
+        <input matInput [(ngModel)]="searchFilter" (keyup)="applyFilter()" placeholder="e.g. 3/9434/1" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button type="button" class="wamis-btn-secondary" (click)="loadWorks()">
+        Refresh
+      </button>
+    </div>
+
+    <!-- Responsive Table matching Screenshot 2 & Screenshot 6 -->
+    <div class="wamis-scrollable-table">
+      <table mat-table [dataSource]="dataSource" class="wamis-table">
+        <!-- 1. Sr. No. -->
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef>Sr.<br/>No.</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <!-- 2. Work Number -->
+        <ng-container matColumnDef="workNumber">
+          <th mat-header-cell *matHeaderCellDef>Work<br/>Number</th>
+          <td mat-cell *matCellDef="let element">{{ element.uniqueFileNo || '3/9434/1' }}</td>
+        </ng-container>
+
+        <!-- 3. Work Desc. -->
+        <ng-container matColumnDef="workDesc">
+          <th mat-header-cell *matHeaderCellDef>Work Desc.</th>
+          <td mat-cell *matCellDef="let element" class="wamis-desc-cell">
+            {{ element.tenderTitle || element.tenderDescription }}
+          </td>
+        </ng-container>
+
+        <!-- 4. Tender Reference Number -->
+        <ng-container matColumnDef="tenderRefNo">
+          <th mat-header-cell *matHeaderCellDef>Tender<br/>Reference<br/>Number</th>
+          <td mat-cell *matCellDef="let element">{{ element.tenderReferenceNo }}</td>
+        </ng-container>
+
+        <!-- 5. Tender Type(procurement) -->
+        <ng-container matColumnDef="tenderType">
+          <th mat-header-cell *matHeaderCellDef>Tender<br/>Type(procurement)</th>
+          <td mat-cell *matCellDef="let element">{{ element.tenderType }}</td>
+        </ng-container>
+
+        <!-- 6. Tender Category -->
+        <ng-container matColumnDef="tenderCategory">
+          <th mat-header-cell *matHeaderCellDef>Tender<br/>Category</th>
+          <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+        </ng-container>
+
+        <!-- 7. Tender Amount(in Rs.) -->
+        <ng-container matColumnDef="tenderAmount">
+          <th mat-header-cell *matHeaderCellDef>Tender<br/>Amount(in<br/>Rs.)</th>
+          <td mat-cell *matCellDef="let element">{{ element.tenderValue | number:'1.0-2' }}</td>
+        </ng-container>
+
+        <!-- 8. Download XML -->
+        <ng-container matColumnDef="downloadXml">
+          <th mat-header-cell *matHeaderCellDef>Download<br/>XML</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onDownloadXml(element)" matTooltip="Download XML">
+              <mat-icon class="wamis-icon-edit">visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 9. View Pre-tender details (Matches Image 1) -->
+        <ng-container matColumnDef="viewDetails">
+          <th mat-header-cell *matHeaderCellDef>View<br/>Pre-tender<br/>details</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onViewDetails(element)" matTooltip="View Pre-tender details">
+              <mat-icon class="wamis-icon-edit">remove_red_eye</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 10. Upload Protected BOQ (Matches Image 2) -->
+        <ng-container matColumnDef="uploadProtectedBoq">
+          <th mat-header-cell *matHeaderCellDef>Upload<br/>Protected<br/>BOQ</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onUploadBoq(element)" matTooltip="Click here to upload protected BOQ">
+              <mat-icon class="wamis-icon-edit">info</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 11. Download Pre-Tender documents -->
+        <ng-container matColumnDef="downloadPreTenderDocs">
+          <th mat-header-cell *matHeaderCellDef>Download<br/>Pre-Tender<br/>documents</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="wamis-docs-download-list">
+              <a href="javascript:void(0)" (click)="onDownloadDoc('NIT File', element)">NIT File ⤓</a>
+              <a href="javascript:void(0)" (click)="onDownloadDoc('DTCN File', element)">DTCN File ⤓</a>
+              <a href="javascript:void(0)" (click)="onDownloadDoc('Protected BOQ', element)">Protected BOQ ⤓</a>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- 12. Download BOQ -->
+        <ng-container matColumnDef="downloadBoq">
+          <th mat-header-cell *matHeaderCellDef>Download<br/>BOQ</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onDownloadDoc('Financial BOQ', element)" matTooltip="Download BOQ">
+              <mat-icon class="wamis-icon-edit">description</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 13. Action Column (Edit, Delete, Check - Matches Image 4) -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="wamis-actions-cell">
+              <!-- Blue Pencil (Edit) -->
+              <button type="button" class="wamis-action-btn" (click)="onEdit(element)" matTooltip="Edit Pre-Tender">
+                <mat-icon class="wamis-icon-edit">edit</mat-icon>
+              </button>
+              <!-- Red Trash Bin (Delete) -->
+              <button type="button" class="wamis-action-btn" (click)="onDelete(element)" matTooltip="Delete Pre-Tender">
+                <mat-icon class="wamis-icon-delete">delete</mat-icon>
+              </button>
+              <!-- Circle Check (Verify/Finalize) -->
+              <button type="button" class="wamis-action-btn" (click)="onFinalize(element)" matTooltip="Finalize Status">
+                <mat-icon class="wamis-icon-circle-check" [class.active]="element.status === 'ACCEPTED'">check_circle</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- 14. Transfer -->
+        <ng-container matColumnDef="transfer">
+          <th mat-header-cell *matHeaderCellDef>Transfer</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onTransfer(element)" matTooltip="Transfer Work">
+              <mat-icon class="wamis-icon-edit">swap_horiz</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 15. Send Pre-Tender Data to GEPNIC -->
+        <ng-container matColumnDef="sendGepnicData">
+          <th mat-header-cell *matHeaderCellDef>Send<br/>Pre-Tender<br/>Data to<br/>GEPNIC</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onSendToGepnic(element)" matTooltip="Click here to send pre-tender details to GEPNIC">
+              <mat-icon class="wamis-icon-edit">adjust</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 16. Upload Files To GEPNIC -->
+        <ng-container matColumnDef="uploadGepnicFiles">
+          <th mat-header-cell *matHeaderCellDef>Upload<br/>Files To<br/>GEPNIC</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onUploadBoq(element)" matTooltip="Click here to send docs to GEPNIC">
+              <mat-icon class="wamis-icon-edit">cloud_upload</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 17. Send Back -->
+        <ng-container matColumnDef="sendBack">
+          <th mat-header-cell *matHeaderCellDef>Send<br/>Back</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onSendBack(element)" matTooltip="Send Back">
+              <mat-icon class="wamis-icon-edit">arrow_back</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 18. Finalize -->
+        <ng-container matColumnDef="finalize">
+          <th mat-header-cell *matHeaderCellDef>Finalize</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onFinalize(element)" matTooltip="Finalize & Lock">
+              <mat-icon class="wamis-icon-edit">lock</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 19. Audit Details (Matches Image 5) -->
+        <ng-container matColumnDef="auditDetails">
+          <th mat-header-cell *matHeaderCellDef>Audit Details</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onAuditDetails(element)" matTooltip="View Audit Trail">
+              <mat-icon class="wamis-icon-edit">history</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <!-- Paginator matching Screenshot 6 -->
+    <mat-paginator
+      [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Select page of works"
+    ></mat-paginator>
+  </div>
+</div>
+

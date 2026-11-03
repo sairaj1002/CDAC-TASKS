@@ -1,0 +1,212 @@
+<mat-card class="component-card component-add-card" appearance="outlined">
+  <mat-card-content>
+    <p *ngIf="loadingDropdowns" class="inline-status">Loading dropdown options…</p>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="component-form-table-wrapper">
+        <table class="component-form-table">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 70px;">Sr No.</th>
+              <th scope="col">Building Description<span class="required">*</span></th>
+              <th scope="col">Built-up Area<span class="required">*</span></th>
+              <th scope="col">Number of Floors<span class="required">*</span></th>
+              <th scope="col">Number of Basements<span class="required">*</span></th>
+              <th scope="col">Repair/Maintenance Type<span class="required">*</span></th>
+              <th scope="col">Building Activity<span class="required">*</span></th>
+              <th scope="col" style="width: 100px;">Audit Details</th>
+              <th scope="col" style="width: 110px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading">
+              <td colspan="9" class="table-message" style="text-align: center; padding: 20px;">Loading buildings…</td>
+            </tr>
+
+            <!-- Saved Records -->
+            <ng-container *ngFor="let row of records; let i = index">
+              <!-- Inline Edit Row when editing this record -->
+              <tr *ngIf="editingId === row.id">
+                <td class="component-serial-number">{{ i + 1 }}</td>
+                <td>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Building Description</mat-label>
+                    <input matInput required formControlName="buildingDescription" placeholder="Building Description" />
+                    <mat-error *ngIf="form.controls['buildingDescription'].hasError('required')">
+                      Description is required.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Built-up Area</mat-label>
+                    <input matInput type="number" min="0" required formControlName="builtUpArea" placeholder="Built-up Area" />
+                    <mat-error *ngIf="form.controls['builtUpArea'].hasError('required')">
+                      Enter a valid area.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Number of Floors</mat-label>
+                    <input matInput type="number" min="0" step="1" required formControlName="numberOfFloors" placeholder="Number of Floors" />
+                    <mat-error *ngIf="form.controls['numberOfFloors'].hasError('required')">
+                      Number of floors is required.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Number of Basements</mat-label>
+                    <input matInput type="number" min="0" step="1" required formControlName="numberOfBasements" placeholder="Number of Basements" />
+                    <mat-error *ngIf="form.controls['numberOfBasements'].hasError('required')">
+                      Number of basements is required.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Repair/Maintenance Type</mat-label>
+                    <mat-select formControlName="maintenanceType" (selectionChange)="onMaintenanceTypeChange()" required placeholder="Repair/Maintenance Type">
+                      <mat-option *ngFor="let o of maintenanceTypes" [value]="o.value">{{ o.label }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls['maintenanceType'].hasError('required')">
+                      Select maintenance type.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Building Activity</mat-label>
+                    <mat-select formControlName="buildingActivity" required placeholder="Building Activity">
+                      <mat-option *ngFor="let o of filteredBuildingActivities" [value]="o.value">{{ o.label }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls['buildingActivity'].hasError('required')">
+                      Select building activity.
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td class="component-audit-cell" style="text-align: center; color: var(--icon-muted);">—</td>
+                <td>
+                  <div class="component-row-actions">
+                    <button mat-icon-button type="submit" class="btn-action-save" [disabled]="saving" aria-label="Save changes" title="Save">
+                      <mat-icon aria-hidden="true">save</mat-icon>
+                    </button>
+                    <button mat-icon-button type="button" class="btn-action-cancel" (click)="cancelEdit()" [disabled]="saving" aria-label="Cancel" title="Cancel">
+                      <mat-icon aria-hidden="true">close</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Read-only View Row -->
+              <tr *ngIf="editingId !== row.id">
+                <td class="component-serial-number">{{ i + 1 }}</td>
+                <td>{{ row.buildingDescription }}</td>
+                <td>{{ row.builtUpArea }}</td>
+                <td>{{ row.numberOfFloors }}</td>
+                <td>{{ row.numberOfBasements }}</td>
+                <td>{{ row.maintenanceType }}</td>
+                <td>{{ row.buildingActivity }}</td>
+                <td class="component-audit-cell" style="text-align: center;">
+                  <button mat-icon-button type="button" (click)="viewAudit(row)" aria-label="Audit details" matTooltip="Audit Details">
+                    <mat-icon class="audit-check-icon">check</mat-icon>
+                  </button>
+                </td>
+                <td>
+                  <div class="component-row-actions">
+                    <button mat-icon-button type="button" class="btn-action-edit" (click)="edit(row)" [disabled]="saving" aria-label="Edit" title="Edit">
+                      <mat-icon aria-hidden="true">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button type="button" class="btn-action-delete" (click)="delete(row)" [disabled]="saving" aria-label="Delete" title="Delete">
+                      <mat-icon aria-hidden="true">delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
+            <!-- Permanent Add Line (Always Visible When Not Editing an Existing Record) -->
+            <tr *ngIf="editingId === null">
+              <td class="component-serial-number">
+                <div class="serial-badge-wrap">
+                  <span>{{ records.length + 1 }}</span>
+                  <span class="new-entry-pill">New</span>
+                </div>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Building Description</mat-label>
+                  <input matInput required formControlName="buildingDescription" placeholder="Building Description" />
+                  <mat-error *ngIf="form.controls['buildingDescription'].hasError('required')">
+                    Description is required.
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Built-up Area</mat-label>
+                  <input matInput type="number" min="0" required formControlName="builtUpArea" placeholder="Built-up Area" />
+                  <mat-error *ngIf="form.controls['builtUpArea'].hasError('required')">
+                    Enter a valid area.
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Number of Floors</mat-label>
+                  <input matInput type="number" min="0" step="1" required formControlName="numberOfFloors" placeholder="Number of Floors" />
+                  <mat-error *ngIf="form.controls['numberOfFloors'].hasError('required')">
+                    Number of floors is required.
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Number of Basements</mat-label>
+                  <input matInput type="number" min="0" step="1" required formControlName="numberOfBasements" placeholder="Number of Basements" />
+                  <mat-error *ngIf="form.controls['numberOfBasements'].hasError('required')">
+                    Number of basements is required.
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Repair/Maintenance Type</mat-label>
+                  <mat-select formControlName="maintenanceType" (selectionChange)="onMaintenanceTypeChange()" required placeholder="Repair/Maintenance Type">
+                    <mat-option *ngFor="let o of maintenanceTypes" [value]="o.value">{{ o.label }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls['maintenanceType'].hasError('required')">
+                    Select maintenance type.
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Building Activity</mat-label>
+                  <mat-select formControlName="buildingActivity" required placeholder="Building Activity">
+                    <mat-option *ngFor="let o of filteredBuildingActivities" [value]="o.value">{{ o.label }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls['buildingActivity'].hasError('required')">
+                    Select building activity.
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td class="component-audit-cell" style="text-align: center; color: var(--icon-muted);">—</td>
+              <td>
+                <div class="component-row-actions">
+                  <button mat-icon-button type="submit" class="btn-action-add" [disabled]="saving || loadingDropdowns" aria-label="Add building" title="Add">
+                    <mat-icon aria-hidden="true">add</mat-icon>
+                  </button>
+                  <button mat-icon-button type="button" class="btn-action-delete" (click)="resetForm()" aria-label="Clear form" title="Clear">
+                    <mat-icon aria-hidden="true">delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

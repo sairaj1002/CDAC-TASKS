@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
 import { GEPNIC_CONSTANTS } from '../../features/gepnic/constants/gepnic.constants';
 
 export interface WamisRailModule {
@@ -19,7 +21,7 @@ export interface SubNavItem {
   standalone: false,
   templateUrl: './sidebar.component.html'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
 
   isExpanded = true;
   selectedModuleId = 'Integration';
@@ -36,6 +38,29 @@ export class SidebarComponent {
 
   // 2. WMS Menu -> Heading: "Works"
   wmsNavItems: SubNavItem[] = [...GEPNIC_CONSTANTS.WMS_NAV_ITEMS];
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.syncActiveModule(this.router.url);
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+    ).subscribe(event => {
+      this.syncActiveModule(event.urlAfterRedirects || event.url);
+    });
+  }
+
+  private syncActiveModule(url: string): void {
+    if (url.includes('/sub-work') || url.includes('/tender')) {
+      this.selectedModuleId = 'WMS';
+      this.railModules.forEach(m => m.active = (m.id === 'WMS'));
+      this.isWorksExpanded = true;
+    } else if (url.includes('/tender-push') || url.includes('/tender-corrigendum-pull') || url.includes('/awarding')) {
+      this.selectedModuleId = 'Integration';
+      this.railModules.forEach(m => m.active = (m.id === 'Integration'));
+      this.isGepnicExpanded = true;
+    }
+  }
 
   toggleGepnic(): void {
     this.isGepnicExpanded = !this.isGepnicExpanded;

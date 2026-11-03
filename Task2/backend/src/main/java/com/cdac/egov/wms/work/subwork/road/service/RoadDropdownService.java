@@ -1,0 +1,47 @@
+package com.cdac.egov.wms.work.subwork.road.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.cdac.egov.wms.work.subwork.dropdown.dto.DropdownOptionDto;
+import com.cdac.egov.wms.work.subwork.dropdown.service.DropdownOptionService;
+
+/**
+ * Backward-compatible delegate for Road dropdown options.
+ * Points to the consolidated DropdownOptionService.
+ */
+@Service
+public class RoadDropdownService {
+
+    private final DropdownOptionService dropdownService;
+
+    public RoadDropdownService(DropdownOptionService dropdownService) {
+        this.dropdownService = dropdownService;
+    }
+
+    public static String normalizeCategory(String category) {
+        return DropdownOptionService.normalizeCategory(category);
+    }
+
+    public List<DropdownOptionDto> findActiveByCategory(String category) {
+        return dropdownService.findActiveByCategory(category);
+    }
+
+    public List<DropdownOptionDto> findAllByCategory(String category) {
+        return dropdownService.findAllByCategory(category);
+    }
+
+    public void validateActiveCode(String category, String code) {
+        dropdownService.validateActiveCode(category, code);
+    }
+
+    public String getLabel(String category, String code) {
+        return dropdownService.getLabel(category, code);
+    }
+
+    public void clearCache() {
+        dropdownService.clearCache();
+    }
+}
+

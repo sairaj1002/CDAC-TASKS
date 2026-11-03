@@ -1,0 +1,20 @@
+<div class="wamis-app-root">
+  <app-wamis-header (toggleSidebar)="toggleSidebar()"></app-wamis-header>
+
+  <div class="wamis-layout-container">
+    <app-wamis-sidebar
+      *ngIf="sidebarVisible"
+      [activeTab]="activeTab"
+      (tabSelected)="onTabSelected($event)"
+    ></app-wamis-sidebar>
+
+    <main class="wamis-content">
+      <app-wamis-master
+        [activeTabIndex]="activeTab"
+        (tabChanged)="onTabSelected($event)"
+      ></app-wamis-master>
+    </main>
+  </div>
+
+  <app-wamis-footer></app-wamis-footer>
+</div>

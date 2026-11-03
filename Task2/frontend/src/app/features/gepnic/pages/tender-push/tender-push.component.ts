@@ -233,6 +233,20 @@ export class TenderPushComponent implements OnInit {
     this.primaryTab = tab;
   }
 
+  // Pre-tender Details Modal Dialog State (Matches Image 1)
+  showPretenderDetailsModal: boolean = false;
+  selectedPretenderDetails: any = null;
+
+  openPretenderDetailsModal(tender: any): void {
+    this.selectedPretenderDetails = tender;
+    this.showPretenderDetailsModal = true;
+  }
+
+  closePretenderDetailsModal(): void {
+    this.showPretenderDetailsModal = false;
+    this.selectedPretenderDetails = null;
+  }
+
   loadTenders(): void {
     this.pretenderApi.listTenders().subscribe({
       next: data => {
@@ -247,6 +261,25 @@ export class TenderPushComponent implements OnInit {
       },
       error: () => {
         // Keeps authentic demo records
+      }
+    });
+  }
+
+  // ==================== TENDER ACTIONS ====================
+  deleteTender(row: PushTenderRecord): void {
+    if (row.pushStatus === 'PUSHED_TO_GEPNIC') {
+      this.snackbar.error('Pushed tenders cannot be deleted.');
+      return;
+    }
+    this.dialog.confirm({
+      title: 'Delete Tender?',
+      message: `Are you sure you want to delete tender #${row.id} (${row.tenderReferenceNumber})?`,
+      okText: 'Delete',
+      cancelText: 'Cancel'
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        this.tenders = this.tenders.filter(t => t.id !== row.id);
+        this.snackbar.success(`Tender #${row.id} deleted successfully`);
       }
     });
   }

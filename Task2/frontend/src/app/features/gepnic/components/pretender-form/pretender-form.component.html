@@ -7,240 +7,425 @@
 
   <!-- ==================== ADD TAB: FORM VIEW ==================== -->
   <div *ngIf="activeTab === 'add'">
-    <!-- Search in sub works (Collapsible Search Component) -->
-    <div class="work-search-container">
-      <app-work-search
-        [selectedWorkId]="tender.parentWorkId"
-        [selectedWorkNumber]="tender.parentWorkNumber"
-        [selectedWorkDescription]="tender.parentWorkDescription"
-        (workSelected)="selectWork($event)"
-        (workCleared)="clearWork()">
-      </app-work-search>
+    <!-- ============================================================== -->
+    <!-- SUB WORK MULTI-SELECT DROPDOWN & PACKAGING                     -->
+    <!-- ============================================================== -->
+    <div *ngIf="enableMultiSubWorkSelect" class="subwork-selection-wrapper" style="margin-bottom: 20px; background: #ffffff; border: 1.5px solid #c7d8e6; border-radius: 6px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+        <div>
+          <label style="font-size: 14px; font-weight: 700; color: #0f2744; text-transform: uppercase; letter-spacing: 0.03em;">
+            Select Sub Work(s) <span class="required" style="color: #dc2626;">*</span>
+          </label>
+        </div>
+        <div *ngIf="selectedSubWorkNumbers.length > 0" style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #0f4a74; background: #e0f2fe; padding: 3px 10px; border-radius: 12px; border: 1px solid #bae6fd;">
+            {{ selectedSubWorkNumbers.length }} Sub Work{{ selectedSubWorkNumbers.length > 1 ? 's' : '' }} Selected
+          </span>
+          <button type="button" (click)="clearSubWorkSelection()" style="background: none; border: none; font-size: 12px; color: #dc2626; cursor: pointer; text-decoration: underline; font-weight: 600;">
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      <!-- Multi-select Dropdown Container -->
+      <div class="subwork-multiselect-container" style="position: relative;">
+        <!-- Trigger Button / Box -->
+        <div
+          (click)="isSubWorkDropdownOpen = !isSubWorkDropdownOpen"
+          style="min-height: 44px; border: 1.5px solid #0f4a74; border-radius: 4px; padding: 6px 12px; background: #f8fafc; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          
+          <!-- Chips / Selected summary or placeholder -->
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex: 1;">
+            <span *ngIf="selectedSubWorkNumbers.length === 0" style="color: #94a3b8; font-size: 13.5px; font-weight: 500;">
+              Click here to select multiple sub works from dropdown...
+            </span>
+
+            <span
+              *ngFor="let regNo of selectedSubWorkNumbers"
+              style="background: #e0f2fe; border: 1px solid #7dd3fc; color: #0369a1; padding: 3px 8px; border-radius: 4px; font-size: 12.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+              <span>{{ regNo }}</span>
+              <span
+                (click)="removeSubWork(regNo, $event)"
+                title="Remove sub work"
+                style="cursor: pointer; font-size: 14px; font-weight: 800; color: #0369a1; line-height: 1;">
+                &times;
+              </span>
+            </span>
+          </div>
+
+          <!-- Dropdown Caret (Pure unicode, no material icon) -->
+          <div style="display: flex; align-items: center; padding-left: 6px;">
+            <span style="font-size: 11px; color: #0f4a74; user-select: none;">
+              {{ isSubWorkDropdownOpen ? '&#9650;' : '&#9660;' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Dropdown Menu / Panel -->
+        <div
+          *ngIf="isSubWorkDropdownOpen"
+          style="position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 999; background: #ffffff; border: 1.5px solid #0f4a74; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); max-height: 380px; display: flex; flex-direction: column;">
+          
+          <!-- Top Action bar: Search + Select All -->
+          <div style="padding: 10px 14px; border-bottom: 1px solid #e2e8f0; background: #f8fafc; display: flex; gap: 12px; align-items: center; justify-content: space-between;">
+            <div style="position: relative; flex: 1;">
+              <input
+                type="text"
+                [(ngModel)]="subWorkSearchQuery"
+                (click)="$event.stopPropagation()"
+                placeholder="Search sub work by number, title, or category..."
+                style="width: 100%; height: 34px; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12.5px; outline: none;" />
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button
+                type="button"
+                (click)="selectAllSubWorks(); $event.stopPropagation()"
+                style="background: #0f4a74; color: #ffffff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11.5px; font-weight: 600; cursor: pointer;">
+                Select All
+              </button>
+              <button
+                type="button"
+                (click)="clearSubWorkSelection(); $event.stopPropagation()"
+                style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 4px; font-size: 11.5px; font-weight: 600; cursor: pointer;">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <!-- Scrollable List of Sub Works -->
+          <div style="overflow-y: auto; max-height: 270px; padding: 6px 0;">
+            <div
+              *ngFor="let sw of filteredSubWorks"
+              (click)="toggleSubWorkSelection(sw, $event)"
+              style="padding: 10px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; transition: background 0.15s;"
+              [style.background]="isSubWorkSelected(sw) ? '#eff6ff' : '#ffffff'">
+
+              <!-- Checkbox -->
+              <input
+                type="checkbox"
+                [checked]="isSubWorkSelected(sw)"
+                (change)="toggleSubWorkSelection(sw, $event)"
+                (click)="$event.stopPropagation()"
+                style="margin-top: 3px; width: 16px; height: 16px; cursor: pointer; accent-color: #0f4a74;" />
+
+              <!-- Item Details -->
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px;">
+                  <span style="font-size: 13.5px; font-weight: 700; color: #0f2744;">
+                    {{ sw.registrationNumber }}
+                  </span>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 600; background: #e2e8f0; color: #334155; padding: 2px 8px; border-radius: 4px;">
+                      {{ sw.workCategory }}
+                    </span>
+                    <span style="font-size: 12px; font-weight: 700; color: #047857;">
+                      ₹{{ sw.estimatedCost | number:'1.0-0' }}
+                    </span>
+                  </div>
+                </div>
+                <div style="font-size: 12.5px; color: #475569; line-height: 1.4;">
+                  {{ sw.subWorkName }}
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="filteredSubWorks.length === 0" style="padding: 20px; text-align: center; color: #94a3b8; font-size: 13px;">
+              No sub works match your search.
+            </div>
+          </div>
+
+          <!-- Dropdown Footer -->
+          <div style="padding: 8px 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11.5px; color: #64748b;">
+              Showing {{ filteredSubWorks.length }} of {{ availableSubWorks.length }} sub works
+            </span>
+            <button
+              type="button"
+              (click)="isSubWorkDropdownOpen = false; $event.stopPropagation()"
+              style="background: #0f4a74; color: #ffffff; border: none; padding: 5px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer;">
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Sub Works View Entries Table (Matches Sub Work View Tab) -->
+      <div *ngIf="selectedSubWorksList.length > 0" style="margin-top: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <span style="font-size: 13px; font-weight: 700; color: #0f2744; text-transform: uppercase; letter-spacing: 0.03em;">
+            Sub Work View Entries ({{ selectedSubWorksList.length }} Selected)
+          </span>
+          <span style="font-size: 12px; color: #64748b;">
+            Click on any Registration Number to view full sub work & tender details
+          </span>
+        </div>
+
+        <div class="wamis-table-container" style="margin-bottom: 0; border: 1px solid #d0dfe8; border-radius: 4px; overflow-x: auto; background: #ffffff;">
+          <table class="wamis-table" style="margin-bottom: 0; min-width: 1000px; width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #e0f2fe; color: #0f2744;">
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 140px; white-space: nowrap;">Registration<br/>Number</th>
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 380px;">Sub Work Name</th>
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 180px; white-space: nowrap;">Work Category</th>
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 130px; white-space: nowrap; text-align: center;">Stipulated Start<br/>Date</th>
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 130px; white-space: nowrap; text-align: center;">Stipulated End<br/>Date</th>
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 110px; white-space: nowrap; text-align: center;">Start Date</th>
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 110px; white-space: nowrap; text-align: center;">End Date</th>
+                <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center; min-width: 90px; white-space: nowrap;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of selectedSubWorksList">
+                <td style="white-space: nowrap;">
+                  <a href="javascript:void(0)" (click)="openSubWorkModal(row, $event)" style="color: #0d6efd; font-weight: 600; text-decoration: underline; cursor: pointer;" title="View Sub Work & Tender Reference Details">
+                    {{ row.registrationNumber }}
+                  </a>
+                </td>
+                <td style="font-size: 12.5px; color: #1e293b; min-width: 380px; max-width: 460px; white-space: normal !important; word-break: break-word !important; line-height: 1.5;">
+                  {{ row.subWorkName }}
+                </td>
+                <td style="font-size: 12.5px; min-width: 180px; white-space: nowrap;">
+                  {{ row.workCategory }}
+                </td>
+                <td style="text-align: center; white-space: nowrap;">{{ row.stipulatedStartDate || '-' }}</td>
+                <td style="text-align: center; white-space: nowrap;">{{ row.stipulatedEndDate || '-' }}</td>
+                <td style="text-align: center; white-space: nowrap;">{{ row.startDate || '-' }}</td>
+                <td style="text-align: center; white-space: nowrap;">{{ row.endDate || '-' }}</td>
+                <td style="text-align: center; white-space: nowrap;">
+                  <button
+                    type="button"
+                    (click)="removeSubWork(row.registrationNumber, $event)"
+                    title="Remove from tender package"
+                    style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; border-radius: 4px; padding: 4px 8px; font-size: 11.5px; font-weight: 600; cursor: pointer;">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div *ngIf="selectedSubWorksList.length === 0" style="margin-top: 14px; padding: 16px; text-align: center; color: #64748b; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 4px; font-size: 13px;">
+        No sub works selected. Select one or more sub works from the dropdown above to view entries.
+      </div>
     </div>
 
     <form class="tender-form" #formRef="ngForm" (ngSubmit)="save()">
-      <div class="form-grid" [class.subwork-5-col]="isSubWorkContext">
-        <!-- Tender Type (Procurement) Radio Bar (Full Width) -->
-        <fieldset class="field full-width procurement">
-          <legend>Tender Type (Procurement) <span class="required">*</span></legend>
-          <label class="radio-option">
-            <input type="radio" name="procurementType" value="Open Tender" [(ngModel)]="tender.procurementType" required>
-            Open Tender
+      <!-- ==================== TENDER DETAILS BOX ==================== -->
+      <div class="tender-section-box">
+        <div class="tender-section-box-header">
+          <label class="tender-section-box-title">
+            Tender Details
           </label>
-          <label class="radio-option">
-            <input type="radio" name="procurementType" value="Limited" [(ngModel)]="tender.procurementType">
-            Limited
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="procurementType" value="Open Limited" [(ngModel)]="tender.procurementType">
-            Open Limited
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="procurementType" value="National Competitive Bid (NCB)" [(ngModel)]="tender.procurementType">
-            National Competitive Bid (NCB)
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="procurementType" value="Global Tender" [(ngModel)]="tender.procurementType">
-            Global Tender
-          </label>
-        </fieldset>
-
-        <!-- ROW 1 -->
-        <!-- Col 1: Tender Reference Number -->
-        <label class="field">
-          <span>Tender Reference Number <span class="required">*</span></span>
-          <input type="text" name="tenderReferenceNumber" [(ngModel)]="tender.tenderReferenceNumber" required placeholder="Enter tender reference number">
-        </label>
-
-        <!-- Col 2: Tender Type (Dropdown from DB) -->
-        <label class="field">
-          <span>Tender Type <span class="required">*</span></span>
-          <select name="tenderTypeId" [(ngModel)]="tender.tenderTypeId" required>
-            <option [ngValue]="null" disabled>Select tender type</option>
-            <option *ngFor="let option of list('tender-type')" [ngValue]="option.id">{{ option.name }}</option>
-          </select>
-        </label>
-
-        <!-- Col 3: Number of Covers (Dropdown from DB) -->
-        <label class="field">
-          <span>Number of Covers <span class="required">*</span></span>
-          <select name="numberOfCoversId" [(ngModel)]="tender.numberOfCoversId" required>
-            <option [ngValue]="null" disabled>Select number of covers</option>
-            <option *ngFor="let option of list('number-of-covers')" [ngValue]="option.id">{{ option.name }}</option>
-          </select>
-        </label>
-
-        <!-- ROW 2 -->
-        <!-- Col 1: Tender Category (Dropdown from DB) -->
-        <label class="field">
-          <span>Tender Category <span class="required">*</span></span>
-          <select name="tenderCategoryId" [(ngModel)]="tender.tenderCategoryId" (ngModelChange)="changeTenderCategory($event)" required>
-            <option [ngValue]="null" disabled>Select tender category</option>
-            <option *ngFor="let option of tenderCategories()" [ngValue]="option.id">{{ option.name }}</option>
-          </select>
-        </label>
-
-        <!-- Col 2: Work Item Product Category (Dropdown from DB, filtered by Tender Category) -->
-        <label class="field">
-          <span>Work Item Product Category <span class="required">*</span></span>
-          <select name="workItemProductCategoryId" [(ngModel)]="tender.workItemProductCategoryId" required>
-            <option [ngValue]="null" disabled>Select product category</option>
-            <option *ngFor="let option of productCategoryOptions()" [ngValue]="option.id">{{ option.name }}</option>
-          </select>
-        </label>
-
-        <!-- Col 3: Number of Bid Openers (Dropdown from DB) -->
-        <label class="field">
-          <span>Number of Bid Openers <span class="required">*</span></span>
-          <select name="numberOfBidOpenersId" [(ngModel)]="tender.numberOfBidOpenersId" required>
-            <option [ngValue]="null" disabled>Select bid openers</option>
-            <option *ngFor="let option of list('number-of-bid-openers')" [ngValue]="option.id">{{ option.name }}</option>
-          </select>
-        </label>
-
-        <!-- ROW 3 -->
-        <!-- Col 1: Form of Contract (Dropdown from DB) -->
-        <label class="field">
-          <span>Form of Contract <span class="required">*</span></span>
-          <select name="formOfContractId" [(ngModel)]="tender.formOfContractId" required>
-            <option [ngValue]="null" disabled>Select contract form</option>
-            <option *ngFor="let option of list('form-of-contract')" [ngValue]="option.id">{{ option.name }}</option>
-          </select>
-        </label>
-
-        <!-- Col 2: Bid Validity Days -->
-        <label class="field">
-          <span>Bid Validity Days <span class="required">*</span></span>
-          <input type="number" min="1" max="2147483647" step="1" name="bidValidityDays" [(ngModel)]="tender.bidValidityDays" required placeholder="Enter days">
-        </label>
-
-        <!-- Document Description for Cover 1 -->
-        <label class="field">
-          <span>Document Description for Cover 1 <span class="required">*</span></span>
-          <input type="text" name="cover1Description" [(ngModel)]="tender.cover1Description" required placeholder="Describe the documents for cover 1">
-        </label>
-
-        <!-- Document Description for Cover 2 -->
-        <label class="field">
-          <span>Document Description for Cover 2</span>
-          <input type="text" name="cover2Description" [(ngModel)]="tender.cover2Description" placeholder="Describe the documents for cover 2">
-        </label>
-
-        <!-- Delivery Period Days -->
-        <label class="field">
-          <span>Delivery Period Days <span class="required">*</span></span>
-          <input type="number" min="1" max="2147483647" step="1" name="deliveryPeriodDays" [(ngModel)]="tender.deliveryPeriodDays" required placeholder="Enter days">
-        </label>
-
-        <!-- ROW 6 -->
-        <!-- Col 1: Tenderer Class (Dropdown from DB) -->
-        <label class="field">
-          <span>Tenderer Class <span class="required">*</span></span>
-          <select name="tendererClassId" [(ngModel)]="tender.tendererClassId" required>
-            <option [ngValue]="null" disabled>Select tenderer class</option>
-            <option *ngFor="let option of list('tenderer-class')" [ngValue]="option.id">{{ option.name }}</option>
-          </select>
-        </label>
-
-        <!-- Col 2: EMD Exemption Box -->
-        <fieldset class="field choice-field">
-          <legend>EMD Exemption <span class="required">*</span></legend>
-          <label><input type="radio" name="emdExemption" [value]="true" [(ngModel)]="tender.emdExemption"> Yes</label>
-          <label><input type="radio" name="emdExemption" [value]="false" [(ngModel)]="tender.emdExemption"> No</label>
-        </fieldset>
-
-        <!-- Col 3: Paper Cost Exemption Box -->
-        <fieldset class="field choice-field">
-          <legend>Paper Cost Exemption <span class="required">*</span></legend>
-          <label><input type="radio" name="paperCostExemption" [value]="true" [(ngModel)]="tender.paperCostExemption"> Yes</label>
-          <label><input type="radio" name="paperCostExemption" [value]="false" [(ngModel)]="tender.paperCostExemption"> No</label>
-        </fieldset>
-
-        <!-- ROW 7 -->
-        <!-- Col 1: Tender Fee -->
-        <label class="field">
-          <span>Tender Fee</span>
-          <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderFee" [(ngModel)]="tender.tenderFee" placeholder="0.00">
-        </label>
-
-        <!-- Col 2: Tender EMD Fee -->
-        <label class="field">
-          <span>Tender EMD Fee</span>
-          <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderEmdFee" [(ngModel)]="tender.tenderEmdFee" placeholder="0.00">
-        </label>
-
-        <!-- Col 3: Pre Bid Meeting Box -->
-        <fieldset class="field choice-field">
-          <legend>Pre Bid Meeting <span class="required">*</span></legend>
-          <label><input type="radio" name="preBidMeeting" [value]="true" [(ngModel)]="tender.preBidMeeting"> Yes</label>
-          <label><input type="radio" name="preBidMeeting" [value]="false" [(ngModel)]="tender.preBidMeeting"> No</label>
-        </fieldset>
-
-        <!-- Pre Bid Meeting Address -->
-        <label class="field">
-          <span>Pre Bid Meeting Address</span>
-          <input type="text" name="preBidMeetingAddress" [(ngModel)]="tender.preBidMeetingAddress" placeholder="Enter meeting address">
-        </label>
-
-        <!-- TENDER SCHEDULE SECTION DIVIDER -->
-        <div class="section-divider full-width">
-          <span>TENDER SCHEDULE</span>
         </div>
 
-        <!-- ROW 9: Schedule Row 1 (3 Cols) -->
-        <label class="field">
-          <span>Tender Publishing Date and Time <span class="required">*</span></span>
-          <input type="datetime-local" name="tenderPublishingDateTime" [(ngModel)]="tender.tenderPublishingDateTime" required>
-        </label>
+        <div class="form-grid" [class.subwork-5-col]="isSubWorkContext">
+          <!-- Tender Type (Procurement) Dropdown -->
+          <label class="field full-width">
+            <span>Tender Type (Procurement) <span class="required">*</span></span>
+            <select name="procurementType" [(ngModel)]="tender.procurementType" required>
+              <option value="" disabled>Select tender type (procurement)</option>
+              <option value="Open Tender">Open Tender</option>
+              <option value="Limited">Limited</option>
+              <option value="Open Limited">Open Limited</option>
+              <option value="National Competitive Bid (NCB)">National Competitive Bid (NCB)</option>
+              <option value="Global Tender">Global Tender</option>
+            </select>
+          </label>
 
-        <label class="field">
-          <span>Document Download Start Date and Time <span class="required">*</span></span>
-          <input type="datetime-local" name="documentDownloadStartDateTime" [(ngModel)]="tender.documentDownloadStartDateTime" required>
-        </label>
+          <!-- ROW 1 -->
+          <!-- Col 1: Tender Reference Number -->
+          <label class="field">
+            <span>Tender Reference Number <span class="required">*</span></span>
+            <input type="text" name="tenderReferenceNumber" [(ngModel)]="tender.tenderReferenceNumber" required placeholder="Enter tender reference number">
+          </label>
 
-        <label class="field">
-          <span>Seek Clarification Start Date and Time <span class="required">*</span></span>
-          <input type="datetime-local" name="seekClarificationStartDateTime" [(ngModel)]="tender.seekClarificationStartDateTime" required>
-        </label>
+          <!-- Col 2: Tender Type (Dropdown from DB) -->
+          <label class="field">
+            <span>Tender Type <span class="required">*</span></span>
+            <select name="tenderTypeId" [(ngModel)]="tender.tenderTypeId" required>
+              <option [ngValue]="null" disabled>Select tender type</option>
+              <option *ngFor="let option of list('tender-type')" [ngValue]="option.id">{{ option.name }}</option>
+            </select>
+          </label>
 
-        <!-- ROW 10: Schedule Row 2 (3 Cols) -->
-        <label class="field">
-          <span>Seek Clarification End Date and Time <span class="required">*</span></span>
-          <input type="datetime-local" name="seekClarificationEndDateTime" [(ngModel)]="tender.seekClarificationEndDateTime" [attr.min]="tender.seekClarificationStartDateTime || null" required>
-        </label>
+          <!-- Col 3: Number of Covers (Dropdown from DB) -->
+          <label class="field">
+            <span>Number of Covers <span class="required">*</span></span>
+            <select name="numberOfCoversId" [(ngModel)]="tender.numberOfCoversId" required>
+              <option [ngValue]="null" disabled>Select number of covers</option>
+              <option *ngFor="let option of list('number-of-covers')" [ngValue]="option.id">{{ option.name }}</option>
+            </select>
+          </label>
 
-        <label class="field">
-          <span>Bid-Sub Start Date and Time <span class="required">*</span></span>
-          <input type="datetime-local" name="bidSubmissionStartDateTime" [(ngModel)]="tender.bidSubmissionStartDateTime" required>
-        </label>
+          <!-- ROW 2 -->
+          <!-- Col 1: Tender Category (Dropdown from DB) -->
+          <label class="field">
+            <span>Tender Category <span class="required">*</span></span>
+            <select name="tenderCategoryId" [(ngModel)]="tender.tenderCategoryId" (ngModelChange)="changeTenderCategory($event)" required>
+              <option [ngValue]="null" disabled>Select tender category</option>
+              <option *ngFor="let option of tenderCategories()" [ngValue]="option.id">{{ option.name }}</option>
+            </select>
+          </label>
 
-        <label class="field">
-          <span>Bid-Sub End Date and Time <span class="required">*</span></span>
-          <input type="datetime-local" name="bidSubmissionEndDateTime" [(ngModel)]="tender.bidSubmissionEndDateTime" [attr.min]="tender.bidSubmissionStartDateTime || null" required>
-        </label>
+          <!-- Col 2: Work Item Product Category (Dropdown from DB, filtered by Tender Category) -->
+          <label class="field">
+            <span>Work Item Product Category <span class="required">*</span></span>
+            <select name="workItemProductCategoryId" [(ngModel)]="tender.workItemProductCategoryId" required>
+              <option [ngValue]="null" disabled>Select product category</option>
+              <option *ngFor="let option of productCategoryOptions()" [ngValue]="option.id">{{ option.name }}</option>
+            </select>
+          </label>
 
-        <!-- ROW 11: Schedule Row 3 -->
-        <label class="field">
-          <span>Bid Opening Date and Time <span class="required">*</span></span>
-          <input type="datetime-local" name="bidOpeningDateTime" [(ngModel)]="tender.bidOpeningDateTime" required>
-        </label>
+          <!-- Col 3: Number of Bid Openers (Dropdown from DB) -->
+          <label class="field">
+            <span>Number of Bid Openers <span class="required">*</span></span>
+            <select name="numberOfBidOpenersId" [(ngModel)]="tender.numberOfBidOpenersId" required>
+              <option [ngValue]="null" disabled>Select bid openers</option>
+              <option *ngFor="let option of list('number-of-bid-openers')" [ngValue]="option.id">{{ option.name }}</option>
+            </select>
+          </label>
+
+          <!-- ROW 3 -->
+          <!-- Col 1: Form of Contract (Dropdown from DB) -->
+          <label class="field">
+            <span>Form of Contract <span class="required">*</span></span>
+            <select name="formOfContractId" [(ngModel)]="tender.formOfContractId" required>
+              <option [ngValue]="null" disabled>Select contract form</option>
+              <option *ngFor="let option of list('form-of-contract')" [ngValue]="option.id">{{ option.name }}</option>
+            </select>
+          </label>
+
+          <!-- Col 2: Bid Validity Days -->
+          <label class="field">
+            <span>Bid Validity Days <span class="required">*</span></span>
+            <input type="number" min="1" max="2147483647" step="1" name="bidValidityDays" [(ngModel)]="tender.bidValidityDays" required placeholder="Enter days">
+          </label>
+
+          <!-- Document Description for Cover 1 -->
+          <label class="field">
+            <span>Document Description for Cover 1 <span class="required">*</span></span>
+            <input type="text" name="cover1Description" [(ngModel)]="tender.cover1Description" required placeholder="Describe the documents for cover 1">
+          </label>
+
+          <!-- Document Description for Cover 2 -->
+          <label class="field">
+            <span>Document Description for Cover 2</span>
+            <input type="text" name="cover2Description" [(ngModel)]="tender.cover2Description" placeholder="Describe the documents for cover 2">
+          </label>
+
+          <!-- Delivery Period Days -->
+          <label class="field">
+            <span>Delivery Period Days <span class="required">*</span></span>
+            <input type="number" min="1" max="2147483647" step="1" name="deliveryPeriodDays" [(ngModel)]="tender.deliveryPeriodDays" required placeholder="Enter days">
+          </label>
+
+          <!-- ROW 6 -->
+          <!-- Col 1: Tenderer Class (Dropdown from DB) -->
+          <label class="field">
+            <span>Tenderer Class <span class="required">*</span></span>
+            <select name="tendererClassId" [(ngModel)]="tender.tendererClassId" required>
+              <option [ngValue]="null" disabled>Select tenderer class</option>
+              <option *ngFor="let option of list('tenderer-class')" [ngValue]="option.id">{{ option.name }}</option>
+            </select>
+          </label>
+
+          <!-- Col 2: EMD Exemption Box -->
+          <fieldset class="field choice-field">
+            <legend>EMD Exemption <span class="required">*</span></legend>
+            <label><input type="radio" name="emdExemption" [value]="true" [(ngModel)]="tender.emdExemption"> Yes</label>
+            <label><input type="radio" name="emdExemption" [value]="false" [(ngModel)]="tender.emdExemption"> No</label>
+          </fieldset>
+
+          <!-- Col 3: Paper Cost Exemption Box -->
+          <fieldset class="field choice-field">
+            <legend>Paper Cost Exemption <span class="required">*</span></legend>
+            <label><input type="radio" name="paperCostExemption" [value]="true" [(ngModel)]="tender.paperCostExemption"> Yes</label>
+            <label><input type="radio" name="paperCostExemption" [value]="false" [(ngModel)]="tender.paperCostExemption"> No</label>
+          </fieldset>
+
+          <!-- ROW 7 -->
+          <!-- Col 1: Tender Fee -->
+          <label class="field">
+            <span>Tender Fee</span>
+            <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderFee" [(ngModel)]="tender.tenderFee" placeholder="0.00">
+          </label>
+
+          <!-- Col 2: Tender EMD Fee -->
+          <label class="field">
+            <span>Tender EMD Fee</span>
+            <input type="number" min="0" max="999999999999.99" step="0.01" name="tenderEmdFee" [(ngModel)]="tender.tenderEmdFee" placeholder="0.00">
+          </label>
+
+          <!-- Col 3: Pre Bid Meeting Box -->
+          <fieldset class="field choice-field">
+            <legend>Pre Bid Meeting <span class="required">*</span></legend>
+            <label><input type="radio" name="preBidMeeting" [value]="true" [(ngModel)]="tender.preBidMeeting"> Yes</label>
+            <label><input type="radio" name="preBidMeeting" [value]="false" [(ngModel)]="tender.preBidMeeting"> No</label>
+          </fieldset>
+
+          <!-- Pre Bid Meeting Address -->
+          <label class="field">
+            <span>Pre Bid Meeting Address</span>
+            <input type="text" name="preBidMeetingAddress" [(ngModel)]="tender.preBidMeetingAddress" placeholder="Enter meeting address">
+          </label>
+        </div>
+      </div>
+
+      <!-- ==================== TENDER SCHEDULE BOX ==================== -->
+      <div class="tender-section-box">
+        <div class="tender-section-box-header">
+          <label class="tender-section-box-title">
+            Tender Schedule
+          </label>
+        </div>
+
+        <div class="form-grid" [class.subwork-5-col]="isSubWorkContext">
+          <!-- ROW 9: Schedule Row 1 (3 Cols) -->
+          <label class="field">
+            <span>Tender Publishing Date and Time <span class="required">*</span></span>
+            <input type="datetime-local" name="tenderPublishingDateTime" [(ngModel)]="tender.tenderPublishingDateTime" required>
+          </label>
+
+          <label class="field">
+            <span>Document Download Start Date and Time <span class="required">*</span></span>
+            <input type="datetime-local" name="documentDownloadStartDateTime" [(ngModel)]="tender.documentDownloadStartDateTime" required>
+          </label>
+
+          <label class="field">
+            <span>Seek Clarification Start Date and Time <span class="required">*</span></span>
+            <input type="datetime-local" name="seekClarificationStartDateTime" [(ngModel)]="tender.seekClarificationStartDateTime" required>
+          </label>
+
+          <!-- ROW 10: Schedule Row 2 (3 Cols) -->
+          <label class="field">
+            <span>Seek Clarification End Date and Time <span class="required">*</span></span>
+            <input type="datetime-local" name="seekClarificationEndDateTime" [(ngModel)]="tender.seekClarificationEndDateTime" [attr.min]="tender.seekClarificationStartDateTime || null" required>
+          </label>
+
+          <label class="field">
+            <span>Bid-Sub Start Date and Time <span class="required">*</span></span>
+            <input type="datetime-local" name="bidSubmissionStartDateTime" [(ngModel)]="tender.bidSubmissionStartDateTime" required>
+          </label>
+
+          <label class="field">
+            <span>Bid-Sub End Date and Time <span class="required">*</span></span>
+            <input type="datetime-local" name="bidSubmissionEndDateTime" [(ngModel)]="tender.bidSubmissionEndDateTime" [attr.min]="tender.bidSubmissionStartDateTime || null" required>
+          </label>
+
+          <!-- ROW 11: Schedule Row 3 -->
+          <label class="field">
+            <span>Bid Opening Date and Time <span class="required">*</span></span>
+            <input type="datetime-local" name="bidOpeningDateTime" [(ngModel)]="tender.bidOpeningDateTime" required>
+          </label>
+        </div>
       </div>
 
       <!-- Loading Dropdown Values Feedback (Matching Image 3) -->
       <p class="feedback loading" *ngIf="mastersLoading || loadingRecord">
         {{ loadingRecord ? 'Loading record...' : 'Loading dropdown values...' }}
       </p>
-
-      <!-- Inline Feedback / Status -->
-      <div class="inline-snackbar-wrapper" *ngIf="error || success">
-        <div class="snackbar-pill" [ngClass]="error ? 'snackbar-error' : 'snackbar-success'">
-          <div class="snackbar-left">
-            <span class="bullet-dot">•</span>
-            <span class="snackbar-message">{{ error || success }}</span>
-          </div>
-          <button *ngIf="error" class="retry-button" type="button" (click)="loadMasters()">Retry dropdowns</button>
-        </div>
-      </div>
 
       <!-- Action Buttons (Save & Cancel Matching Image 3) -->
       <div class="form-actions">
@@ -270,17 +455,33 @@
               <th>Publishing Date</th>
               <th style="text-align: center;">BOQ</th>
               <th style="text-align: center;">Docs</th>
-              <th>NIT</th>
-              <th>DTCN</th>
-              <th>Other</th>
+              <th style="text-align: center;">Pre-tender Details</th>
               <th class="actions-header">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let row of savedTenders">
-              <td>{{ row.id }}</td>
-              <td class="font-bold">{{ row.tenderReferenceNumber }}</td>
-              <td>{{ row.parentWorkNumber || '—' }}</td>
+              <td class="font-bold">
+                <a href="javascript:void(0)" (click)="openPretenderDetailsModal(row)" style="color: #0d6efd; font-weight: 700; text-decoration: underline; cursor: pointer;" title="View complete Sub Work, Work & Tender details">
+                  #{{ row.id }}
+                </a>
+              </td>
+              <td class="font-bold">
+                <a href="javascript:void(0)" (click)="openPretenderDetailsModal(row)" style="color: #0f2744; text-decoration: underline; cursor: pointer;" title="View complete Sub Work, Work & Tender details">
+                  {{ row.tenderReferenceNumber }}
+                </a>
+              </td>
+              <td>
+                <ng-container *ngIf="row.parentWorkNumber; else noWork">
+                  <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                    <span *ngFor="let p of (row.parentWorkNumber.includes(',') ? row.parentWorkNumber.split(',') : [row.parentWorkNumber])"
+                          style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; border-radius: 4px; padding: 2px 6px; font-size: 11px; font-weight: 600; white-space: nowrap;">
+                      {{ p.trim() }}
+                    </span>
+                  </div>
+                </ng-container>
+                <ng-template #noWork>—</ng-template>
+              </td>
               <td>{{ row.procurementType }}</td>
               <td>{{ row.tenderType }}</td>
               <td>{{ row.tenderCategory }}</td>
@@ -299,29 +500,43 @@
                   <span>Docs</span>
                 </button>
               </td>
-              <td>
-                <a *ngIf="row.nitFileName" [href]="fileUrl(row.nitFileName)" target="_blank" class="doc-link">Download</a>
-                <span *ngIf="!row.nitFileName">—</span>
+              <!-- Pre-tender Details (Matches Image 1) -->
+              <td style="text-align: center;">
+                <button
+                  type="button"
+                  class="table-pill-btn ptd-pill-btn"
+                  (click)="openPretenderDetailsModal(row)"
+                  title="View Pre-Tender details"
+                  style="background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 12px; padding: 4px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600;">
+                  <span class="material-icons" style="font-size: 15px;">visibility</span>
+                  <span>View Details</span>
+                </button>
               </td>
-              <td>
-                <a *ngIf="row.dtcnFileName" [href]="fileUrl(row.dtcnFileName)" target="_blank" class="doc-link">Download</a>
-                <span *ngIf="!row.dtcnFileName">—</span>
-              </td>
-              <td>
-                <a *ngIf="row.otherFileName" [href]="fileUrl(row.otherFileName)" target="_blank" class="doc-link">Download</a>
-                <span *ngIf="!row.otherFileName">—</span>
-              </td>
-              <td class="action-cell">
+              <td class="action-cell" style="white-space: nowrap;">
                 <button type="button" class="action-btn edit-btn" (click)="editTender(row.id)" title="Edit Tender">
                   Edit
                 </button>
-                <button type="button" class="action-btn delete-btn" (click)="deleteTender(row)" title="Delete Tender">
+                <button
+                  type="button"
+                  class="action-btn delete-btn"
+                  *ngIf="row.pushStatus !== 'PUSHED_TO_GEPNIC'"
+                  (click)="deleteTender(row)"
+                  title="Delete Tender">
                   Delete
+                </button>
+                <button
+                  type="button"
+                  class="action-btn push-btn"
+                  (click)="pushTenderToGepnic(row)"
+                  [disabled]="pushingTenderId === row.id"
+                  title="Push Tender to GePNIC">
+                  <span class="material-icons" style="font-size: 13px; vertical-align: middle;">send</span>
+                  {{ row.pushStatus === 'PUSHED_TO_GEPNIC' ? 'Pushed' : 'Push to GePNIC' }}
                 </button>
               </td>
             </tr>
             <tr *ngIf="savedTenders.length === 0">
-              <td colspan="13" class="empty-cell">No tenders found. Switch to "Add" tab to create one.</td>
+              <td colspan="11" class="empty-cell">No tenders found. Switch to "Add" tab to create one.</td>
             </tr>
           </tbody>
         </table>
@@ -365,13 +580,8 @@
 
       <!-- Modal Body -->
       <div class="modal-custom-body">
-        <!-- Multiple Files Drag & Drop Zone -->
-        <div class="docs-dropzone" (dragover)="onDragOver($event)" (drop)="onFilesDropped($event)" (click)="docsFileInput.click()">
-          <span class="material-icons dropzone-icon">drive_folder_upload</span>
-          <div class="dropzone-primary-text">Click to choose files or drag & drop multiple documents here</div>
-          <div class="dropzone-hint">Supports PDF, DOC, DOCX, XLS, XLSX, ZIP, DWG (Select multiple files at once)</div>
-          <input type="file" #docsFileInput multiple style="display: none;" (change)="onMultipleDocsSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.dwg,.csv">
-        </div>
+        <!-- Hidden File Input for Document Selection -->
+        <input type="file" #docsFileInput multiple style="display: none;" (change)="onMultipleDocsSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.dwg,.csv">
 
         <!-- Default Category Selector for new uploads -->
         <div class="docs-category-bar">
@@ -449,7 +659,12 @@
                   <a [href]="fileUrl(doc.name)" target="_blank" class="existing-download-link" title="Download">
                     <span class="material-icons" style="font-size: 14px;">download</span> Download
                   </a>
-                  <button type="button" class="existing-delete-btn" (click)="deleteExistingDoc(doc)" title="Delete">
+                  <button
+                    type="button"
+                    class="existing-delete-btn"
+                    *ngIf="selectedTenderForDocs?.pushStatus !== 'PUSHED_TO_GEPNIC'"
+                    (click)="deleteExistingDoc(doc)"
+                    title="Delete">
                     <span class="material-icons" style="font-size: 14px;">delete</span>
                   </button>
                 </td>
@@ -465,6 +680,295 @@
       <!-- Modal Footer -->
       <div class="modal-custom-footer">
         <button type="button" class="primary-button" (click)="closeDocsModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRE-TENDER, WORK & SUB WORK DETAILS MODAL DIALOG ==================== -->
+  <div class="custom-modal-backdrop" *ngIf="showPretenderDetailsModal" (click)="closePretenderDetailsModal()">
+    <div class="custom-modal-dialog pretender-details-modal-dialog" style="max-width: 900px; width: 95%; background: #ffffff; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden;" (click)="$event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="modal-custom-header" style="background: var(--wamis-navy, #0f2c59); color: #ffffff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div class="modal-title" style="font-size: 16px; font-weight: 700; color: #ffffff;">
+          Sub Work, Work & Tender Reference Details
+        </div>
+        <button type="button" class="modal-close-cross" (click)="closePretenderDetailsModal()" matTooltip="Close" style="background: none; border: none; color: #ffffff; font-size: 22px; cursor: pointer; line-height: 1;">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-custom-body" style="padding: 18px 24px; max-height: 82vh; overflow-y: auto; background: #ffffff;">
+
+        <!-- Key Identification Strip -->
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 6px; padding: 12px 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: #166534; font-weight: 700; letter-spacing: 0.04em;">Tender Reference ID</div>
+            <div style="font-size: 16px; font-weight: 800; color: #14532d;">{{ selectedPretenderDetails?.tenderReferenceNumber || 'CE/PWD/PUNE/2026/089' }}</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: #166534; font-weight: 700; letter-spacing: 0.04em;">Unique File / Sub Work Ref</div>
+            <div style="font-size: 14px; font-weight: 700; color: #15803d;">{{ selectedPretenderDetails?.parentWorkNumber || '2026100014/1' }}</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: #166534; font-weight: 700; letter-spacing: 0.04em;">Procurement Type</div>
+            <div style="font-size: 14px; font-weight: 700; color: #15803d;">{{ selectedPretenderDetails?.procurementType || selectedPretenderDetails?.tenderType || 'Open Tender' }}</div>
+          </div>
+        </div>
+
+        <!-- 1. Complete Sub Work Details Section (Packaged Sub Works) -->
+        <div class="ptd-section-header" style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13.5px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+          Sub Work Details (Packaged Sub Works)
+        </div>
+        <div style="border: 1px solid #d0dfe8; border-radius: 4px; overflow-x: auto; margin-bottom: 20px;">
+          <table class="wamis-table" style="margin-bottom: 0; min-width: 820px; width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #e0f2fe; color: #0f2744;">
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; white-space: nowrap;">Sub Work Reg. No.</th>
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; min-width: 280px;">Sub Work Name</th>
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; white-space: nowrap;">Work Category</th>
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; white-space: nowrap; text-align: center;">Stipulated Start Date</th>
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; white-space: nowrap; text-align: center;">Stipulated End Date</th>
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; white-space: nowrap; text-align: center;">Actual Start Date</th>
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; white-space: nowrap; text-align: center;">Actual End Date</th>
+                <th style="padding: 10px 12px; font-size: 12px; font-weight: 700; white-space: nowrap; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sw of getLinkedSubWorksForDetails(selectedPretenderDetails)">
+                <td style="padding: 8px 12px; font-weight: 700; color: #0f4a74; white-space: nowrap;">
+                  {{ sw.registrationNumber }}
+                </td>
+                <td style="padding: 8px 12px; font-size: 12px; color: #1e293b; line-height: 1.4; word-break: break-word;">
+                  {{ sw.subWorkName }}
+                </td>
+                <td style="padding: 8px 12px; font-size: 12px; white-space: nowrap;">
+                  {{ sw.workCategory }}
+                </td>
+                <td style="padding: 8px 12px; text-align: center; font-size: 12px; white-space: nowrap;">
+                  {{ sw.stipulatedStartDate || '-' }}
+                </td>
+                <td style="padding: 8px 12px; text-align: center; font-size: 12px; white-space: nowrap;">
+                  {{ sw.stipulatedEndDate || '-' }}
+                </td>
+                <td style="padding: 8px 12px; text-align: center; font-size: 12px; white-space: nowrap;">
+                  {{ sw.startDate || '-' }}
+                </td>
+                <td style="padding: 8px 12px; text-align: center; font-size: 12px; white-space: nowrap;">
+                  {{ sw.endDate || '-' }}
+                </td>
+                <td style="padding: 8px 12px; text-align: center; font-size: 12px; font-weight: 600; color: #15803d; white-space: nowrap;">
+                  Active
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 2. Work Item Details Section -->
+        <div class="ptd-section-header" style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13.5px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+          Work Item Details
+        </div>
+        <table class="ptd-table" style="width: 100%; border-collapse: collapse; margin-bottom: 18px;">
+          <tbody>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Work Number</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f4a74; width: 25%; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.parentWorkNumber || selectedPretenderDetails?.parentWorkId || '2026100014' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender Value</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #047857; width: 25%; border: 1px solid #e2e8f0;">₹ {{ (selectedPretenderDetails?.tenderFee ? selectedPretenderDetails?.tenderFee * 500 : 39748169) | number }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Work Description</td>
+              <td class="ptd-value" colspan="3" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; line-height: 1.45; border: 1px solid #e2e8f0;">
+                {{ selectedPretenderDetails?.parentWorkDescription || 'Improvement of Banapur main canal Antarkiyari-Kosarada road in the Dist. of Khordha under Special Central Assistance to States Capital Expenditure (CAPEX) for the year 2022-23' }}
+              </td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Tender Category</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.tenderCategory || 'Works' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Product Category</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.workItemProductCategory || 'Civil Works - Roads' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Bid Validity Days</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.bidValidityDays || 90 }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Delivery Period Days</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.deliveryPeriodDays || 365 }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Pre Bid Meeting Address</td>
+              <td class="ptd-value" colspan="3" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">
+                {{ selectedPretenderDetails?.preBidMeetingAddress || 'O/o CCE CRWC BBSR / Superintending Engineer Office, PWD Circle Pune' }}
+              </td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Tenderer Class</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.tendererClass || 'A or equivalent' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">PIN Code</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">751013</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 3. Tender Basic Details Section -->
+        <div class="ptd-section-header" style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13.5px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+          Tender Basic Details
+        </div>
+        <table class="ptd-table" style="width: 100%; border-collapse: collapse; margin-bottom: 18px;">
+          <tbody>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Unique File Number</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; width: 25%; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.parentWorkNumber || '2026100014/1' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender Reference Number</td>
+              <td class="ptd-value font-bold" style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; width: 25%; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.tenderReferenceNumber || 'CE/PWD/PUNE/2026/089' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Tender Type</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.procurementType || selectedPretenderDetails?.tenderType || 'National Competitive Bid' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Form of contract</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.formOfContract || 'Percentage' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">No. of Covers</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.numberOfCovers || '2' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Tender Category</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedPretenderDetails?.tenderCategory || 'Works' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 4. Tender Fee Details Section -->
+        <div class="ptd-section-header" style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13.5px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+          Tender Fee Details
+        </div>
+        <table class="ptd-table" style="width: 100%; border-collapse: collapse; margin-bottom: 18px;">
+          <tbody>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender Fee (₹)</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; width: 25%; border: 1px solid #e2e8f0;">₹ {{ (selectedPretenderDetails?.tenderFee || 10000) | number }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender EMD Fee (₹)</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #047857; width: 25%; border: 1px solid #e2e8f0;">₹ {{ (selectedPretenderDetails?.tenderEmdFee || 397482) | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 5. Tender Critical Dates Section -->
+        <div class="ptd-section-header" style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13.5px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+          Tender Critical Dates
+        </div>
+        <table class="ptd-table" style="width: 100%; border-collapse: collapse;">
+          <tbody>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender Publish Date & Time</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; width: 25%; border: 1px solid #e2e8f0;">{{ (selectedPretenderDetails?.tenderPublishingDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2026 18:00:00' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Document Download Start Date & Time</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; width: 25%; border: 1px solid #e2e8f0;">{{ (selectedPretenderDetails?.documentDownloadStartDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2026 18:00:00' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Seek Clarification Start Date & Time</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ (selectedPretenderDetails?.seekClarificationStartDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2026 18:00:00' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Seek Clarification End Date & Time</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ (selectedPretenderDetails?.seekClarificationEndDateTime | date:'dd/MM/yyyy HH:mm:ss') || '27/02/2026 15:00:00' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Bid Sub Start Date & Time</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ (selectedPretenderDetails?.bidSubmissionStartDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2026 18:00:00' }}</td>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Bid Sub End Date & Time</td>
+              <td class="ptd-value" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ (selectedPretenderDetails?.bidSubmissionEndDateTime | date:'dd/MM/yyyy HH:mm:ss') || '28/02/2026 17:00:00' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label" style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Bid Open Date & Time</td>
+              <td class="ptd-value" colspan="3" style="padding: 8px 12px; font-size: 12.5px; font-weight: 600; color: #0f2744; border: 1px solid #e2e8f0;">{{ (selectedPretenderDetails?.bidOpeningDateTime | date:'dd/MM/yyyy HH:mm:ss') || '01/03/2026 11:00:00' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-custom-footer" style="padding: 12px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; text-align: right;">
+        <button type="button" class="primary-button" (click)="closePretenderDetailsModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SUB WORK & TENDER REFERENCE MODAL DIALOG ==================== -->
+  <div class="custom-modal-backdrop" *ngIf="showSubWorkModal" (click)="closeSubWorkModal()">
+    <div class="custom-modal-dialog" style="max-width: 720px; width: 92%; background: #ffffff; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden;" (click)="$event.stopPropagation()">
+      <!-- Modal Header -->
+      <div style="background: var(--wamis-navy, #0f2c59); color: #ffffff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 15px; font-weight: 700; color: #ffffff;">
+          Sub Work & Tender Reference Details
+        </div>
+        <button type="button" (click)="closeSubWorkModal()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; line-height: 1;">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div style="padding: 18px 22px; max-height: 80vh; overflow-y: auto; background: #ffffff;" *ngIf="selectedSubWorkModalItem">
+        <!-- Sub Work Details Section -->
+        <div style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+          Sub Work Specifications
+        </div>
+        <table class="ptd-table" style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+          <tbody>
+            <tr>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Registration Number</td>
+              <td style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f4a74; width: 25%; border: 1px solid #e2e8f0;">{{ selectedSubWorkModalItem.registrationNumber }}</td>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Work Category</td>
+              <td style="padding: 8px 12px; font-weight: 600; font-size: 12.5px; color: #1e293b; width: 25%; border: 1px solid #e2e8f0;">{{ selectedSubWorkModalItem.workCategory }}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Sub Work Name</td>
+              <td colspan="3" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; line-height: 1.45; border: 1px solid #e2e8f0;">
+                {{ selectedSubWorkModalItem.subWorkName }}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Stipulated Start Date</td>
+              <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkModalItem.stipulatedStartDate || '-' }}</td>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Stipulated End Date</td>
+              <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkModalItem.stipulatedEndDate || '-' }}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Actual Start Date</td>
+              <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkModalItem.startDate || '-' }}</td>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Actual End Date</td>
+              <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkModalItem.endDate || '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Tender & Parent Work Reference Section -->
+        <div style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+          Tender Reference & Work Context
+        </div>
+        <table class="ptd-table" style="width: 100%; border-collapse: collapse;">
+          <tbody>
+            <tr>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender Reference ID</td>
+              <td style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; width: 25%; border: 1px solid #e2e8f0;">{{ tender.tenderReferenceNumber || 'CE/PWD/PUNE/2026/089' }}</td>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender Category</td>
+              <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; width: 25%; border: 1px solid #e2e8f0;">{{ getTenderCategoryLabel() }}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Packaged Works</td>
+              <td colspan="3" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; line-height: 1.45; border: 1px solid #e2e8f0;">
+                {{ tender.parentWorkNumber || selectedSubWorkModalItem.registrationNumber }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="padding: 12px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+        <button type="button" class="primary-button" (click)="closeSubWorkModal()">
           Close
         </button>
       </div>

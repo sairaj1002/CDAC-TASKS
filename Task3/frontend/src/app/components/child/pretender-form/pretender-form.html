@@ -1,0 +1,244 @@
+<div class="wamis-subwork-container">
+  <!-- Title Banner matching Screenshot 2 -->
+  <div class="wamis-topbar">
+    <span class="wamis-topbar-title">
+      {{ isEditMode ? 'Edit Pre-Tender Record: ' + formData.tenderReferenceNo : 'New Pre-Tender (Procurement) Registration' }}
+    </span>
+  </div>
+
+  <div class="component-details-panel">
+    <p class="wamis-dialog-subtitle">
+      Fields marked with an asterisk <span class="required">*</span> are mandatory for GePNIC submission.
+    </p>
+
+    <!-- SECTION 1: WORK & BASIC DETAILS -->
+    <h3 class="wamis-section-title">1. Work & Basic Information</h3>
+    <div class="wamis-wms-form-grid">
+      <!-- Unique File No -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Unique File Number <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.uniqueFileNo" placeholder="e.g. 3/9434/1" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Tender Reference Number -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Tender Reference Number <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.tenderReferenceNo" placeholder="e.g. Tender Online CC 05 of 2026" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Tender Type (Backend Master Dropdown) -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Tender Type <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="formData.tenderType">
+            <mat-option *ngFor="let opt of tenderTypes" [value]="opt.displayName">
+              {{ opt.displayName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Form of Contract (Backend Master Dropdown) -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Form of Contract <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="formData.formContract">
+            <mat-option *ngFor="let opt of formsOfContract" [value]="opt.displayName">
+              {{ opt.displayName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Tender Category (Backend Master Dropdown) -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Tender Category <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="formData.category">
+            <mat-option *ngFor="let opt of tenderCategories" [value]="opt.displayName">
+              {{ opt.displayName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Product Category (Backend Master Dropdown) -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Product Category</label>
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="formData.location">
+            <mat-option *ngFor="let opt of productCategories" [value]="opt.displayName">
+              {{ opt.displayName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Number of Covers -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">No. of Covers <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" [(ngModel)]="formData.coversCount" min="1" max="4" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Bid Openers (Backend Master Dropdown) -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Bid Openers</label>
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="formData.bidOpeners">
+            <mat-option *ngFor="let opt of bidOpenersList" [value]="opt.displayName">
+              {{ opt.displayName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Title and Description (Span Full Width) -->
+    <div class="wamis-wms-form-grid">
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Work Description / Title <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <textarea matInput [(ngModel)]="formData.tenderTitle" rows="2" placeholder="Detailed work description..." required></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- SECTION 2: FINANCIAL & ESTIMATE DETAILS -->
+    <h3 class="wamis-section-title">2. Financial & Estimate Details</h3>
+    <div class="wamis-wms-form-grid">
+      <!-- Tender Value -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Tender Estimated Value (Rs.) <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" [(ngModel)]="formData.tenderValue" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Fee Amount -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Tender Fee (Rs.) <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" [(ngModel)]="formData.feeAmount" required />
+        </mat-form-field>
+      </div>
+
+      <!-- EMD Amount -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">EMD Fee (Rs.) <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" [(ngModel)]="formData.emdAmount" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Tenderer Class (Backend Master Dropdown) -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Tenderer Class</label>
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="formData.tendererClass">
+            <mat-option *ngFor="let opt of tendererClasses" [value]="opt.displayName">
+              {{ opt.displayName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- SECTION 3: CRITICAL DATES -->
+    <h3 class="wamis-section-title">3. Critical Tender Dates & Deadlines</h3>
+    <div class="wamis-wms-form-grid">
+      <!-- Publishing Date -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Publishing Date & Time <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.publishingDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Document Download Start Date -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Doc Download Start <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.docDownloadStartDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Bid Submission Start Date -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Bid Submission Start <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.bidSubmissionStartDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Bid Submission End Date -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Bid Submission End <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.bidSubmissionEndDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Bid Open Date -->
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Bid Opening Date <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.bidOpenDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- SECTION 4: INVITING OFFICER & LOCATION -->
+    <h3 class="wamis-section-title">4. Inviting Officer & Office Location</h3>
+    <div class="wamis-wms-form-grid">
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Inviting Officer <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.invitingOfficer" required />
+        </mat-form-field>
+      </div>
+
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Inviting Officer Address <span class="required">*</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="formData.invitingOfficerAddress" required />
+        </mat-form-field>
+      </div>
+
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">PIN Code</label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" [(ngModel)]="formData.pincode" />
+        </mat-form-field>
+      </div>
+
+      <div class="wamis-wms-field">
+        <label class="wamis-wms-label">Bid Validity Days</label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" [(ngModel)]="formData.bidValidityDays" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="wamis-dialog-actions">
+      <button type="button" class="btn-dialog-ok" (click)="onSubmit()" [disabled]="saving">
+        {{ saving ? 'Saving...' : (isEditMode ? 'Update Pre-Tender' : 'Save Pre-Tender') }}
+      </button>
+
+      <button *ngIf="isEditMode" type="button" class="wamis-btn-secondary" (click)="onValidate()">
+        Validate Business Rules
+      </button>
+
+      <button type="button" class="btn-dialog-cancel" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+

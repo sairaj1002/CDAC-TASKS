@@ -172,18 +172,35 @@
       message="To be built in future">
     </app-empty-tab>
 
+    <!-- ============================================================== -->
+    <!-- TAB: SCOPE (Positioned after Work Type, with Dropdown Selector) -->
+    <!-- ============================================================== -->
+    <div *ngIf="activeSecondaryTab === 'Scope'" class="wamis-child-section" style="margin-bottom: 24px;">
+      <!-- Scope Selector Control (Dropdown without icon & without switcher buttons) -->
+      <div style="background: #ffffff; border: 1px solid #d0dfe8; border-radius: 4px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: flex-start;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <label style="font-size: 14px; font-weight: 700; color: #0f2744;">
+            Select Scope Category :
+          </label>
+          <select
+            [(ngModel)]="selectedScopeType"
+            style="min-width: 220px; height: 38px; border: 1.5px solid #0f4a74; border-radius: 4px; padding: 0 12px; font-size: 13.5px; font-weight: 600; color: #0f2744; background: #f8fafc; cursor: pointer; outline: none;">
+            <option value="">Select scope category</option>
+            <option *ngFor="let opt of scopeOptions" [value]="opt">{{ opt }}</option>
+          </select>
+        </div>
+      </div>
 
-    <!-- ============================================================== -->
-    <!-- TAB 6: PRETENDER (Renamed from Tender, 4-5 items per row)      -->
-    <!-- ============================================================== -->
-    <div *ngIf="activeSecondaryTab === 'Pretender'" class="wamis-child-section" style="margin-bottom: 20px;">
-      <app-pretender-form
-        [isSubWorkContext]="true"
-        [parentWorkId]="formData.registrationNumber || 'SW-001'"
-        [parentWorkNumber]="formData.subWorkNumber || 'SWRN-2026-0001'"
-        [parentWorkDescription]="formData.subWorkDescription || formData.work">
-      </app-pretender-form>
+      <!-- Dynamically Loaded Scope Component (Nothing visible until an option is selected) -->
+      <div *ngIf="selectedScopeType" class="scope-component-host" style="background: #ffffff; border: 1px solid #d0dfe8; border-radius: 4px; padding: 16px;">
+        <app-road-component *ngIf="selectedScopeType === 'Road'"></app-road-component>
+        <app-bridge-component *ngIf="selectedScopeType === 'Bridge'"></app-bridge-component>
+        <app-building *ngIf="selectedScopeType === 'Building'"></app-building>
+        <app-others *ngIf="selectedScopeType === 'Others'"></app-others>
+      </div>
     </div>
+
+
 
         <!-- ============================================================== -->
     <!-- TAB 7: AWARDING (Exact match to User Image)                    -->
@@ -410,61 +427,49 @@
   <!-- View Tab View: Matches Image 2 (Sub Work View with Pale Blue Header and Icons) -->
   <div *ngIf="primaryTab === 'View'" style="background: #ffffff; padding: 14px 18px 24px; border: 1px solid #d0dfe8; border-radius: 4px;">
     <div class="wamis-table-container" style="margin-bottom: 0; border: 1px solid #d0dfe8;">
-      <table class="wamis-table" style="margin-bottom: 0; min-width: 1400px;">
+      <table class="wamis-table" style="margin-bottom: 0; min-width: 1200px; width: 100%; border-collapse: collapse;">
         <thead>
           <tr style="background-color: #e0f2fe; color: #0f2744;">
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Registration<br/>Number</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 250px;">Sub Work Name</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Work Category</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Stipulated Start<br/>Date</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Stipulated End<br/>Date</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Start Date</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">End Date</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px;">Contractor<br/>Name</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">Agreement Amt.<br/>(₹)</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">GST Agreement<br/>Amt. (₹)</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: right;">Progressive<br/>Expenditure (₹)</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Action</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Close</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Audit Details</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Report</th>
-            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center;">Attachments</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 140px; white-space: nowrap;">Registration<br/>Number</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 380px;">Sub Work Name</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 180px; white-space: nowrap;">Work Category</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 130px; white-space: nowrap;">Stipulated Start<br/>Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 130px; white-space: nowrap;">Stipulated End<br/>Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 110px; white-space: nowrap;">Start Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; min-width: 110px; white-space: nowrap;">End Date</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center; min-width: 90px; white-space: nowrap;">Action</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center; min-width: 70px;">Close</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center; min-width: 100px;">Audit Details</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center; min-width: 70px;">Report</th>
+            <th style="background-color: #e0f2fe; color: #0f2744; font-weight: 700; font-size: 13px; padding: 12px 14px; text-align: center; min-width: 100px;">Attachments</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of subWorkRecords">
             <!-- Registration Number (blue link) -->
-            <td>
-              <a href="javascript:void(0)" style="color: #0d6efd; font-weight: 600; text-decoration: none;">
+            <td style="white-space: nowrap;">
+              <a href="javascript:void(0)" (click)="openSubWorkDetails(row)" style="color: #0d6efd; font-weight: 600; text-decoration: underline; cursor: pointer;" title="View Sub Work & Work Details">
                 {{ row.registrationNumber }}
               </a>
             </td>
 
-            <!-- Sub Work Name -->
-            <td style="font-size: 12.5px; color: #1e293b; max-width: 320px;">
+            <!-- Sub Work Name (Allows clean multi-line wrapping and prevents column overflow) -->
+            <td style="font-size: 12.5px; color: #1e293b; min-width: 380px; max-width: 460px; white-space: normal !important; word-break: break-word !important; line-height: 1.5;">
               {{ row.subWorkName }}
             </td>
 
             <!-- Work Category -->
-            <td style="font-size: 12.5px;">
+            <td style="font-size: 12.5px; min-width: 180px; white-space: nowrap;">
               {{ row.workCategory }}
             </td>
 
             <!-- Stipulated Dates -->
-            <td style="text-align: center;">{{ row.stipulatedStartDate ? (row.stipulatedStartDate | date:'dd-MM-yyyy') : '' }}</td>
-            <td style="text-align: center;">{{ row.stipulatedEndDate ? (row.stipulatedEndDate | date:'dd-MM-yyyy') : '' }}</td>
+            <td style="text-align: center; white-space: nowrap;">{{ row.stipulatedStartDate ? (row.stipulatedStartDate | date:'dd-MM-yyyy') : '' }}</td>
+            <td style="text-align: center; white-space: nowrap;">{{ row.stipulatedEndDate ? (row.stipulatedEndDate | date:'dd-MM-yyyy') : '' }}</td>
 
             <!-- Start / End Date -->
-            <td style="text-align: center;">{{ row.startDate }}</td>
-            <td style="text-align: center;">{{ row.endDate }}</td>
-
-            <!-- Contractor Name -->
-            <td>{{ row.contractorName || '-' }}</td>
-
-            <!-- Financials -->
-            <td style="text-align: right; font-weight: 500;">{{ row.agreementAmt | number:'1.2-2' }}</td>
-            <td style="text-align: right; font-weight: 500;">{{ row.gstAgreementAmt | number:'1.2-2' }}</td>
-            <td style="text-align: right; font-weight: 500;">{{ row.progressiveExpenditure | number:'1.2-2' }}</td>
+            <td style="text-align: center; white-space: nowrap;">{{ row.startDate }}</td>
+            <td style="text-align: center; white-space: nowrap;">{{ row.endDate }}</td>
 
             <!-- Action: Blue Edit Pen + Red Delete Trash -->
             <td style="text-align: center; white-space: nowrap;">
@@ -506,6 +511,99 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Sub Work & Work Details Modal Dialog (Opened by clicking ID / Registration Number) -->
+    <div class="custom-modal-backdrop" *ngIf="showSubWorkDetailsModal" (click)="closeSubWorkDetails()">
+      <div class="custom-modal-dialog" style="max-width: 750px; width: 92%; background: #ffffff; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden;" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div style="background: var(--wamis-navy, #0f2c59); color: #ffffff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+            <span>Sub Work & Work Details</span>
+          </div>
+          <button type="button" (click)="closeSubWorkDetails()" style="background: none; border: none; color: #ffffff; cursor: pointer; font-size: 20px; line-height: 1;">&times;</button>
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 18px 22px; max-height: 80vh; overflow-y: auto; background: #ffffff;" *ngIf="selectedSubWorkView">
+          <!-- 1. Sub Work Details Section -->
+          <div style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+            Sub Work Details
+          </div>
+          <table class="ptd-table" style="width: 100%; border-collapse: collapse; margin-bottom: 18px;">
+            <tbody>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Registration Number</td>
+                <td style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f4a74; width: 25%; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.registrationNumber }}</td>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Work Category</td>
+                <td style="padding: 8px 12px; font-weight: 600; font-size: 12.5px; color: #1e293b; width: 25%; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.workCategory }}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Sub Work Name</td>
+                <td colspan="3" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; line-height: 1.45; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.subWorkName }}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Stipulated Start Date</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.stipulatedStartDate || '-' }}</td>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Stipulated End Date</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.stipulatedEndDate || '-' }}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Actual Start Date</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.startDate || '-' }}</td>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Actual End Date</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.endDate || '-' }}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Status</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; font-weight: 600; color: #15803d; border: 1px solid #e2e8f0;">{{ selectedSubWorkView.status || 'Active' }}</td>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Audit Status</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">Verified & Compliant</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 2. Work & Tender Reference Details Section -->
+          <div style="background: #f1f5f9; padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; border-left: 4px solid #0f4a74; margin-bottom: 10px;">
+            Work & Tender Reference Details
+          </div>
+          <table class="ptd-table" style="width: 100%; border-collapse: collapse;">
+            <tbody>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Tender Reference ID</td>
+                <td style="padding: 8px 12px; font-weight: 700; font-size: 13px; color: #0f2744; width: 25%; border: 1px solid #e2e8f0;">{{ linkedTenderReferenceId }}</td>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; width: 25%; border: 1px solid #e2e8f0;">Parent Work Number</td>
+                <td style="padding: 8px 12px; font-weight: 600; font-size: 12.5px; color: #1e293b; width: 25%; border: 1px solid #e2e8f0;">2026100014</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Parent Work Description</td>
+                <td colspan="3" style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; line-height: 1.45; border: 1px solid #e2e8f0;">
+                  Improvement, repair, renovation and infrastructure strengthening works under Special Central Assistance to States Capital Expenditure (CAPEX) for the year 2026-27
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Division Office</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">O/o Executive Engineer, PWD Pune Circle</td>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">District</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">Pune</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Scheme</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">Mukhya Mantri Gram Sadak Yojana (MMGSY)</td>
+                <td style="padding: 8px 12px; background: #f8fafc; font-weight: 600; font-size: 12.5px; color: #475569; border: 1px solid #e2e8f0;">Asset</td>
+                <td style="padding: 8px 12px; font-size: 12.5px; color: #1e293b; border: 1px solid #e2e8f0;">State Highway SH-27 / Administrative Complex</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 12px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+          <button type="button" class="wamis-btn-primary" (click)="closeSubWorkDetails()">
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

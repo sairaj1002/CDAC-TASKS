@@ -1,23 +1,14 @@
 <div class="tender-push-page">
   <div class="wamis-section-title">
-    GePNIC Tender Push & Document Repository
+    Pretender
   </div>
 
-  <!-- Primary Tabs Bar (View Tenders [Default] | Create & Push Tender) -->
+  <!-- Primary Tabs Bar (PreTender) -->
   <div class="wamis-primary-tabs" style="margin-bottom: 20px;">
     <button type="button"
-            class="wamis-primary-tab"
-            [class.active]="primaryTab === 'View'"
-            (click)="setPrimaryTab('View')"
-            matTooltip="View tenders repository and manage documents">
-      View Tenders
-    </button>
-    <button type="button"
-            class="wamis-primary-tab"
-            [class.active]="primaryTab === 'Add'"
-            (click)="setPrimaryTab('Add')"
-            matTooltip="Create and push new Tender to GePNIC">
-      Create & Push Tender
+            class="wamis-primary-tab active"
+            matTooltip="PreTender details and documents">
+      PreTender
     </button>
   </div>
 
@@ -37,9 +28,7 @@
               <th>Publishing Date</th>
               <th style="text-align: center;">BOQ</th>
               <th style="text-align: center;">Docs</th>
-              <th>NIT</th>
-              <th>DTCN</th>
-              <th>Other</th>
+              <th style="text-align: center;">Pre-tender Details</th>
               <th>GePNIC Status</th>
               <th class="actions-header" style="text-align: center;">Action</th>
             </tr>
@@ -74,18 +63,17 @@
                 </button>
               </td>
 
-              <!-- Documents Download Links -->
-              <td>
-                <a *ngIf="row.nitFileName" [href]="fileUrl(row.nitFileName)" target="_blank" class="doc-link">Download</a>
-                <span *ngIf="!row.nitFileName">—</span>
-              </td>
-              <td>
-                <a *ngIf="row.dtcnFileName" [href]="fileUrl(row.dtcnFileName)" target="_blank" class="doc-link">Download</a>
-                <span *ngIf="!row.dtcnFileName">—</span>
-              </td>
-              <td>
-                <a *ngIf="row.otherFileName" [href]="fileUrl(row.otherFileName)" target="_blank" class="doc-link">Download</a>
-                <span *ngIf="!row.otherFileName">—</span>
+              <!-- Pre-tender Details (Matches Image 1) -->
+              <td style="text-align: center;">
+                <button
+                  type="button"
+                  class="table-pill-btn ptd-pill-btn"
+                  (click)="openPretenderDetailsModal(row)"
+                  title="View Pre-Tender details"
+                  style="background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 12px; padding: 4px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600;">
+                  <span class="material-icons" style="font-size: 15px;">visibility</span>
+                  <span>View Details</span>
+                </button>
               </td>
 
               <!-- GePNIC Push Status Badge -->
@@ -99,6 +87,15 @@
               <td style="text-align: center; white-space: nowrap;">
                 <button
                   type="button"
+                  class="action-btn delete-btn"
+                  *ngIf="row.pushStatus !== 'PUSHED_TO_GEPNIC'"
+                  (click)="deleteTender(row)"
+                  title="Delete Tender"
+                  style="margin-right: 6px;">
+                  Delete
+                </button>
+                <button
+                  type="button"
                   class="action-btn push-btn"
                   (click)="pushTenderToGepnic(row)"
                   [disabled]="submitting"
@@ -110,7 +107,7 @@
             </tr>
 
             <tr *ngIf="tenders.length === 0">
-              <td colspan="14" class="empty-cell">No tenders found. Click "Create & Push Tender" to add one.</td>
+              <td colspan="12" class="empty-cell">No pre-tender records found.</td>
             </tr>
           </tbody>
         </table>
@@ -127,15 +124,6 @@
         <span class="material-icons">cloud_upload</span>
         <span>Document Upload</span>
       </button>
-
-      <button
-        type="button"
-        class="secondary-add-btn"
-        (click)="setPrimaryTab('Add')"
-        matTooltip="Switch to Tender Configuration & Push Form">
-        <span class="material-icons">add</span>
-        <span>Create New Tender</span>
-      </button>
     </div>
 
     <!-- GePNIC Push Result Payload Viewer -->
@@ -149,19 +137,7 @@
     </div>
   </div>
 
-  <!-- ==================== ADD TAB: TENDER PUSH FORM ==================== -->
-  <div *ngIf="primaryTab === 'Add'">
-    <app-tender-form [initialData]="initialTenderData" (formSubmit)="onFormSubmit($event)"></app-tender-form>
 
-    <div *ngIf="lastResult" style="margin-top: 24px;">
-      <app-request-response-viewer
-        [requestPayload]="requestPayload"
-        [responsePayload]="responsePayload"
-        [status]="lastResult.status"
-        [responseCode]="lastResult.responseCode || 1">
-      </app-request-response-viewer>
-    </div>
-  </div>
 
   <!-- ==================== BOQ MODAL DIALOG ==================== -->
   <div class="custom-modal-backdrop" *ngIf="showBoqModal" (click)="closeBoqModal()">
@@ -199,13 +175,8 @@
 
       <!-- Modal Body -->
       <div class="modal-custom-body">
-        <!-- Multiple Files Drag & Drop Zone -->
-        <div class="docs-dropzone" (dragover)="onDragOver($event)" (drop)="onFilesDropped($event)" (click)="docsFileInput.click()">
-          <span class="material-icons dropzone-icon">drive_folder_upload</span>
-          <div class="dropzone-primary-text">Click to choose files or drag & drop multiple documents here</div>
-          <div class="dropzone-hint">Supports PDF, DOC, DOCX, XLS, XLSX, ZIP, DWG (Select multiple files at once)</div>
-          <input type="file" #docsFileInput multiple style="display: none;" (change)="onMultipleDocsSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.dwg,.csv">
-        </div>
+        <!-- Hidden File Input for Multiple Document Upload -->
+        <input type="file" #docsFileInput multiple style="display: none;" (change)="onMultipleDocsSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.dwg,.csv">
 
         <!-- Default Category Selector for new uploads -->
         <div class="docs-category-bar">
@@ -283,7 +254,12 @@
                   <a [href]="fileUrl(doc.name)" target="_blank" class="existing-download-link" title="Download">
                     <span class="material-icons" style="font-size: 14px;">download</span> Download
                   </a>
-                  <button type="button" class="existing-delete-btn" (click)="deleteExistingDoc(doc)" title="Delete">
+                  <button
+                    type="button"
+                    class="existing-delete-btn"
+                    *ngIf="selectedTenderForDocs?.pushStatus !== 'PUSHED_TO_GEPNIC'"
+                    (click)="deleteExistingDoc(doc)"
+                    title="Delete">
                     <span class="material-icons" style="font-size: 14px;">delete</span>
                   </button>
                 </td>
@@ -299,6 +275,149 @@
       <!-- Modal Footer -->
       <div class="modal-custom-footer">
         <button type="button" class="primary-button" (click)="closeDocsModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRE-TENDER DETAILS MODAL DIALOG (Matches Image 1) ==================== -->
+  <div class="custom-modal-backdrop" *ngIf="showPretenderDetailsModal" (click)="closePretenderDetailsModal()">
+    <div class="custom-modal-dialog pretender-details-modal-dialog" (click)="$event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="modal-custom-header">
+        <div class="modal-title" style="font-size: 16px; font-weight: 700; color: #0f2744;">
+          Pre-tender Details
+        </div>
+        <button type="button" class="modal-close-cross" (click)="closePretenderDetailsModal()" matTooltip="Close">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-custom-body" style="padding: 16px 22px; max-height: 82vh; overflow-y: auto; background: #ffffff;">
+
+        <!-- 1. Work Item Details Section -->
+        <div class="ptd-section-header">Work Item Details</div>
+        <table class="ptd-table">
+          <tbody>
+            <tr>
+              <td class="ptd-label">Work Number</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.parentWorkNumber || selectedPretenderDetails?.parentWorkId || '3/9434/1' }}</td>
+              <td class="ptd-label">Tender Value</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.tenderFee ? selectedPretenderDetails?.tenderFee * 500 : 39748169) | number }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Work Description</td>
+              <td class="ptd-value" style="line-height: 1.45;">{{ selectedPretenderDetails?.parentWorkDescription || 'Improvement of Banapur main canal Antarkiyari-Kosarada road in the Dist. of Khordha under Special Central Assistance to States Capital Expenditure (CAPEX) for the year 2022-23' }}</td>
+              <td class="ptd-label">PIN Code</td>
+              <td class="ptd-value">751013</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Tender Category</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.tenderCategory || 'Works' }}</td>
+              <td class="ptd-label">Product Category</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.workItemProductCategory || 'Civil Works - Roads' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Bid Validity Days</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.bidValidityDays || 90 }}</td>
+              <td class="ptd-label">Delivery Period Days</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.deliveryPeriodDays || 365 }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Pre Bid Meeting Place</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.preBidMeetingAddress || 'O/o CCE CRWC BBSR' }}</td>
+              <td class="ptd-label">Pre Bid Meeting Address</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.preBidMeetingAddress || 'O/o CCE CRWC BBSR' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Bid Opening Place</td>
+              <td class="ptd-value">---</td>
+              <td class="ptd-label">Tenderer Class</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.tendererClass || 'A or equivalent' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Tender Inviting Office</td>
+              <td class="ptd-value">---</td>
+              <td class="ptd-label">Tender Inviting Officer</td>
+              <td class="ptd-value">---</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 2. Tender Basic Details Section -->
+        <div class="ptd-section-header" style="margin-top: 18px;">Tender Basic Details</div>
+        <table class="ptd-table">
+          <tbody>
+            <tr>
+              <td class="ptd-label">Unique File Number</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.parentWorkNumber || '3/9434/1' }}</td>
+              <td class="ptd-label">Tender Reference Number</td>
+              <td class="ptd-value font-bold" style="color: #0f2744;">{{ selectedPretenderDetails?.tenderReferenceNumber || 'Tender Online CC 05 of 2023' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Tender Type</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.tenderType || 'National Competitive Bid' }}</td>
+              <td class="ptd-label">Form of contract</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.formOfContract || 'Percentage' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">No. of Covers</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.numberOfCovers || '2' }}</td>
+              <td class="ptd-label">Tender Category</td>
+              <td class="ptd-value">{{ selectedPretenderDetails?.tenderCategory || 'Works' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 3. Tender Fee Details Section -->
+        <div class="ptd-section-header" style="margin-top: 18px;">Tender Fee Details</div>
+        <table class="ptd-table">
+          <tbody>
+            <tr>
+              <td class="ptd-label">Tender Fee</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.tenderFee || 10000) | number }}</td>
+              <td class="ptd-label">Tender EMD Fee</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.tenderEmdFee || 397482) | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 4. Tender Critical Dates Section -->
+        <div class="ptd-section-header" style="margin-top: 18px;">Tender Critical Dates</div>
+        <table class="ptd-table">
+          <tbody>
+            <tr>
+              <td class="ptd-label">Tender Publish Date & Time</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.tenderPublishingDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2023 18:00:00' }}</td>
+              <td class="ptd-label">Document Download Start Date & Time</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.documentDownloadStartDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2023 18:00:00' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Seek Clarification Start Date & Time</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.seekClarificationStartDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2023 18:00:00' }}</td>
+              <td class="ptd-label">Seek Clarification End Date & Time</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.seekClarificationEndDateTime | date:'dd/MM/yyyy HH:mm:ss') || '27/02/2023 15:00:00' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Bid Sub Start Date & Time</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.bidSubmissionStartDateTime | date:'dd/MM/yyyy HH:mm:ss') || '14/02/2023 18:00:00' }}</td>
+              <td class="ptd-label">Bid Sub End Date & Time</td>
+              <td class="ptd-value">{{ (selectedPretenderDetails?.bidSubmissionEndDateTime | date:'dd/MM/yyyy HH:mm:ss') || '28/02/2023 17:00:00' }}</td>
+            </tr>
+            <tr>
+              <td class="ptd-label">Bid Open Date & Time</td>
+              <td class="ptd-value" colspan="3">{{ (selectedPretenderDetails?.bidOpeningDateTime | date:'dd/MM/yyyy HH:mm:ss') || '01/03/2023 11:00:00' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-custom-footer" style="padding: 10px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; text-align: right;">
+        <button type="button" class="primary-button" (click)="closePretenderDetailsModal()">
           Close
         </button>
       </div>

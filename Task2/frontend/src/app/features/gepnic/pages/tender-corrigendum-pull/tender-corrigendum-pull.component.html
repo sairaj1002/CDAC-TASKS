@@ -1,117 +1,343 @@
 <div class="wamis-section-title">
-  Tender & Corrigendum
+  Post E-Procurement Details
 </div>
 
 <div class="wamis-tabs-bar">
-  <div class="wamis-tab-item" [class.active]="activeType === 'tenders'" (click)="activeType = 'tenders'">
-    Tenders Retrieval
+  <div class="wamis-tab-item" [class.active]="activeType === 'aoc'" (click)="activeType = 'aoc'">
+    Post E-Procurement Details (AOC)
   </div>
   <div class="wamis-tab-item" [class.active]="activeType === 'corrigendums'" (click)="activeType = 'corrigendums'">
     Corrigendums Retrieval
   </div>
 </div>
 
-<div class="wamis-card">
-  <form [formGroup]="searchForm" (ngSubmit)="executeSearch()">
-    <div class="wamis-form-grid">
-      <!-- Col 1 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Published Date (yyyyMMdd) <span class="required">*</span></label>
-        <input type="text" class="wamis-form-control" formControlName="publishedDate" placeholder="e.g. 20261101" />
-        <span class="wamis-error-text" *ngIf="searchForm.get('publishedDate')?.invalid && searchForm.get('publishedDate')?.touched">
-          Date is required in yyyyMMdd format.
-        </span>
-      </div>
-
-      <!-- Col 2 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Tender Reference (Optional)</label>
-        <input type="text" class="wamis-form-control" formControlName="tenderReference" placeholder="e.g. WAMIS-TND-..." />
-      </div>
-
-      <!-- Col 3 -->
-      <div class="wamis-form-group">
-        <label class="wamis-form-label">Jurisdictional Office Code</label>
-        <input type="text" class="wamis-form-control" placeholder="e.g. PWD-PUN-01" />
-      </div>
+<!-- ==================== POST TENDER / AOC DETAILS (Matches Image 2) ==================== -->
+<div *ngIf="activeType === 'aoc'">
+  <!-- Top Filter Card: Get AOC Info By Pre-tender created date (Matches Image 2) -->
+  <div class="wamis-card" style="margin-bottom: 20px;">
+    <div style="font-size: 14px; font-weight: 700; color: #0f2744; margin-bottom: 4px;">
+      Get AOC Info By Pre-tender created date
+    </div>
+    <div style="font-size: 12px; color: #c2410c; margin-bottom: 14px; font-weight: 500;">
+      * Pre-Tender created date should be lesser than current date
     </div>
 
-    <div style="margin-top: 14px;">
-      <button type="submit" class="wamis-btn-primary" [disabled]="searching" matTooltip="Query GePNIC service">
-        {{ searching ? 'Searching...' : 'Pull From GePNIC' }}
+    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+      <label style="font-size: 13px; font-weight: 600; color: #0f2744;">
+        AOC Upload Date <span style="color: #dc2626;">*</span>
+      </label>
+      <input
+        type="date"
+        [(ngModel)]="aocUploadDate"
+        class="wamis-form-control"
+        style="width: 220px; height: 36px;" />
+      
+      <button
+        type="button"
+        class="wamis-btn-primary"
+        (click)="getAocInfo()"
+        [disabled]="loadingAoc"
+        style="height: 36px; padding: 0 18px; font-weight: 600;">
+        {{ loadingAoc ? 'Getting...' : 'Get' }}
+      </button>
+
+      <button
+        type="button"
+        (click)="downloadJson()"
+        class="wamis-btn-primary"
+        style="height: 36px; padding: 0 16px; background: #0369a1; border-color: #0284c7; font-weight: 600;">
+        <span class="material-icons" style="font-size: 15px; vertical-align: middle; margin-right: 4px;">download</span>
+        Download Json
       </button>
     </div>
-  </form>
-</div>
+  </div>
 
-<!-- Tenders Results Table -->
-<div class="wamis-card" *ngIf="activeType === 'tenders'">
-  <div class="wamis-card-title">Retrieved Tenders ({{ tenderResults.length }})</div>
-  <div class="wamis-table-container">
-    <table class="wamis-table">
-      <thead>
-        <tr>
-          <th style="width: 50px; text-align: center;">Sr No.</th>
-          <th>Tender Reference</th>
-          <th>Title</th>
-          <th>Estimated Value (₹)</th>
-          <th>Publish Date</th>
-          <th>Bid End Date</th>
-          <th>Corrigendums</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let t of tenderResults; let i = index">
-          <td style="text-align: center; font-weight: 500;">{{ i + 1 }}</td>
-          <td><strong>{{ t.externalTenderReference }}</strong></td>
-          <td>{{ t.title }}</td>
-          <td>₹ {{ t.estimatedCost | number:'1.2-2' }}</td>
-          <td>{{ t.publishDate | date:'yyyy-MM-dd' }}</td>
-          <td>{{ t.bidSubmissionEndDate | date:'yyyy-MM-dd' }}</td>
-          <td style="text-align: center;">
-            <span class="wamis-badge-pill">{{ t.corrigendumCount }}</span>
-          </td>
-          <td><app-status-chip [status]="t.status"></app-status-chip></td>
-        </tr>
-        <tr *ngIf="tenderResults.length === 0">
-          <td colspan="8" class="wamis-table-empty">No tenders found for this published date.</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- AOC Details Table Card (Matches Image 2 Exactly) -->
+  <div class="wamis-card">
+    <div class="wamis-card-title" style="margin-bottom: 12px; font-size: 14px; font-weight: 700; color: #0f2744;">
+      AOC Details By Pre-Tender Created Date
+    </div>
+    <div class="wamis-table-container">
+      <table class="wamis-table" style="min-width: 1200px;">
+        <thead>
+          <tr style="background-color: #e0f2fe; color: #0f2744;">
+            <th style="width: 60px; text-align: center;">Sr.<br/>No.</th>
+            <th style="min-width: 140px;">Unique File<br/>Number</th>
+            <th style="min-width: 150px;">Tender<br/>Reference No.</th>
+            <th style="min-width: 320px;">Tender Description</th>
+            <th style="min-width: 100px;">Tender<br/>Type</th>
+            <th style="min-width: 110px;">Publish<br/>Date</th>
+            <th style="min-width: 110px; text-align: center;">View AOC<br/>Details</th>
+            <th style="min-width: 100px; text-align: center;">Insert in<br/>AOC</th>
+            <th style="min-width: 80px; text-align: center;">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of aocRecords">
+            <td style="text-align: center; font-weight: 500;">{{ row.srNo }}</td>
+            <td style="font-weight: 600; color: #0f2744;">{{ row.uniqueFileNumber }}</td>
+            <td><strong>{{ row.tenderReferenceNo }}</strong></td>
+            <td style="font-size: 12px; line-height: 1.4; color: #334155;">{{ row.tenderDescription }}</td>
+            <td>{{ row.tenderType }}</td>
+            <td>{{ row.publishDate }}</td>
+
+            <!-- View AOC Details: Eye Icon (Opens Image 1 Modal Dialog) -->
+            <td style="text-align: center;">
+              <button
+                type="button"
+                class="action-icon-btn"
+                (click)="openPretenderDetailsModal(row)"
+                title="View Pre-tender & AOC Details"
+                style="background: none; border: none; cursor: pointer; color: #0284c7; padding: 4px;">
+                <span class="material-icons" style="font-size: 20px;">visibility</span>
+              </button>
+            </td>
+
+            <!-- Insert in AOC Action -->
+            <td style="text-align: center;">
+              <button
+                type="button"
+                class="action-icon-btn"
+                (click)="insertInAoc(row)"
+                title="Insert in AOC"
+                style="background: none; border: none; cursor: pointer; color: #0f2744; font-weight: 700; padding: 4px;">
+                <span class="material-icons" style="font-size: 18px;" [style.color]="row.insertedInAoc ? '#16a34a' : '#0f2744'">
+                  {{ row.insertedInAoc ? 'check_circle' : 'input' }}
+                </span>
+              </button>
+            </td>
+
+            <!-- Delete Action -->
+            <td style="text-align: center;">
+              <button
+                type="button"
+                class="action-icon-btn"
+                (click)="deleteAocRecord(row)"
+                title="Delete AOC Record"
+                style="background: none; border: none; cursor: pointer; color: #0284c7; padding: 4px;">
+                <span class="material-icons" style="font-size: 18px; color: #0284c7;">delete</span>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="aocRecords.length === 0">
+            <td colspan="9" class="wamis-table-empty">No AOC records found for selected upload date.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<!-- Corrigendums Results Table -->
-<div class="wamis-card" *ngIf="activeType === 'corrigendums'">
-  <div class="wamis-card-title">Retrieved Corrigendums ({{ corrigendumResults.length }})</div>
-  <div class="wamis-table-container">
-    <table class="wamis-table">
-      <thead>
-        <tr>
-          <th style="width: 50px; text-align: center;">Sr No.</th>
-          <th>Corrigendum Ref</th>
-          <th>Tender Reference</th>
-          <th>Category / Type</th>
-          <th>Published Date</th>
-          <th>Description</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let c of corrigendumResults; let i = index">
-          <td style="text-align: center; font-weight: 500;">{{ i + 1 }}</td>
-          <td><strong>{{ c.corrigendumReference }}</strong></td>
-          <td>{{ c.tenderReference }}</td>
-          <td><span class="wamis-status-chip wamis-status-progress">{{ c.type }}</span></td>
-          <td>{{ c.publishedDate | date:'yyyy-MM-dd' }}</td>
-          <td>{{ c.description }}</td>
-          <td><app-status-chip [status]="c.status"></app-status-chip></td>
-        </tr>
-        <tr *ngIf="corrigendumResults.length === 0">
-          <td colspan="7" class="wamis-table-empty">No corrigendums found for this published date.</td>
-        </tr>
-      </tbody>
-    </table>
+<!-- ==================== CORRIGENDUMS RETRIEVAL ==================== -->
+<div *ngIf="activeType === 'corrigendums'">
+  <div class="wamis-card">
+    <form [formGroup]="searchForm" (ngSubmit)="executeSearch()">
+      <div class="wamis-form-grid">
+        <!-- Col 1 -->
+        <div class="wamis-form-group">
+          <label class="wamis-form-label">Published Date (yyyyMMdd) <span class="required">*</span></label>
+          <input type="text" class="wamis-form-control" formControlName="publishedDate" placeholder="e.g. 20261101" />
+          <span class="wamis-error-text" *ngIf="searchForm.get('publishedDate')?.invalid && searchForm.get('publishedDate')?.touched">
+            Date is required in yyyyMMdd format.
+          </span>
+        </div>
+
+        <!-- Col 2 -->
+        <div class="wamis-form-group">
+          <label class="wamis-form-label">Tender Reference (Optional)</label>
+          <input type="text" class="wamis-form-control" formControlName="tenderReference" placeholder="e.g. WAMIS-TND-..." />
+        </div>
+
+        <!-- Col 3 -->
+        <div class="wamis-form-group">
+          <label class="wamis-form-label">Jurisdictional Office Code</label>
+          <input type="text" class="wamis-form-control" placeholder="e.g. PWD-PUN-01" />
+        </div>
+      </div>
+
+      <div style="margin-top: 14px;">
+        <button type="submit" class="wamis-btn-primary" [disabled]="searching" matTooltip="Query GePNIC service">
+          {{ searching ? 'Searching...' : 'Pull From GePNIC' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Corrigendums Results Table -->
+  <div class="wamis-card">
+    <div class="wamis-card-title">Retrieved Corrigendums ({{ corrigendumResults.length }})</div>
+    <div class="wamis-table-container">
+      <table class="wamis-table">
+        <thead>
+          <tr>
+            <th style="width: 50px; text-align: center;">Sr No.</th>
+            <th>Corrigendum Ref</th>
+            <th>Tender Reference</th>
+            <th>Category / Type</th>
+            <th>Published Date</th>
+            <th>Description</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of corrigendumResults; let i = index">
+            <td style="text-align: center; font-weight: 500;">{{ i + 1 }}</td>
+            <td><strong>{{ c.corrigendumReference }}</strong></td>
+            <td>{{ c.tenderReference }}</td>
+            <td><span class="wamis-status-chip wamis-status-progress">{{ c.type }}</span></td>
+            <td>{{ c.publishedDate | date:'yyyy-MM-dd' }}</td>
+            <td>{{ c.description }}</td>
+            <td><app-status-chip [status]="c.status"></app-status-chip></td>
+          </tr>
+          <tr *ngIf="corrigendumResults.length === 0">
+            <td colspan="7" class="wamis-table-empty">No corrigendums found for this published date.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PRE-TENDER DETAILS MODAL DIALOG (Matches Image 1) ==================== -->
+<div class="custom-modal-backdrop" *ngIf="showPretenderDetailsModal" (click)="closePretenderDetailsModal()">
+  <div class="custom-modal-dialog pretender-details-modal-dialog" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-custom-header">
+      <div class="modal-title" style="font-size: 16px; font-weight: 700; color: #0f2744;">
+        Pre-tender Details
+      </div>
+      <button type="button" class="modal-close-cross" (click)="closePretenderDetailsModal()" matTooltip="Close">
+        &times;
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-custom-body" style="padding: 16px 22px; max-height: 82vh; overflow-y: auto; background: #ffffff;">
+
+      <!-- 1. Work Item Details Section -->
+      <div class="ptd-section-header">Work Item Details</div>
+      <table class="ptd-table">
+        <tbody>
+          <tr>
+            <td class="ptd-label">Work Number</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.parentWorkNumber || selectedPretenderDetails?.uniqueFileNumber || '3/9434/1' }}</td>
+            <td class="ptd-label">Tender Value</td>
+            <td class="ptd-value">{{ (selectedPretenderDetails?.tenderValue || 39748169) | number }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Work Description</td>
+            <td class="ptd-value" style="line-height: 1.45;">{{ selectedPretenderDetails?.parentWorkDescription || selectedPretenderDetails?.tenderDescription || 'Improvement of Banapur main canal Antarkiyari-Kosarada road in the Dist. of Khordha under Special Central Assistance to States Capital Expenditure (CAPEX) for the year 2022-23' }}</td>
+            <td class="ptd-label">PIN Code</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.pinCode || '751013' }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Tender Category</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.tenderCategory || 'Works' }}</td>
+            <td class="ptd-label">Product Category</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.productCategory || selectedPretenderDetails?.workItemProductCategory || 'Civil Works - Roads' }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Bid Validity Days</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.bidValidityDays || 90 }}</td>
+            <td class="ptd-label">Delivery Period Days</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.deliveryPeriodDays || 365 }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Pre Bid Meeting Place</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.preBidMeetingAddress || 'O/o CCE CRWC BBSR' }}</td>
+            <td class="ptd-label">Pre Bid Meeting Address</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.preBidMeetingAddress || 'O/o CCE CRWC BBSR' }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Bid Opening Place</td>
+            <td class="ptd-value">---</td>
+            <td class="ptd-label">Tenderer Class</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.tendererClass || 'A or equivalent' }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Tender Inviting Office</td>
+            <td class="ptd-value">---</td>
+            <td class="ptd-label">Tender Inviting Officer</td>
+            <td class="ptd-value">---</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2. Tender Basic Details Section -->
+      <div class="ptd-section-header" style="margin-top: 18px;">Tender Basic Details</div>
+      <table class="ptd-table">
+        <tbody>
+          <tr>
+            <td class="ptd-label">Unique File Number</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.uniqueFileNumber || selectedPretenderDetails?.parentWorkNumber || '3/9434/1' }}</td>
+            <td class="ptd-label">Tender Reference Number</td>
+            <td class="ptd-value font-bold" style="color: #0f2744;">{{ selectedPretenderDetails?.tenderReferenceNo || selectedPretenderDetails?.tenderReferenceNumber || 'Tender Online CC 05 of 2023' }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Tender Type</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.tenderType || 'National Competitive Bid' }}</td>
+            <td class="ptd-label">Form of contract</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.formOfContract || 'Percentage' }}</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">No. of Covers</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.noOfCovers || selectedPretenderDetails?.numberOfCovers || '2' }}</td>
+            <td class="ptd-label">Tender Category</td>
+            <td class="ptd-value">{{ selectedPretenderDetails?.tenderCategory || 'Works' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 3. Tender Fee Details Section -->
+      <div class="ptd-section-header" style="margin-top: 18px;">Tender Fee Details</div>
+      <table class="ptd-table">
+        <tbody>
+          <tr>
+            <td class="ptd-label">Tender Fee</td>
+            <td class="ptd-value">{{ (selectedPretenderDetails?.tenderFee || 10000) | number }}</td>
+            <td class="ptd-label">Tender EMD Fee</td>
+            <td class="ptd-value">{{ (selectedPretenderDetails?.tenderEmdFee || 397482) | number }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 4. Tender Critical Dates Section -->
+      <div class="ptd-section-header" style="margin-top: 18px;">Tender Critical Dates</div>
+      <table class="ptd-table">
+        <tbody>
+          <tr>
+            <td class="ptd-label">Tender Publish Date & Time</td>
+            <td class="ptd-value">14/02/2023 18:00:00</td>
+            <td class="ptd-label">Document Download Start Date & Time</td>
+            <td class="ptd-value">14/02/2023 18:00:00</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Seek Clarification Start Date & Time</td>
+            <td class="ptd-value">14/02/2023 18:00:00</td>
+            <td class="ptd-label">Seek Clarification End Date & Time</td>
+            <td class="ptd-value">27/02/2023 15:00:00</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Bid Sub Start Date & Time</td>
+            <td class="ptd-value">14/02/2023 18:00:00</td>
+            <td class="ptd-label">Bid Sub End Date & Time</td>
+            <td class="ptd-value">28/02/2023 17:00:00</td>
+          </tr>
+          <tr>
+            <td class="ptd-label">Bid Open Date & Time</td>
+            <td class="ptd-value" colspan="3">01/03/2023 11:00:00</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-custom-footer" style="padding: 10px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; text-align: right;">
+      <button type="button" class="primary-button" (click)="closePretenderDetailsModal()">
+        Close
+      </button>
+    </div>
   </div>
 </div>

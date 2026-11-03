@@ -1,0 +1,51 @@
+<!-- 1. Master Top Government & C-DAC Banner matching Screenshot 2 -->
+<header class="wamis-topbar">
+  <div class="wamis-topbar-left">
+    <div class="wamis-emblem">
+      <svg class="wamis-emblem-svg" viewBox="0 0 24 24">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <span class="wamis-topbar-title">{{ appFullName }}</span>
+  </div>
+
+  <div class="wamis-topbar-right">
+    <button type="button" class="wamis-topbar-btn" matTooltip="Notifications" aria-label="Notifications">
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <button type="button" class="wamis-topbar-btn" matTooltip="System Health & GePNIC Config" aria-label="Configuration">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <div class="wamis-avatar-circle" matTooltip="Logged in as Executive Engineer" aria-label="User Avatar">
+      EE
+    </div>
+  </div>
+</header>
+
+<!-- 2. Sub-Header Bar with Division Office Pill matching Screenshot 2 -->
+<div class="wamis-subbar">
+  <div class="wamis-subbar-left">
+    <button type="button" class="wamis-hamburger-btn" (click)="toggleSidebar.emit()" aria-label="Toggle Menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="wamis-division-container">
+      <div class="wamis-division-pill" (click)="toggleDropdown()">
+        <span class="wamis-division-name">{{ activeDivision }}</span>
+        <span class="wamis-clear-cross">▾</span>
+      </div>
+
+      <div class="wamis-division-dropdown" *ngIf="showDivisionDropdown">
+        <div
+          *ngFor="let div of divisions"
+          class="wamis-division-option"
+          [class.selected]="div === activeDivision"
+          (click)="selectDivision(div)"
+        >
+          {{ div }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
