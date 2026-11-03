@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { APP_CONSTANTS } from '../../../common/constants/app.constants';
 import {
   DropdownMasterResponseForm,
+  PreTenderDocumentForm,
   PreTenderForm,
   PreTenderResponseForm,
   SubWorkDetail,
@@ -13,6 +14,14 @@ import { PreTenderService } from '../../../common/services/pretender.service';
 import { WorkService } from '../../../common/services/work.service';
 import { NotificationService } from '../../../common/services/notification.service';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog';
+
+/** The tender dates chosen on the Critical Dates tab (sent as yyyy-MM-ddTHH:mm:ss). */
+type CriticalDateKey = 'publishingDate' | 'docDownloadStartDate' | 'bidSubmissionStartDate' | 'bidSubmissionEndDate' | 'bidOpenDate';
+
+interface DateParts {
+  date: Date | null;
+  time: Date | null;
+}
 
 @Component({
   selector: 'app-pretender-form',
@@ -44,6 +53,8 @@ export class PreTenderFormChildComponent implements OnInit {
   subWorkQuery: string | SubWorkDetail = '';
   subWorkOptions: SubWorkDetail[] = [];
   selectedSubWork: SubWorkDetail | null = null;
+  // the work / sub work search box: open at first, and folded away once a sub work is chosen
+  searchOpen = true;
   // the work description filled in from the chosen sub work (replaced when another sub work is chosen)
   private prefilledTitle = '';
 
@@ -92,27 +103,26 @@ export class PreTenderFormChildComponent implements OnInit {
     tendererClass: '',
     invitingOfficer: 'Executive Engineer',
     invitingOfficerAddress: 'PWD Division Office',
-    documents: [
-      {
-        docUniqueId: 1,
-        docCode: 'NITDOC',
-        docName: 'tender-notice.pdf',
-        docDescription: 'Notice Inviting Tender',
-        docMimeType: '.pdf',
-        docSize: 35000,
-        docPriority: 1,
-      },
-      {
-        docUniqueId: 2,
-        docCode: 'BOQDOC',
-        docName: 'financial-boq.xls',
-        docDescription: 'Bill of Quantities',
-        docMimeType: '.xls',
-        docSize: 28000,
-        docPriority: 2,
-      },
-    ],
+    // attached on the Documents tab
+    documents: [],
   };
+
+  // Critical Dates tab, in date order: each field is shown as a date (calendar) and a time (list of times)
+  readonly criticalDateFields: { key: CriticalDateKey; label: string }[] = [
+    { key: 'publishingDate', label: 'Publishing Date & Time' },
+    { key: 'docDownloadStartDate', label: 'Doc Download Start' },
+    { key: 'bidSubmissionStartDate', label: 'Bid Submission Start' },
+    { key: 'bidSubmissionEndDate', label: 'Bid Submission End' },
+    { key: 'bidOpenDate', label: 'Bid Opening Date' },
+  ];
+  dateParts = this.splitDates();
+
+  // Documents tab: the category chosen for the next files (DOC_CODE master values)
+  docCategories: DropdownMasterResponseForm[] = [];
+  selectedDocCategory = '';
+  // The picked files, by docUniqueId, so they can be opened before saving. Only the document details are saved
+  // with the tender (there is no file storage service yet), so documents of a saved tender have no file here.
+  private docFiles = new Map<number, File>();
 
   constructor(
     private dropdownService: DropdownService,
@@ -175,6 +185,7 @@ export class PreTenderFormChildComponent implements OnInit {
 
   onSubWorkSelected(subWork: SubWorkDetail): void {
     this.selectedSubWork = subWork;
+    this.searchOpen = false;
     // the sub work description is the usual work description of its tender; a text the user typed is kept
     if (!this.formData.tenderTitle || this.formData.tenderTitle === this.prefilledTitle) {
       this.formData.tenderTitle = subWork.description;
@@ -213,6 +224,8 @@ export class PreTenderFormChildComponent implements OnInit {
         this.tendererClasses = groups[APP_CONSTANTS.DROPDOWN_CATEGORIES.TENDERER_CLASS] || [];
         this.bidOpenersList = groups[APP_CONSTANTS.DROPDOWN_CATEGORIES.BID_OPENERS] || [];
         this.divisionOffices = groups[APP_CONSTANTS.DROPDOWN_CATEGORIES.DIVISION_OFFICE] || [];
+        this.docCategories = groups[APP_CONSTANTS.DROPDOWN_CATEGORIES.DOC_CODE] || [];
+        this.selectedDocCategory = this.docCategories[0]?.code ?? '';
       },
       error: () => {
         this.notificationService.showWarning('Could not load some master dropdowns from backend. Using standard defaults.');
@@ -246,8 +259,10 @@ export class PreTenderFormChildComponent implements OnInit {
       bidSubmissionStartDate: tender.bidSubmissionStartDate,
       bidSubmissionEndDate: tender.bidSubmissionEndDate,
       bidOpenDate: tender.bidOpenDate,
-      documents: tender.documents || this.formData.documents,
+      documents: [...(tender.documents || [])],
     };
+    this.docFiles.clear();
+    this.dateParts = this.splitDates();
     // show the work of the edited tender (its sub work is not stored with the tender yet)
     this.selectedSubWork = null;
     this.workService.getWork(this.formData.workId).subscribe((work) => (this.selectedWork = work ?? null));
@@ -267,6 +282,117 @@ export class PreTenderFormChildComponent implements OnInit {
     this.formData.productCategory = '';
     this.formData.bidOpeners = '';
     this.formData.tendererClass = '';
+    this.formData.documents = [];
+    this.docFiles.clear();
+  }
+
+  /** Called by the date and time pickers: keeps the yyyy-MM-ddTHH:mm:ss value of the tender up to date. */
+  setDatePart(key: CriticalDateKey, part: keyof DateParts, value: Date | null): void {
+    const parts = this.dateParts[key];
+    parts[part] = value;
+    // a new date gets a usual tender time until a time is chosen
+    if (part === 'date' && value && !parts.time) {
+      parts.time = new Date(value.getFullYear(), value.getMonth(), value.getDate(), 10, 0);
+    }
+    if (!parts.date) {
+      this.formData[key] = '';
+      return;
+    }
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const d = parts.date;
+    const hours = parts.time ? parts.time.getHours() : 0;
+    const minutes = parts.time ? parts.time.getMinutes() : 0;
+    this.formData[key] = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(hours)}:${pad(minutes)}:00`;
+  }
+
+  /** A date cannot be before the one above it (publishing, download, bid start, bid end, opening). */
+  earliestDateFor(key: CriticalDateKey): Date | null {
+    const index = this.criticalDateFields.findIndex((f) => f.key === key);
+    return index > 0 ? this.dateParts[this.criticalDateFields[index - 1].key].date : null;
+  }
+
+  private splitDates(): Record<CriticalDateKey, DateParts> {
+    const parts = {} as Record<CriticalDateKey, DateParts>;
+    for (const field of this.criticalDateFields) {
+      const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(this.formData[field.key] || '');
+      if (!match) {
+        parts[field.key] = { date: null, time: null };
+        continue;
+      }
+      const [y, mo, d, h, mi] = match.slice(1).map(Number);
+      parts[field.key] = { date: new Date(y, mo - 1, d), time: new Date(y, mo - 1, d, h, mi) };
+    }
+    return parts;
+  }
+
+  /** Adds the picked files as documents of the chosen category. */
+  onDocumentFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = Array.from(input.files ?? []);
+    input.value = ''; // the same file can be picked again after it was removed
+    if (!files.length) {
+      return;
+    }
+    const category = this.docCategories.find((c) => c.code === this.selectedDocCategory);
+    if (!category) {
+      this.notificationService.showError('Please select the document category first.');
+      return;
+    }
+    const today = new Date().toISOString().slice(0, 10);
+    for (const file of files) {
+      const dot = file.name.lastIndexOf('.');
+      const docUniqueId = Math.max(0, ...this.formData.documents.map((d) => d.docUniqueId)) + 1;
+      this.formData.documents.push({
+        docUniqueId,
+        docCode: category.code,
+        docName: file.name,
+        docDescription: category.displayName,
+        docMimeType: dot > 0 ? file.name.slice(dot).toLowerCase() : file.type || '.bin',
+        docSize: file.size,
+        docPriority: this.formData.documents.length + 1,
+        uploadedAt: today,
+      });
+      this.docFiles.set(docUniqueId, file);
+    }
+    this.notificationService.showSuccess(`${files.length} document(s) attached as ${category.displayName}.`);
+  }
+
+  removeDocument(doc: PreTenderDocumentForm): void {
+    this.formData.documents = this.formData.documents.filter((d) => d !== doc);
+    this.docFiles.delete(doc.docUniqueId);
+    // priorities follow the order of the list
+    this.formData.documents.forEach((d, i) => (d.docPriority = i + 1));
+  }
+
+  hasFile(doc: PreTenderDocumentForm): boolean {
+    return this.docFiles.has(doc.docUniqueId);
+  }
+
+  downloadDocument(doc: PreTenderDocumentForm): void {
+    const file = this.docFiles.get(doc.docUniqueId);
+    if (!file) {
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = doc.docName;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  docCategoryLabel(doc: PreTenderDocumentForm): string {
+    return this.docCategories.find((c) => c.code === doc.docCode)?.displayName ?? doc.docDescription ?? doc.docCode;
+  }
+
+  formatSize(bytes: number | undefined): string {
+    if (!bytes) {
+      return '-';
+    }
+    if (bytes < 1024 * 1024) {
+      return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+    }
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   }
 
   onSubmit(): void {
@@ -286,6 +412,10 @@ export class PreTenderFormChildComponent implements OnInit {
       !this.formData.tendererClass
     ) {
       this.notificationService.showError('Please fill in all mandatory fields marked with an asterisk (*).');
+      return;
+    }
+    if (this.criticalDateFields.some((f) => !this.formData[f.key])) {
+      this.notificationService.showError('Please choose all the dates on the Critical Dates tab.');
       return;
     }
 

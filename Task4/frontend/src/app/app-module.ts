@@ -20,6 +20,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 
@@ -84,6 +87,8 @@ import { GlobalErrorHandler } from './common/error-handler/global-error-handler'
     MatTabsModule,
     MatExpansionModule,
     MatAutocompleteModule,
+    MatDatepickerModule,
+    MatTimepickerModule,
     MatCheckboxModule,
     MatRadioModule,
   ],
@@ -93,6 +98,9 @@ import { GlobalErrorHandler } from './common/error-handler/global-error-handler'
     provideHttpClient(withInterceptors([userIdInterceptor, exceptionInterceptor]), withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    // dates as dd/mm/yyyy and times as 24-hour hh:mm in the date and time pickers
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     provideAnimationsAsync(),
   ],
   bootstrap: [App],

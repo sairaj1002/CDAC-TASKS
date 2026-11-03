@@ -3,7 +3,7 @@
     <p class="form-mode">Editing <strong>{{ formData.tenderReferenceNo }}</strong></p>
   } @else {
     <!-- Step 1: the tender is raised against one sub work; search the work, then one of its sub works -->
-    <mat-expansion-panel class="search-panel mb-3">
+    <mat-expansion-panel class="search-panel mb-3" [expanded]="searchOpen" (opened)="searchOpen = true" (closed)="searchOpen = false">
       <mat-expansion-panel-header>
         <mat-panel-title>Search Work and Sub Work</mat-panel-title>
         <mat-panel-description class="justify-content-end">
@@ -34,13 +34,14 @@
         </mat-form-field>
       </div>
 
+      <!-- the sub work search appears once a work is chosen -->
+      @if (selectedWork) {
       <div class="col-12 col-lg-6 mb-2">
         <label class="field-label" for="subWorkQuery">Sub Work <span class="required">*</span></label>
         <mat-form-field appearance="outline" class="full-width-field">
           <mat-icon matPrefix class="search-prefix">search</mat-icon>
           <input matInput id="subWorkQuery" name="subWorkQuery" [(ngModel)]="subWorkQuery" (ngModelChange)="onSubWorkQuery($event)"
-            [matAutocomplete]="subWorkAuto" [disabled]="!selectedWork"
-            [placeholder]="selectedWork ? 'Search sub work by number or description' : 'Select a work first'" />
+            [matAutocomplete]="subWorkAuto" placeholder="Search sub work by number or description" />
           @if (selectedSubWork) {
             <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearSubWork(); $event.stopPropagation()" title="Clear">✕</button>
           }
@@ -56,6 +57,7 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
+      }
     </div>
     </mat-expansion-panel>
   }
@@ -244,36 +246,28 @@
 
   <mat-tab label="Critical Dates">
   <div class="row">
-    <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <label class="field-label" for="publishingDate">Publishing Date &amp; Time <span class="required">*</span></label>
-      <mat-form-field appearance="outline" class="full-width-field">
-        <input matInput id="publishingDate" name="publishingDate" [(ngModel)]="formData.publishingDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
-      </mat-form-field>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <label class="field-label" for="docDownloadStartDate">Doc Download Start <span class="required">*</span></label>
-      <mat-form-field appearance="outline" class="full-width-field">
-        <input matInput id="docDownloadStartDate" name="docDownloadStartDate" [(ngModel)]="formData.docDownloadStartDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
-      </mat-form-field>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <label class="field-label" for="bidSubmissionStartDate">Bid Submission Start <span class="required">*</span></label>
-      <mat-form-field appearance="outline" class="full-width-field">
-        <input matInput id="bidSubmissionStartDate" name="bidSubmissionStartDate" [(ngModel)]="formData.bidSubmissionStartDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
-      </mat-form-field>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <label class="field-label" for="bidSubmissionEndDate">Bid Submission End <span class="required">*</span></label>
-      <mat-form-field appearance="outline" class="full-width-field">
-        <input matInput id="bidSubmissionEndDate" name="bidSubmissionEndDate" [(ngModel)]="formData.bidSubmissionEndDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
-      </mat-form-field>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4 mb-2">
-      <label class="field-label" for="bidOpenDate">Bid Opening Date <span class="required">*</span></label>
-      <mat-form-field appearance="outline" class="full-width-field">
-        <input matInput id="bidOpenDate" name="bidOpenDate" [(ngModel)]="formData.bidOpenDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
-      </mat-form-field>
-    </div>
+    <!-- each date: a calendar for the day and a list of times; both together give the date-time sent to the backend -->
+    @for (field of criticalDateFields; track field.key) {
+      <div class="col-12 col-md-6 col-lg-4 mb-2">
+        <label class="field-label" [for]="field.key">{{ field.label }} <span class="required">*</span></label>
+        <div class="date-time-pair">
+          <mat-form-field appearance="outline" class="date-part">
+            <input matInput readonly [id]="field.key" [name]="field.key + 'Date'" [matDatepicker]="datePicker"
+              [ngModel]="dateParts[field.key].date" (ngModelChange)="setDatePart(field.key, 'date', $event)"
+              [min]="earliestDateFor(field.key)" (click)="datePicker.open()" placeholder="Select date" />
+            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="time-part">
+            <input matInput [name]="field.key + 'Time'" [matTimepicker]="timePicker"
+              [ngModel]="dateParts[field.key].time" (ngModelChange)="setDatePart(field.key, 'time', $event)"
+              [disabled]="!dateParts[field.key].date" placeholder="Time" />
+            <mat-timepicker-toggle matIconSuffix [for]="timePicker"></mat-timepicker-toggle>
+            <mat-timepicker #timePicker interval="30m"></mat-timepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    }
   </div>
 
   </mat-tab>
@@ -305,6 +299,70 @@
       </mat-form-field>
     </div>
   </div>
+  </mat-tab>
+
+  <!-- Documents: choose a category, then the files of that category -->
+  <mat-tab label="Documents">
+    <div class="doc-toolbar">
+      <label class="field-label mb-0" for="docCategory">Document Category:</label>
+      <mat-form-field appearance="outline" class="doc-category compact-field" subscriptSizing="dynamic">
+        <mat-select id="docCategory" name="docCategory" [(ngModel)]="selectedDocCategory" placeholder="Select document category">
+          @for (cat of docCategories; track cat.code) {
+            <mat-option [value]="cat.code">{{ cat.displayName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <input #docFileInput type="file" multiple hidden
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.dxf,.zip,.jpg,.jpeg,.png"
+        (change)="onDocumentFilesSelected($event)" />
+      <button mat-raised-button color="primary" type="button" [disabled]="!selectedDocCategory" (click)="docFileInput.click()">
+        <mat-icon>add_circle</mat-icon> Select Files
+      </button>
+    </div>
+
+    <div class="doc-list">
+      <div class="section-title mb-2">Attached Tender Documents ({{ formData.documents.length }})</div>
+      @if (formData.documents.length) {
+        <div class="table-responsive">
+          <table class="table doc-table">
+            <thead>
+              <tr>
+                <th>Document Name</th>
+                <th>Category</th>
+                <th>Upload Date</th>
+                <th>Size</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (doc of formData.documents; track doc.docUniqueId) {
+                <tr>
+                  <td class="doc-name">
+                    <mat-icon [class.doc-pdf]="doc.docMimeType === '.pdf'">{{ doc.docMimeType === '.pdf' ? 'picture_as_pdf' : 'description' }}</mat-icon>
+                    <span>{{ doc.docName }}</span>
+                  </td>
+                  <td><span class="doc-chip">{{ docCategoryLabel(doc) }}</span></td>
+                  <td>{{ doc.uploadedAt || '-' }}</td>
+                  <td>{{ formatSize(doc.docSize) }}</td>
+                  <td class="text-end doc-actions">
+                    <button mat-button type="button" class="doc-download" [disabled]="!hasFile(doc)"
+                      [title]="hasFile(doc) ? 'Download' : 'The file is not stored yet; only its details are saved with the tender'"
+                      (click)="downloadDocument(doc)">
+                      <mat-icon>download</mat-icon> Download
+                    </button>
+                    <button mat-icon-button type="button" class="action-delete" title="Remove" aria-label="Remove document"
+                      (click)="removeDocument(doc)"><mat-icon>delete</mat-icon></button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="no-data">No documents attached yet. Choose a category and select the files.</div>
+      }
+      <p class="doc-note">A Notice Inviting Tender (NIT) document is required before the tender can be sent to GePNIC.</p>
+    </div>
   </mat-tab>
   </mat-tab-group>
   </div>

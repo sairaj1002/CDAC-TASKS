@@ -113,11 +113,18 @@ body {
   --mat-tab-inactive-label-text-color: #505050;
 }
 
-// A Bootstrap .row reaches 12px past both sides of its box (the gutter); inside a tab that made the tab body
-// scroll sideways by 12px. The gutter is empty space, so it is simply cut off. (Two classes: Material adds its
-// own tab styles after this file, and they would win over a single class.)
+// A tab body never scrolls by itself: only the page scrolls (Material makes it a scroll box of its own, which
+// showed a second scroll bar inside the page). A Bootstrap .row reaches 12px past both sides of its box (the
+// gutter); that empty space is cut off sideways. "clip" is used because "hidden" would make the body a
+// scroll box again. (Two classes: Material adds its own tab styles after this file.)
 .mat-mdc-tab-group .mat-mdc-tab-body-content {
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+// the shown tab grows with its content; the tab wrapper around it still cuts off anything sideways
+.mat-mdc-tab-group .mat-mdc-tab-body.mat-mdc-tab-body-active {
+  overflow: visible;
 }
 
 // ---------------------------------------------------------------------------
@@ -526,6 +533,11 @@ app-home {
 // ---------------------------------------------------------------------------
 // 6. WMS Pre-Tender: form, table, details and dialogs
 // ---------------------------------------------------------------------------
+// room under the Save button for its shadow (the tab clips anything below its content)
+.pretender-form {
+  padding-bottom: 0.5rem;
+}
+
 .form-mode {
   margin-bottom: 0.75rem;
   color: #505050;
@@ -585,6 +597,127 @@ app-home {
   margin-bottom: 0.75rem;
   color: #505050;
   font-size: 0.9rem;
+}
+
+// Critical Dates: the date (calendar) and the time (list of times) of one field side by side
+.date-time-pair {
+  display: flex;
+  gap: 0.5rem;
+
+  .date-part {
+    flex: 3 1 0;
+    min-width: 0;
+  }
+
+  .time-part {
+    flex: 2 1 0;
+    min-width: 0;
+  }
+
+  // the date opens its calendar on a click anywhere in the field
+  .date-part input {
+    cursor: pointer;
+  }
+}
+
+// Documents sub-tab: category + Select Files bar, then the attached documents (as the WAMIS document screens)
+.doc-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e3e8ef;
+  border-radius: 6px;
+  background: #f8fafc;
+
+  .doc-category {
+    flex: 1 1 320px;
+  }
+
+  .mat-icon {
+    margin-right: 4px;
+  }
+}
+
+.doc-list {
+  padding: 0.75rem 1rem 0.25rem;
+  border: 1px solid #e3e8ef;
+  border-radius: 6px;
+}
+
+.doc-table {
+  margin-bottom: 0.5rem;
+
+  th {
+    padding: 0.6rem 0.75rem;
+    background-color: #f1f5f9 !important;
+    color: #1e293b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  td {
+    padding: 0.5rem 0.75rem;
+    color: #334155;
+    font-size: 0.875rem;
+    vertical-align: middle;
+  }
+
+  .doc-name {
+    font-weight: 600;
+    color: #1e293b;
+
+    .mat-icon {
+      margin-right: 6px;
+      vertical-align: middle;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: #64748b;
+
+      &.doc-pdf {
+        color: #d32f2f;
+      }
+    }
+  }
+
+  .doc-actions {
+    white-space: nowrap;
+  }
+}
+
+.doc-chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  background: #eef2f7;
+  color: #1e293b;
+  font-size: 0.8rem;
+}
+
+.doc-download {
+  color: #022a72 !important;
+
+  .mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// Material's icon button sets its own icon colour; this keeps the remove icon red
+.doc-actions .action-delete {
+  --mat-icon-button-icon-color: #d32f2f;
+  color: #d32f2f;
+}
+
+.doc-note {
+  margin: 0.5rem 0;
+  color: #505050;
+  font-size: 0.8rem;
 }
 
 // Financial Details / Critical Dates / Inviting Officer: sub-tabs side by side in one bordered box

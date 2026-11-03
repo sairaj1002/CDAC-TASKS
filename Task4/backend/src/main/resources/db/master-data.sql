@@ -279,6 +279,21 @@ SELECT 'PRODUCT_CATEGORY', left(p.name, 40) || '|' || c.category, p.name, c.cate
 UNION ALL
 SELECT 'TENDERER_CLASS', tenderclass, tenderclass, description, display_order, TRUE, 'SYSTEM', now(), 'SYSTEM', now() FROM wamis_master.master_tenderer_class;
 
+-- Tender document types (DOC_CODE), the categories of the Pre-Tender Documents tab. The code is
+-- stored as doc_code on each document; GePNIC needs at least one code containing NIT. The codes
+-- NITDOC, BOQDOC, DRAWINGDOC and ADDLDOC are kept from the earlier seed, so saved documents stay valid.
+DELETE FROM wamis_core.wamis_master_dropdowns WHERE category = 'DOC_CODE';
+
+INSERT INTO wamis_core.wamis_master_dropdowns (category, code, display_name, description, display_order, active, created_by, created_at, updated_by, updated_at) VALUES
+    ('DOC_CODE', 'NITDOC',     'Notice Inviting Tender (NIT)',           'Notice Inviting Tender',                1, TRUE, 'SYSTEM', now(), 'SYSTEM', now()),
+    ('DOC_CODE', 'DTCNDOC',    'Draft Tender Notice & Conditions (DTCN)', 'Draft tender notice and conditions',    2, TRUE, 'SYSTEM', now(), 'SYSTEM', now()),
+    ('DOC_CODE', 'TECHSPECDOC','Technical Specifications',               'Technical specifications of the work',  3, TRUE, 'SYSTEM', now(), 'SYSTEM', now()),
+    ('DOC_CODE', 'DRAWINGDOC', 'Engineering Drawings',                   'Technical drawings and plans',          4, TRUE, 'SYSTEM', now(), 'SYSTEM', now()),
+    ('DOC_CODE', 'BOQDOC',     'Bill of Quantities (BOQ)',               'Bill of Quantities spreadsheet',        5, TRUE, 'SYSTEM', now(), 'SYSTEM', now()),
+    ('DOC_CODE', 'PREBIDDOC',  'Pre-Bid Meeting Clarifications',         'Clarifications from the pre-bid meeting', 6, TRUE, 'SYSTEM', now(), 'SYSTEM', now()),
+    ('DOC_CODE', 'CORRDOC',    'Corrigendum / Addendum',                 'Corrigendum or addendum to the tender', 7, TRUE, 'SYSTEM', now(), 'SYSTEM', now()),
+    ('DOC_CODE', 'ADDLDOC',    'Other Supporting Document',              'Other supporting or mandatory documents', 8, TRUE, 'SYSTEM', now(), 'SYSTEM', now());
+
 -- --------------------------------------------------------------------
 -- One-time conversion of pre-tenders from earlier versions, which stored the master
 -- values as text (tender_type, form_contract, category, product_category, bid_openers,
