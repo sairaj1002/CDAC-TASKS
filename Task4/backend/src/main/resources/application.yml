@@ -1,0 +1,66 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: wamis-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:${DB_URL:jdbc:postgresql://localhost:5432/wamis}}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:${DB_USERNAME:postgres}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD:root123}}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      pool-name: WamisHikariPool
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        # all JPA entities live in the wamis_core schema (created by db/schema.sql)
+        default_schema: wamis_core
+        format_sql: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  sql:
+    init:
+      # wamis_master (xls masters) + wamis_core (app tables), then the xls master data;
+      # both run before Hibernate starts
+      mode: always
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/master-data.sql
+      # the scripts contain DO $$ ... $$ blocks, so send each to PostgreSQL in one piece
+      separator: "^^^ END OF SCRIPT ^^^"
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+
+integration:
+  gepnic:
+    enabled: false
+    environment: demo
+    base-url: ${GEPNIC_BASE_URL:https://demoeproc.nic.in}
+    connect-timeout: 5s
+    read-timeout: 30s
+    max-upload-size: 20MB
+    unique-user-id: ${GEPNIC_UNIQUE_USER_ID:DEMO_WAMIS_USER}
+    key-id: ${GEPNIC_KEY_ID:DEMO-KEY-THUMBPRINT-001}
+    key-store-location: ${GEPNIC_KEYSTORE_LOCATION:}
+    key-store-password: ${GEPNIC_KEYSTORE_PASSWORD:}
+    trust-store-location: ${GEPNIC_TRUSTSTORE_LOCATION:}
+    trust-store-password: ${GEPNIC_TRUSTSTORE_PASSWORD:}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

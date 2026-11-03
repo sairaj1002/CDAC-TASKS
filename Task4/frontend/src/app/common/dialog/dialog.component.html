@@ -1,0 +1,23 @@
+<div>
+  <div class="text-align-end-custom">
+    <mat-icon (keypress)="onNoClick()" (click)="onNoClick()" class="close-button mat-elevation-z4 pointer">close</mat-icon>
+  </div>
+  @if (confirmationMessageDialogFlag) {
+    <h1 class="align-center-text" mat-dialog-title>{{data.title}}</h1>
+    <div>
+      <mat-card class="mat-card-padding mat-elevation-z0 d-flex flex-column align-center-text">
+        <mat-card-content class="white-space-font-size-custom" [class.text-danger]="isAlertMessage">
+          {{data.warning}}
+        </mat-card-content>
+      </mat-card>
+      <div class="align-center-text">
+        <button mat-raised-button [mat-dialog-close]="data.flag"
+          class="dialog-box-button button-color width-100">{{'Ok'}}</button>
+        @if (showCancelButton) {
+          <button mat-raised-button class="cancel-button-color width-100"
+            (click)="onNoClick()">{{'Cancel'}}</button>
+        }
+      </div>
+    </div>
+  }
+</div>

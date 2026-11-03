@@ -1,0 +1,22 @@
+<div class="container-fluid p-3">
+  <div class="d-flex align-items-center mb-2">
+    <span class="page-title">{{ 'Work Assignment' | translate }}</span>
+  </div>
+
+  <mat-tab-group animationDuration="0ms" [mat-stretch-tabs]="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedTabChange)="onTabChange($event)">
+    @if (canAdd) {
+      <mat-tab [label]="'Add' | translate">
+        <div class="pt-3">
+          <app-work-assignment-add></app-work-assignment-add>
+        </div>
+      </mat-tab>
+    }
+    @if (canView) {
+      <mat-tab [label]="'View' | translate">
+        <div class="pt-3">
+          <app-work-assignment-view></app-work-assignment-view>
+        </div>
+      </mat-tab>
+    }
+  </mat-tab-group>
+</div>

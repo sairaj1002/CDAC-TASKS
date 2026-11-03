@@ -1,0 +1,8 @@
+<div class="wamis-actions-cell">
+  <span>&bull; {{ data?.message }}</span>
+  <button type="button" class="wamis-action-btn" (click)="copyMessage()">
+    <mat-icon class="wamis-icon-edit">content_copy</mat-icon>
+    <span>{{ copied ? 'Copied' : 'Copy' }}</span>
+  </button>
+</div>
+

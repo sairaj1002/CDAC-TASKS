@@ -1,0 +1,1753 @@
+// ============================================================================
+// WAMIS: the application's only stylesheet.
+// The look is the one of the QMS module (Project7): QMS shell, Material indigo theme and Bootstrap grid
+// (both loaded in angular.json before this file), outlined fields with navy labels, Add / View tabs.
+// The WMS Pre-Tender screens use the same classes, so every module looks the same.
+//
+//  1. Global (from the QMS styles.css)      5. Page conventions shared by all screens
+//  2. Shell: app-home (QMS home component)   6. WMS Pre-Tender: table, details and dialogs
+//  3. Loader                                  7. QMS screens (their component styles, scoped by element)
+//  4. Pop-up messages
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// 1. Global (from the QMS styles.css)
+// ---------------------------------------------------------------------------
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f3f0;
+  color: #201f1d;
+  height: 100%;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// Compact outline fields (search bars): 40px high, 14px text
+.compact-field {
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 8px;
+  --mat-form-field-container-text-size: 14px;
+}
+
+// Confirmation dialog (QMS DialogComponent): same class names and values as the QMS frontend
+.text-align-end-custom {
+  text-align: end !important;
+}
+
+.align-center-text {
+  text-align: center !important;
+}
+
+.mat-card-padding {
+  padding: 5px;
+}
+
+.white-space-font-size-custom {
+  white-space: pre-line !important;
+  font-size: large !important;
+}
+
+.close-button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-weight: 900;
+  background-color: #180085;
+  color: rgb(15, 10, 10);
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.width-100 {
+  width: 6.25rem;
+}
+
+.button-color {
+  background: #022a72;
+  margin-left: 0.625rem !important;
+  color: white;
+  margin-top: 0.313rem !important;
+  --mat-button-protected-container-color: #022a72;
+  --mat-button-protected-label-text-color: #ffffff;
+}
+
+.cancel-button-color {
+  background: #f44336;
+  margin-left: 0.625rem !important;
+  color: white;
+  margin-top: 0.313rem !important;
+  --mat-button-protected-container-color: #f44336;
+  --mat-button-protected-label-text-color: #ffffff;
+}
+
+.mat-mdc-dialog-container,
+.mat-dialog-container {
+  overflow: hidden !important;
+  padding: 0.375rem !important;
+}
+
+// The dialog is small and sizes itself to its text, so it never needs its own scrollbar
+.mat-mdc-dialog-surface {
+  overflow: hidden !important;
+}
+
+.mat-mdc-dialog-surface .mat-mdc-card-content,
+.mat-mdc-dialog-surface .mat-mdc-card-content:first-child,
+.mat-mdc-dialog-surface .mat-mdc-card-content:last-child {
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+// Tabs: grey labels, black active underline (as in the WAMIS screens)
+.mat-mdc-tab-group {
+  --mdc-tab-indicator-active-indicator-color: #000;
+  --mat-tab-active-indicator-color: #000;
+  --mat-tab-active-label-text-color: #000;
+  --mat-tab-inactive-label-text-color: #505050;
+}
+
+// A Bootstrap .row reaches 12px past both sides of its box (the gutter); inside a tab that made the tab body
+// scroll sideways by 12px. The gutter is empty space, so it is simply cut off. (Two classes: Material adds its
+// own tab styles after this file, and they would win over a single class.)
+.mat-mdc-tab-group .mat-mdc-tab-body-content {
+  overflow-x: hidden;
+}
+
+// ---------------------------------------------------------------------------
+// 2. Shell: app-home (QMS home component: header, office bar, module rail, menu, footer)
+// ---------------------------------------------------------------------------
+app-home {
+  // The frame is pinned to the window, so it can never slide up when the page itself gets scrolled;
+  // only the menu panels and the content area scroll, and they do not pass their scrolling on to the window
+  .shell {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  // header
+  .header-space {
+    display: flex;
+    align-items: center;
+    height: 2.813rem;
+    padding: 0.313rem 0.625rem;
+    background-color: #0e5194;
+    color: #d5eaff;
+  }
+
+  // logo and title lead back to the home page
+  .home-link {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  h4.example-app-name {
+    margin: 0 0 0 0.5rem;
+    font-size: 1.125rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .logo-icon {
+    flex-shrink: 0;
+    font-size: 1.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .custom-mat-icon {
+    font-size: 1.5rem;
+  }
+
+  // office name bar
+  .nav-toolbar {
+    display: flex;
+    align-items: center;
+    height: 2.813rem;
+    padding: 0 0.625rem;
+    background-color: #fff;
+    border-bottom: 1px solid #7da5d0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .title-center {
+    min-width: 25rem;
+    margin-left: 1.5rem;
+    border-bottom: 1px solid #7da5d0;
+  }
+
+  .circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+
+  // body
+  .body {
+    position: relative;
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    background-color: #fafafa;
+  }
+
+  .left-section {
+    flex: 0 0 6.25rem;
+    overflow-y: auto;
+    background: linear-gradient(270deg, #1b64ad 0%, #003d79 100%);
+  }
+
+  .navigation {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 6px;
+    gap: 4px;
+    border: 0.2px solid #6f6b80;
+    color: #fff;
+    font-family: Roboto, sans-serif;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .active-menu {
+    background-color: #003467 !important;
+    color: white !important;
+    border-radius: 5px;
+  }
+
+  // The module menu opens over the page instead of pushing it aside, so the page keeps its full width
+  // (a wide list would otherwise need a sideways scrollbar while the menu is open)
+  .right-section {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 6.25rem;
+    z-index: 5;
+    width: 14.0625rem;
+    overflow-y: auto;
+    background-color: #ebebeb;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.18);
+  }
+
+  .right-section.hidden {
+    display: none;
+  }
+
+  .side-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: #ebebeb;
+  }
+
+  .menu-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 62px;
+    padding: 15px;
+    background-color: #0d5092;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .right-icon {
+    cursor: pointer;
+  }
+
+  .menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .expansion-panel-body {
+    background-color: #ebebeb;
+  }
+
+  .expansion-panel-body .mat-expansion-panel-body {
+    padding: 0 0.063rem 0.063rem;
+    width: 100%;
+  }
+
+  .expansion-panel-body .mat-expansion-panel-header {
+    padding-left: 1.25rem;
+    background-color: #ebebeb;
+  }
+
+  .expansion-panel-body .mat-expansion-panel-header-title {
+    color: #022a72;
+    font-weight: 550;
+    font-size: 0.938rem;
+  }
+
+  .function-item {
+    padding: 0.55rem 1rem 0.55rem 2.75rem;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 0.938rem;
+    cursor: pointer;
+  }
+
+  .function-item:hover {
+    background-color: #d9e4f1;
+  }
+
+  // WMS screens that are listed but not built yet
+  .function-item.function-disabled {
+    color: rgba(0, 0, 0, 0.38);
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  // The page scrolls up and down only: nothing may push it sideways (a slightly diagonal wheel or touchpad
+  // swipe would otherwise shift the whole page left and right while scrolling)
+  .content {
+    flex: 1;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .left-section,
+  .right-section {
+    overscroll-behavior: contain;
+  }
+
+  // footer
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 1.875rem;
+    padding: 0 1rem;
+    background-color: #0e5194;
+    color: #d5eaff;
+  }
+
+  .footer {
+    font-size: 0.75rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 3. Loader: grey veil with a ring of navy dots while the backend is busy
+// ---------------------------------------------------------------------------
+.wamis-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(40, 40, 40, 0.45);
+}
+
+.wamis-loader-dots {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  animation: wamis-spin 1.1s steps(8) infinite;
+
+  span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border-radius: 50%;
+    background: #0d3f9e;
+    // eight dots on a circle, shrinking towards the tail
+    transform: rotate(calc(var(--i) * 45deg)) translateY(-26px) scale(calc(1 - var(--i) * 0.11));
+  }
+}
+
+@keyframes wamis-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 4. Pop-up messages (snackbar), same class names as the QMS frontend
+// ---------------------------------------------------------------------------
+.snackbar-success {
+  --mat-snack-bar-container-color: #d4edda;
+  --mat-snack-bar-supporting-text-color: #155724;
+  --mat-snack-bar-button-color: #155724;
+}
+
+.snackbar-danger {
+  --mat-snack-bar-container-color: #f8d7da;
+  --mat-snack-bar-supporting-text-color: #721c24;
+  --mat-snack-bar-button-color: #721c24;
+}
+
+// ---------------------------------------------------------------------------
+// 5. Page conventions shared by all screens (as in the QMS screens)
+// ---------------------------------------------------------------------------
+.page-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #022a72;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.938rem;
+  font-weight: 600;
+  color: #022a72;
+}
+
+.required {
+  color: #f44336;
+  margin-left: 0.313rem;
+}
+
+.full-width-field {
+  width: 100%;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #022a72;
+  letter-spacing: 0.2px;
+}
+
+// ✕ inside a selected dropdown clears it; the arrow is hidden meanwhile
+.btn-clear-suffix {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+
+  &:hover {
+    color: #dc3545;
+  }
+}
+
+.has-value .mat-mdc-select-arrow-wrapper {
+  display: none !important;
+}
+
+// "Search in ..." box, closed until its header is clicked
+.search-panel {
+  border: 1px solid #dde6f0;
+  box-shadow: none !important;
+
+  .mat-expansion-panel-header-title {
+    color: #505050;
+    font-size: 0.938rem;
+    font-weight: 600;
+  }
+}
+
+// Refresh icon and paginator sit side by side in the middle of the page
+.paginator-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-btn {
+  color: #022a72;
+}
+
+.paginator-center {
+  width: auto;
+
+  .mat-mdc-paginator-container {
+    justify-content: center;
+  }
+}
+
+.no-data {
+  padding: 1rem;
+  text-align: center;
+  color: #505050;
+}
+
+// ---------------------------------------------------------------------------
+// 6. WMS Pre-Tender: form, table, details and dialogs
+// ---------------------------------------------------------------------------
+.form-mode {
+  margin-bottom: 0.75rem;
+  color: #505050;
+}
+
+// Work / sub work search of the Add form: each suggestion shows its numbers above its name
+.search-prefix {
+  margin: 0 4px 0 10px;
+  color: #64748b;
+}
+
+.search-option .mdc-list-item__primary-text {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  line-height: 1.3;
+}
+
+.search-option-code {
+  color: #022a72;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.search-option-text {
+  font-size: 0.875rem;
+  white-space: normal;
+}
+
+// the chosen work and sub work in one row (light-blue header, as the other WAMIS tables)
+.selected-work-table {
+  margin-bottom: 0;
+  border: 1px solid #dcdcdc;
+
+  th {
+    padding: 0.55rem 0.4rem;
+    background-color: #e1f6fb !important;
+    color: #333;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #dcdcdc;
+  }
+
+  td {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.85rem;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #e2e8f0;
+  }
+}
+
+// shown instead of the tender details until a sub work is chosen
+.locked-note {
+  margin-bottom: 0.75rem;
+  color: #505050;
+  font-size: 0.9rem;
+}
+
+// Financial Details / Critical Dates / Inviting Officer: sub-tabs side by side in one bordered box
+.detail-tabs {
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  background: #fff;
+
+  .mat-mdc-tab-header {
+    border-bottom: 1px solid #dcdcdc;
+  }
+
+  .mat-mdc-tab-body-content {
+    padding: 1rem 1rem 0.25rem;
+    overflow: hidden;
+  }
+}
+
+// The table fits the page: headers wrap onto several lines and long codes break after a slash, so all
+// columns share the width instead of pushing the table sideways. Only a screen too narrow for even the
+// shortest columns still scrolls the table itself.
+.wamis-scrollable-table {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+// list of pre-tenders: light-blue header, as the QMS allocation tables
+.wamis-table {
+  width: 100%;
+  border: 1px solid #dcdcdc;
+
+  th.mat-mdc-header-cell {
+    padding: 0.5rem 0.2rem;
+    background-color: #e1f6fb;
+    color: #333;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    border: 1px solid #dcdcdc;
+  }
+
+  td.mat-mdc-cell {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.82rem;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+  }
+
+  // amounts are read as one number and never wrap
+  td.wamis-nowrap {
+    white-space: nowrap;
+  }
+
+  // the icon columns stay narrow
+  .wamis-action-btn .mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  // label/value pairs in the details dialog
+  td.wamis-wms-label {
+    width: 18%;
+    background: #f5f8fc;
+    color: #022a72;
+    font-weight: 600;
+    text-align: left;
+  }
+}
+
+.wamis-link-cell {
+  color: #022a72;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.wamis-desc-cell {
+  min-width: 125px;
+  max-width: 300px;
+  text-align: left !important;
+  white-space: normal;
+}
+
+// long descriptions stop after four lines with "..."; the whole text shows when the pointer rests on it
+.wamis-desc-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+.wamis-docs-download-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  a {
+    color: #022a72;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.wamis-actions-cell {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.wamis-action-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(2, 42, 114, 0.08);
+  }
+}
+
+// same colours as the QMS row actions
+.wamis-icon-edit {
+  color: #022a72;
+}
+
+.wamis-icon-delete {
+  color: #d32f2f;
+}
+
+.wamis-icon-circle-check {
+  color: #9aa5b1;
+
+  &.active {
+    color: #0d47a1;
+  }
+}
+
+// labels and section titles inside the WMS dialogs
+.wamis-wms-label {
+  color: #022a72;
+  font-size: 0.938rem;
+  font-weight: 600;
+}
+
+.wamis-section-title {
+  margin: 0.75rem 0 0.5rem;
+  color: #022a72;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.wamis-wms-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1.5rem;
+}
+
+.wamis-wms-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.wamis-wms-counter {
+  color: #505050;
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.component-details-panel {
+  display: block;
+}
+
+// confirm dialog: centred title and text, navy Ok and red Cancel, like the QMS DialogComponent
+.wamis-dialog-card {
+  position: relative;
+  text-align: center;
+}
+
+.wamis-dialog-close-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: #180085;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.wamis-dialog-body {
+  padding: 1.25rem 1rem 0.75rem;
+}
+
+.wamis-dialog-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.wamis-dialog-subtitle {
+  margin-bottom: 1rem;
+  font-size: large;
+  white-space: pre-line;
+}
+
+.wamis-dialog-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 0.75rem;
+}
+
+@mixin wamis-dialog-button($color) {
+  min-width: 6.25rem;
+  height: 36px;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 4px;
+  background: $color;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 1px 5px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-dialog-ok {
+  @include wamis-dialog-button(#022a72);
+}
+
+.btn-dialog-cancel {
+  @include wamis-dialog-button(#f44336);
+}
+
+// dialog title bars (audit details, upload BOQ, details)
+.wamis-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #0e5194;
+  color: #fff;
+}
+
+.wamis-topbar-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.wamis-subbar-left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #dde6f0;
+
+  .wamis-section-title,
+  .audit-details-title {
+    margin: 0;
+    color: #022a72;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+}
+
+.wamis-clear-cross {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.component-audit-details-content {
+  padding: 16px;
+}
+
+.component-audit-details-table-wrapper {
+  max-height: 60vh;
+  overflow: auto;
+  border: 1px solid #dcdcdc;
+}
+
+.component-audit-details-table {
+  width: 100%;
+
+  .mat-mdc-header-cell {
+    background-color: #e1f6fb;
+    color: #333;
+    font-weight: 600;
+  }
+}
+
+.component-search-controls input[type='file'] {
+  width: 100%;
+  padding: 8px;
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+// ---------------------------------------------------------------------------
+// 7. QMS screens: their component styles, each scoped to its element
+//    (generated from the QMS *.component.css files: :host -> &, ::ng-deep dropped)
+// ---------------------------------------------------------------------------
+
+// qms/item/item.component.css
+app-item {
+  .page-title {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #505050;
+  }
+
+  .field-label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.938rem;
+      font-weight: 600;
+      color: #022a72;
+  }
+
+  .required {
+      color: #f44336;
+      margin-left: 0.313rem;
+  }
+
+  .full-width-field {
+      width: 100%;
+  }
+
+  .search-panel {
+      border: 1px solid #dde6f0;
+      box-shadow: none;
+  }
+
+  /* Header text of the closed search box */
+  & .search-panel .mat-expansion-panel-header-title {
+      color: #505050;
+      font-size: 0.938rem;
+      font-weight: 600;
+  }
+
+  .item-table {
+      width: 100%;
+  }
+
+  .item-table th {
+      color: #022a72;
+      font-weight: 600;
+      font-size: 0.938rem;
+  }
+
+  /* Edit, Delete and Approve stay on one line; the column keeps the room they need */
+  .actions-cell {
+      white-space: nowrap;
+      min-width: 9.5rem;
+  }
+
+  .action-edit {
+      color: #022a72;
+  }
+
+  .action-delete {
+      color: #d32f2f;
+  }
+
+  .action-approve {
+      color: #0d47a1;
+  }
+
+  .action-locked {
+      color: #d32f2f;
+  }
+
+  .audit-icon {
+      color: #505050;
+  }
+
+  /* Refresh icon and paginator sit side by side in the middle of the page */
+  .paginator-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .refresh-btn {
+      color: #022a72;
+  }
+
+  /* Paginator in the middle of the page (Material puts it at the right edge by default) */
+  & .paginator-center {
+      width: auto;
+  }
+
+  & .paginator-center .mat-mdc-paginator-container {
+      justify-content: center;
+  }
+
+  .no-data {
+      padding: 1rem;
+      text-align: center;
+      color: #505050;
+  }
+}
+
+// qms/item/item-audit/item-audit.component.css
+app-item-audit {
+  .audit-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0.5rem 0 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+  }
+
+  .audit-title {
+      margin: 0;
+      padding: 1rem 0;
+      font-size: 0.938rem;
+      font-weight: 400;
+      color: #333;
+  }
+
+  .audit-body {
+      padding-top: 1.5rem;
+  }
+
+  .audit-table {
+      width: 100%;
+  }
+
+  .audit-table th {
+      background-color: #dff3fa;
+      color: #333;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-align: center;
+  }
+
+  .audit-table td {
+      font-size: 0.813rem;
+      text-align: center;
+  }
+
+  .audit-table tr.mat-mdc-row:nth-child(odd) td {
+      background-color: #f1f9fc;
+  }
+
+  .no-data {
+      padding: 1rem;
+      text-align: center;
+      color: #505050;
+  }
+}
+
+// qms/work-assignment/work-assignment-outer.component.css
+app-work-assignment-outer {
+  & {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .container-fluid {
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #022a72;
+  }
+
+  .help-icon {
+    color: #1a3c8f;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-left: 6px;
+    cursor: pointer;
+  }
+}
+
+// qms/work-assignment/work-assignment-add/allocation-details.component.css
+app-allocation-details {
+  & {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .allocation-wrapper {
+    padding: 0.5rem 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #022a72;
+    letter-spacing: 0.2px;
+  }
+
+  .allocation-card {
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+  }
+
+  .allocation-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse;
+    border: 1px solid #dcdcdc;
+    margin-bottom: 0;
+    box-sizing: border-box;
+  }
+
+  .allocation-table th {
+    background-color: #e1f6fb !important;
+    color: #333333;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: center;
+    border: 1px solid #dcdcdc;
+    padding: 0.65rem 0.5rem;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+
+  .allocation-table td {
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 0.5rem;
+    vertical-align: middle;
+    box-sizing: border-box;
+  }
+
+  /* Locked column proportions */
+  .col-sr {
+    width: 6%;
+  }
+
+  .col-field {
+    width: 23.5%;
+  }
+
+  .custom-select-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #94a3b8;
+    border-radius: 4px;
+    padding: 0 0.5rem;
+    background-color: #ffffff;
+    position: relative;
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .custom-select-box:focus-within {
+    border-color: #022a72;
+  }
+
+  .custom-select-box.has-error {
+    border-color: #dc3545 !important;
+  }
+
+  .custom-select-box mat-select {
+    flex: 1;
+    font-size: 0.875rem;
+    width: 100%;
+  }
+
+  .btn-clear {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .btn-clear:hover {
+    color: #dc3545;
+  }
+
+  /* Delete Button */
+  .btn-delete {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-delete:hover {
+    background-color: #fee2e2;
+  }
+
+  .icon-trash {
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  /* Action Footer: Save on Left, Add Approval Level on Right */
+  .action-footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .btn-save {
+    background-color: #022a72 !important;
+    color: #ffffff !important;
+    font-weight: 500;
+    padding: 0.5rem 1.75rem;
+    border-radius: 4px;
+  }
+
+  .btn-add-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f0f7ff;
+    border: 1px dashed #337ab7;
+    color: #022a72;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.45rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-add-level:hover {
+    background-color: #e0efff;
+    border-style: solid;
+  }
+
+  .icon-add {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .required {
+    color: #dc3545;
+    margin-left: 2px;
+  }
+}
+
+// qms/work-assignment/work-assignment-add/work-assignment-add.component.css
+app-work-assignment-add {
+  .field-label {
+    display: block;
+    color: #1a3c8f;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .required-star {
+    color: #f44336;
+  }
+
+  .full-width-field {
+    width: 100%;
+  }
+
+  .btn-clear-suffix {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  .btn-clear-suffix:hover {
+    color: #dc3545;
+  }
+}
+
+// qms/work-assignment/work-assignment-view/work-assignment-view.component.css
+app-work-assignment-view {
+  & {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .field-label {
+    display: block;
+    color: #1a3c8f;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .required-star {
+    color: #f44336;
+  }
+
+  .full-width-field {
+    width: 100%;
+  }
+
+  /* Hide dropdown arrow when a work is selected */
+  .has-value .mat-mdc-select-arrow-wrapper {
+    display: none !important;
+  }
+
+  .btn-clear-suffix {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  .btn-clear-suffix:hover {
+    color: #dc3545;
+  }
+
+  /* Allocation Details Read-Only Card */
+  .allocation-wrapper {
+    padding: 0.5rem 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #022a72;
+    letter-spacing: 0.2px;
+  }
+
+  .allocation-card {
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+  }
+
+  .allocation-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse;
+    border: 1px solid #dcdcdc;
+    margin-bottom: 0;
+    box-sizing: border-box;
+  }
+
+  .allocation-table th {
+    background-color: #e1f6fb !important;
+    color: #333333;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: center;
+    border: 1px solid #dcdcdc;
+    padding: 0.65rem 0.5rem;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+
+  .allocation-table td {
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 0.5rem;
+    vertical-align: middle;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+  }
+
+  .col-sr {
+    width: 6%;
+  }
+
+  .col-field {
+    width: 23.5%;
+  }
+
+  /* Disabled / Read-Only Box Styling */
+  .custom-value-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ced4da;        /* Soft disabled border */
+    border-radius: 4px;
+    padding: 0 0.75rem;
+    background-color: #e9ecef;        /* Standard disabled gray background */
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: not-allowed;              /* Not-allowed cursor on hover */
+  }
+
+  .box-value-text {
+    font-size: 0.875rem;
+    color: #495057;                   /* Muted disabled text color */
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+}
+
+// qms/work-inspection/work-inspection-outer.component.css
+app-work-inspection-outer {
+  & {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .container-fluid {
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #022a72;
+  }
+
+  .help-icon {
+    color: #1a3c8f;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-left: 6px;
+    cursor: pointer;
+  }
+}
+
+// qms/work-inspection/work-inspection-and-reporting/work-inspection-and-reporting.component.css
+app-work-inspection-and-reporting {
+  & {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Page Outer Wrapper */
+  .inspection-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 4px 0 30px 0;
+    box-sizing: border-box;
+  }
+
+  /* Zero out Bootstrap negative margins to prevent horizontal scrollbars */
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Section Title */
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #022a72;
+    letter-spacing: 0.2px;
+  }
+
+  /* Form Field Labels matching Work Assignment */
+  .field-label {
+    display: block;
+    color: #1a3c8f;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .required-star {
+    color: #f44336;
+    font-weight: bold;
+  }
+
+  .full-width-field {
+    width: 100%;
+  }
+
+  /* Success Calculation Banner */
+  .alert-calc-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Custom Grid Table (Checklist) */
+  .custom-grid-table {
+    width: 100% !important;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin-bottom: 0;
+    background: #ffffff;
+  }
+
+  .custom-grid-table th {
+    background-color: #f5f7fa;
+    color: #1a3c8f;
+    font-weight: 600;
+    border: 1px solid #d4dfe8;
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 0.95rem;
+  }
+
+  .custom-grid-table td {
+    border: 1px solid #d4dfe8;
+    padding: 10px 14px;
+    vertical-align: middle;
+    color: #222222;
+    text-align: left;
+    font-size: 0.92rem;
+  }
+
+  .custom-grid-table tbody tr:hover {
+    background-color: #f9fbfd;
+  }
+
+  /* Grade Dropdown in Table Cells */
+  .grade-select {
+    font-size: 0.9rem;
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid #c5d0dc;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  /* Action Buttons Toolbar */
+  .action-buttons-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+    margin-bottom: 24px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .btn-action {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: 1px solid #5a6268;
+    padding: 7px 18px;
+    border-radius: 4px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+  }
+
+  .btn-action:hover {
+    background-color: #5a6268;
+  }
+
+  .btn-action:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.4);
+  }
+}
+
+// qms/work-inspection/work-inspection-view/work-inspection-view.component.css
+app-work-inspection-view {
+  & {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Page Outer Wrapper */
+  .inspection-view-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 4px 0 30px 0;
+    box-sizing: border-box;
+  }
+
+  /* Zero out Bootstrap negative margins to eliminate horizontal scrollbar */
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Section Title matching Work Assignment */
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #022a72;
+    letter-spacing: 0.2px;
+  }
+
+  /* Form Field Labels matching Work Assignment */
+  .field-label {
+    display: block;
+    color: #1a3c8f;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .required-star {
+    color: #f44336;
+    font-weight: bold;
+  }
+
+  .full-width-field {
+    width: 100%;
+  }
+
+  /* Custom Grid Table (Grade Details Checklist) */
+  .custom-grid-table {
+    width: 100% !important;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    margin-bottom: 0;
+    background: #ffffff;
+  }
+
+  .custom-grid-table th {
+    background-color: #f5f7fa;
+    color: #1a3c8f;
+    font-weight: 600;
+    border: 1px solid #d4dfe8;
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 0.95rem;
+  }
+
+  .custom-grid-table td {
+    border: 1px solid #d4dfe8;
+    padding: 10px 14px;
+    vertical-align: middle;
+    color: #222222;
+    text-align: left;
+    font-size: 0.92rem;
+  }
+
+  .custom-grid-table tbody tr:hover {
+    background-color: #f9fbfd;
+  }
+
+  /* Grade Badges */
+  .grade-badge {
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .badge-satisfactory {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+  }
+
+  .badge-sri {
+    background-color: #fff3cd;
+    color: #664d03;
+    border: 1px solid #ffecb5;
+  }
+
+  .badge-unsatisfactory {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+  }
+
+  .badge-na {
+    background-color: #e2e3e5;
+    color: #41464b;
+    border: 1px solid #d3d6d8;
+  }
+}

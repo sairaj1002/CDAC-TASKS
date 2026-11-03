@@ -1,0 +1,323 @@
+<form class="pretender-form" (ngSubmit)="onSubmit()">
+  @if (isEditMode) {
+    <p class="form-mode">Editing <strong>{{ formData.tenderReferenceNo }}</strong></p>
+  } @else {
+    <!-- Step 1: the tender is raised against one sub work; search the work, then one of its sub works -->
+    <mat-expansion-panel class="search-panel mb-3">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Search Work and Sub Work</mat-panel-title>
+        <mat-panel-description class="justify-content-end">
+          <mat-icon>search</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+    <div class="row">
+      <div class="col-12 col-lg-6 mb-2">
+        <label class="field-label" for="workQuery">Work <span class="required">*</span></label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <mat-icon matPrefix class="search-prefix">search</mat-icon>
+          <input matInput id="workQuery" name="workQuery" [(ngModel)]="workQuery" (ngModelChange)="onWorkQuery($event)"
+            [matAutocomplete]="workAuto" placeholder="Search work by registration number, work number or name" />
+          @if (selectedWork) {
+            <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearWork(); $event.stopPropagation()" title="Clear">✕</button>
+          }
+          <mat-autocomplete #workAuto="matAutocomplete" [displayWith]="workLabel" (optionSelected)="onWorkSelected($event.option.value)">
+            @for (work of workOptions; track work.id) {
+              <mat-option [value]="work" class="search-option">
+                <span class="search-option-code">{{ work.registrationNumber }} · {{ work.workNumber }}</span>
+                <span class="search-option-text">{{ work.nameOfWork }}</span>
+              </mat-option>
+            } @empty {
+              <mat-option disabled>No work found.</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-lg-6 mb-2">
+        <label class="field-label" for="subWorkQuery">Sub Work <span class="required">*</span></label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <mat-icon matPrefix class="search-prefix">search</mat-icon>
+          <input matInput id="subWorkQuery" name="subWorkQuery" [(ngModel)]="subWorkQuery" (ngModelChange)="onSubWorkQuery($event)"
+            [matAutocomplete]="subWorkAuto" [disabled]="!selectedWork"
+            [placeholder]="selectedWork ? 'Search sub work by number or description' : 'Select a work first'" />
+          @if (selectedSubWork) {
+            <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearSubWork(); $event.stopPropagation()" title="Clear">✕</button>
+          }
+          <mat-autocomplete #subWorkAuto="matAutocomplete" [displayWith]="subWorkLabel" (optionSelected)="onSubWorkSelected($event.option.value)">
+            @for (subWork of subWorkOptions; track subWork.id) {
+              <mat-option [value]="subWork" class="search-option">
+                <span class="search-option-code">{{ subWork.registrationNumber }} · {{ subWork.subWorkNumber }}</span>
+                <span class="search-option-text">{{ subWork.description }}</span>
+              </mat-option>
+            } @empty {
+              <mat-option disabled>No sub work found for this work.</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+    </mat-expansion-panel>
+  }
+
+  <!-- The chosen work and sub work, in one row (an edited tender shows its work) -->
+  @if (selectedWork && (selectedSubWork || isEditMode)) {
+    <div class="table-responsive mb-3">
+      <table class="table selected-work-table">
+        <thead>
+          <tr>
+            <th>Work Reg. No.</th>
+            <th>Name of Work</th>
+            <th>Sub Work Reg. No.</th>
+            <th>Sub Work No.</th>
+            <th>Sub Work Description</th>
+            <th>Work Category</th>
+            <th>Work Type</th>
+            <th>Program Type</th>
+            <th>District</th>
+            <th>Scheme</th>
+            <th>Budget Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ selectedWork.registrationNumber }}</td>
+            <td class="text-start">{{ selectedWork.nameOfWork }}</td>
+            <td>{{ selectedSubWork?.registrationNumber || '-' }}</td>
+            <td>{{ selectedSubWork?.subWorkNumber || '-' }}</td>
+            <td class="text-start">{{ selectedSubWork?.description || '-' }}</td>
+            <td>{{ selectedWork.workCategory }}</td>
+            <td>{{ selectedWork.workType }}</td>
+            <td>{{ selectedWork.programType }}</td>
+            <td>{{ selectedWork.district }}</td>
+            <td>{{ selectedWork.scheme }}</td>
+            <td>{{ selectedWork.budgetYear }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Step 2: tender details, shown only once a sub work is chosen -->
+  @if (detailsLocked) {
+    <p class="locked-note">Select the work and its sub work to add the tender details.</p>
+  } @else {
+  <div class="tender-details">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="uniqueFileNo">Unique File Number <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="uniqueFileNo" name="uniqueFileNo" [(ngModel)]="formData.uniqueFileNo" placeholder="Enter unique file number" required />
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="tenderReferenceNo">Tender Reference Number <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="tenderReferenceNo" name="tenderReferenceNo" [(ngModel)]="formData.tenderReferenceNo" placeholder="Enter tender reference number" required />
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="tenderTitle">Work Description <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="tenderTitle" name="tenderTitle" [(ngModel)]="formData.tenderTitle" placeholder="Enter work description" required />
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">Tender Type <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="formData.tenderType">
+        <mat-select name="tenderType" [(ngModel)]="formData.tenderType" placeholder="Select tender type" required>
+          @for (opt of tenderTypes; track opt.id) {
+            <mat-option [value]="opt.displayName">{{ opt.displayName }}</mat-option>
+          }
+        </mat-select>
+        @if (formData.tenderType) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="formData.tenderType = ''; $event.stopPropagation()" title="Clear">✕</button>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">Form of Contract <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="formData.formContract">
+        <mat-select name="formContract" [(ngModel)]="formData.formContract" placeholder="Select form of contract" required>
+          @for (opt of formsOfContract; track opt.id) {
+            <mat-option [value]="opt.displayName">{{ opt.displayName }}</mat-option>
+          }
+        </mat-select>
+        @if (formData.formContract) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="formData.formContract = ''; $event.stopPropagation()" title="Clear">✕</button>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">Tender Category <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="formData.category">
+        <mat-select name="category" [(ngModel)]="formData.category" (selectionChange)="onTenderCategoryChange()" placeholder="Select tender category" required>
+          @for (opt of tenderCategories; track opt.id) {
+            <mat-option [value]="opt.displayName">{{ opt.displayName }}</mat-option>
+          }
+        </mat-select>
+        @if (formData.category) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="formData.category = ''; onTenderCategoryChange(); $event.stopPropagation()" title="Clear">✕</button>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">Product Category <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="formData.productCategory">
+        <mat-select name="productCategory" [(ngModel)]="formData.productCategory" placeholder="Select product category" required>
+          @for (opt of filteredProductCategories; track opt.id) {
+            <mat-option [value]="opt.displayName">{{ opt.displayName }}</mat-option>
+          }
+        </mat-select>
+        @if (formData.productCategory) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="formData.productCategory = ''; $event.stopPropagation()" title="Clear">✕</button>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="coversCount">No. of Covers <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="coversCount" name="coversCount" type="number" [(ngModel)]="formData.coversCount" min="1" max="4" placeholder="Enter no. of covers" required />
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">Bid Openers <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="formData.bidOpeners">
+        <mat-select name="bidOpeners" [(ngModel)]="formData.bidOpeners" placeholder="Select bid openers" required>
+          @for (opt of bidOpenersList; track opt.id) {
+            <mat-option [value]="opt.displayName">{{ opt.displayName }}</mat-option>
+          }
+        </mat-select>
+        @if (formData.bidOpeners) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="formData.bidOpeners = ''; $event.stopPropagation()" title="Clear">✕</button>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Detail sub-tabs: Financial Details | Critical Dates | Inviting Officer -->
+  <mat-tab-group class="detail-tabs mb-3" animationDuration="0ms" [mat-stretch-tabs]="false" mat-align-tabs="start">
+  <mat-tab label="Financial Details">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label" for="tenderValue">Tender Estimated Value (₹) <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="tenderValue" name="tenderValue" type="number" [(ngModel)]="formData.tenderValue" placeholder="Enter estimated value" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label" for="feeAmount">Tender Fee (₹) <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="feeAmount" name="feeAmount" type="number" [(ngModel)]="formData.feeAmount" placeholder="Enter tender fee" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label" for="emdAmount">EMD Fee (₹) <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="emdAmount" name="emdAmount" type="number" [(ngModel)]="formData.emdAmount" placeholder="Enter EMD fee" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label">Tenderer Class <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="formData.tendererClass">
+        <mat-select name="tendererClass" [(ngModel)]="formData.tendererClass" placeholder="Select tenderer class" required>
+          @for (opt of tendererClasses; track opt.id) {
+            <mat-option [value]="opt.displayName">{{ opt.displayName }}</mat-option>
+          }
+        </mat-select>
+        @if (formData.tendererClass) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="formData.tendererClass = ''; $event.stopPropagation()" title="Clear">✕</button>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  </mat-tab>
+
+  <mat-tab label="Critical Dates">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="publishingDate">Publishing Date &amp; Time <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="publishingDate" name="publishingDate" [(ngModel)]="formData.publishingDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="docDownloadStartDate">Doc Download Start <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="docDownloadStartDate" name="docDownloadStartDate" [(ngModel)]="formData.docDownloadStartDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="bidSubmissionStartDate">Bid Submission Start <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="bidSubmissionStartDate" name="bidSubmissionStartDate" [(ngModel)]="formData.bidSubmissionStartDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="bidSubmissionEndDate">Bid Submission End <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="bidSubmissionEndDate" name="bidSubmissionEndDate" [(ngModel)]="formData.bidSubmissionEndDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label" for="bidOpenDate">Bid Opening Date <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="bidOpenDate" name="bidOpenDate" [(ngModel)]="formData.bidOpenDate" placeholder="YYYY-MM-DDTHH:mm:ss" required />
+      </mat-form-field>
+    </div>
+  </div>
+
+  </mat-tab>
+
+  <mat-tab label="Inviting Officer">
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label" for="invitingOfficer">Inviting Officer <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="invitingOfficer" name="invitingOfficer" [(ngModel)]="formData.invitingOfficer" placeholder="Enter inviting officer" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label" for="invitingOfficerAddress">Inviting Officer Address <span class="required">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="invitingOfficerAddress" name="invitingOfficerAddress" [(ngModel)]="formData.invitingOfficerAddress" placeholder="Enter address" required />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label" for="pincode">PIN Code</label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="pincode" name="pincode" type="number" [(ngModel)]="formData.pincode" placeholder="Enter PIN code" />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3 mb-2">
+      <label class="field-label" for="bidValidityDays">Bid Validity Days</label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput id="bidValidityDays" name="bidValidityDays" type="number" [(ngModel)]="formData.bidValidityDays" placeholder="Enter bid validity days" />
+      </mat-form-field>
+    </div>
+  </div>
+  </mat-tab>
+  </mat-tab-group>
+  </div>
+
+  <!-- Actions -->
+  <button mat-raised-button color="primary" type="submit" class="me-2" [disabled]="saving">
+    {{ saving ? 'Saving...' : (isEditMode ? 'Update' : 'Save') }}
+  </button>
+  @if (isEditMode) {
+    <button mat-raised-button type="button" class="me-2" (click)="onValidate()">Validate</button>
+    <button mat-raised-button type="button" (click)="onCancel()">Cancel</button>
+  } @else {
+    <button mat-raised-button type="button" (click)="resetForm()">Reset</button>
+  }
+  }
+</form>
