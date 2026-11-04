@@ -68,12 +68,12 @@
           <td mat-cell *matCellDef="let element" class="wamis-nowrap">{{ element.tenderValue | number:'1.0-2' }}</td>
         </ng-container>
 
-        <!-- 8. Download XML -->
-        <ng-container matColumnDef="downloadXml">
-          <th mat-header-cell *matHeaderCellDef>Download XML</th>
+        <!-- 8. View JSON: the tender JSON as it would be sent to GePNIC -->
+        <ng-container matColumnDef="viewJson">
+          <th mat-header-cell *matHeaderCellDef>View JSON</th>
           <td mat-cell *matCellDef="let element">
-            <button type="button" class="wamis-action-btn" (click)="onDownloadXml(element)" matTooltip="Download XML">
-              <mat-icon class="wamis-icon-edit">visibility</mat-icon>
+            <button type="button" class="wamis-action-btn" (click)="onViewJson(element)" matTooltip="View the GePNIC JSON of this tender">
+              <mat-icon class="wamis-icon-edit">data_object</mat-icon>
             </button>
           </td>
         </ng-container>
@@ -88,34 +88,14 @@
           </td>
         </ng-container>
 
-        <!-- 10. Upload Protected BOQ (Matches Image 2) -->
-        <ng-container matColumnDef="uploadProtectedBoq">
-          <th mat-header-cell *matHeaderCellDef>Upload Protected BOQ</th>
+        <!-- 10. Documents: one dialog to upload (protected BOQ, NIT, ...), see and download the tender's documents -->
+        <ng-container matColumnDef="documents">
+          <th mat-header-cell *matHeaderCellDef>Documents</th>
           <td mat-cell *matCellDef="let element">
-            <button type="button" class="wamis-action-btn" (click)="onUploadBoq(element)" matTooltip="Click here to upload protected BOQ">
-              <mat-icon class="wamis-icon-edit">info</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <!-- 11. Download Pre-Tender documents -->
-        <ng-container matColumnDef="downloadPreTenderDocs">
-          <th mat-header-cell *matHeaderCellDef>Download Pre-Tender documents</th>
-          <td mat-cell *matCellDef="let element">
-            <div class="wamis-docs-download-list">
-              <a href="javascript:void(0)" (click)="onDownloadDoc('NIT File', element)">NIT File ⤓</a>
-              <a href="javascript:void(0)" (click)="onDownloadDoc('DTCN File', element)">DTCN File ⤓</a>
-              <a href="javascript:void(0)" (click)="onDownloadDoc('Protected BOQ', element)">Protected BOQ ⤓</a>
-            </div>
-          </td>
-        </ng-container>
-
-        <!-- 12. Download BOQ -->
-        <ng-container matColumnDef="downloadBoq">
-          <th mat-header-cell *matHeaderCellDef>Download BOQ</th>
-          <td mat-cell *matCellDef="let element">
-            <button type="button" class="wamis-action-btn" (click)="onDownloadDoc('Financial BOQ', element)" matTooltip="Download BOQ">
-              <mat-icon class="wamis-icon-edit">description</mat-icon>
+            <button type="button" class="wamis-action-btn doc-count-btn" (click)="openDocuments(element)"
+              matTooltip="Upload, see and download the documents of this tender (protected BOQ, NIT, ...)">
+              <mat-icon class="wamis-icon-edit">folder_open</mat-icon>
+              <span class="doc-count">{{ element.documents?.length || 0 }}</span>
             </button>
           </td>
         </ng-container>

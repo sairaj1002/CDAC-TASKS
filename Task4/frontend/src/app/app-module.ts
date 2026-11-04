@@ -43,6 +43,8 @@ import { ViewDetailsDialogComponent } from './components/shared/view-details-dia
 import { AuditDetailsDialogComponent } from './components/shared/audit-details-dialog/audit-details-dialog';
 import { UploadBoqDialogComponent } from './components/shared/upload-boq-dialog/upload-boq-dialog';
 import { CustomSnackbarComponent } from './components/shared/custom-snackbar/custom-snackbar';
+import { JsonViewDialogComponent } from './components/shared/json-view-dialog/json-view-dialog';
+import { TenderDocumentsDialogComponent } from './components/shared/tender-documents-dialog/tender-documents-dialog';
 
 // HTTP interceptors and error handling
 import { LoadingInterceptor } from './common/interceptors/loading.interceptor';
@@ -64,6 +66,8 @@ import { GlobalErrorHandler } from './common/error-handler/global-error-handler'
     AuditDetailsDialogComponent,
     UploadBoqDialogComponent,
     CustomSnackbarComponent,
+    JsonViewDialogComponent,
+    TenderDocumentsDialogComponent,
   ],
   imports: [
     BrowserModule,

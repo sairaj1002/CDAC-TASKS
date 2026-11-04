@@ -213,6 +213,14 @@ CREATE TABLE IF NOT EXISTS wamis_core.wamis_pretender_documents (
 );
 CREATE INDEX IF NOT EXISTS idx_pretender_docs_parent ON wamis_core.wamis_pretender_documents (pretender_id);
 
+-- PreTenderDocumentFile: the uploaded file of a document (one row per document, same id)
+CREATE TABLE IF NOT EXISTS wamis_core.wamis_pretender_document_files (
+    document_id     BIGINT        PRIMARY KEY,
+    content_type    VARCHAR(150),
+    content         BYTEA         NOT NULL,
+    uploaded_at     TIMESTAMP(6)  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ====================================================================
 -- wamis_intergation  (columns mirror the JPA entities)
 -- ====================================================================
@@ -288,6 +296,8 @@ BEGIN
         -- within wamis_core / wamis_intergation -> wamis_core
         ('wamis_core.wamis_pretender_documents', 'fk_document_pretender',
          'FOREIGN KEY (pretender_id) REFERENCES wamis_core.wamis_pretenders (id) ON DELETE CASCADE'),
+        ('wamis_core.wamis_pretender_document_files', 'fk_document_file_document',
+         'FOREIGN KEY (document_id) REFERENCES wamis_core.wamis_pretender_documents (id) ON DELETE CASCADE'),
         ('wamis_intergation.wamis_integration_transactions', 'fk_txn_pretender',
          'FOREIGN KEY (pretender_id) REFERENCES wamis_core.wamis_pretenders (id) ON DELETE SET NULL'),
         ('wamis_intergation.wamis_integration_audit_events', 'fk_audit_transaction',

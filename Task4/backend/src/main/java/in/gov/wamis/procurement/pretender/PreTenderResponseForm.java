@@ -48,6 +48,24 @@ public class PreTenderResponseForm {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime bidOpenDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime seekClarificationStartDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime seekClarificationEndDate;
+
+    // work item details shown on the details screen and loaded back into the edit form
+    private Boolean preBidMeeting;
+    private String preBidMeetingPlace;
+    private String preBidMeetingAddress;
+    private Integer bidValidityDays;
+    private Integer deliveryPeriodDays;
+    private String location;
+    private Integer pincode;
+    private String bidOpenPlace;
+    private String invitingOfficer;
+    private String invitingOfficerAddress;
+
     private IntegrationStatus status;
     private List<PreTenderDocumentForm> documents = new ArrayList<>();
 
@@ -85,6 +103,18 @@ public class PreTenderResponseForm {
         form.setBidSubmissionStartDate(entity.getBidSubmissionStartDate());
         form.setBidSubmissionEndDate(entity.getBidSubmissionEndDate());
         form.setBidOpenDate(entity.getBidOpenDate());
+        form.setSeekClarificationStartDate(entity.getSeekClarificationStartDate());
+        form.setSeekClarificationEndDate(entity.getSeekClarificationEndDate());
+        form.setPreBidMeeting(entity.getPreBidMeeting());
+        form.setPreBidMeetingPlace(entity.getPreBidMeetingPlace());
+        form.setPreBidMeetingAddress(entity.getPreBidMeetingAddress());
+        form.setBidValidityDays(entity.getBidValidityDays());
+        form.setDeliveryPeriodDays(entity.getDeliveryPeriodDays());
+        form.setLocation(entity.getLocation());
+        form.setPincode(entity.getPincode());
+        form.setBidOpenPlace(entity.getBidOpenPlace());
+        form.setInvitingOfficer(entity.getInvitingOfficer());
+        form.setInvitingOfficerAddress(entity.getInvitingOfficerAddress());
         form.setStatus(entity.getStatus());
         form.setCreatedAt(entity.getCreatedAt());
 
@@ -286,6 +316,102 @@ public class PreTenderResponseForm {
 
     public void setBidOpenDate(LocalDateTime bidOpenDate) {
         this.bidOpenDate = bidOpenDate;
+    }
+
+    public LocalDateTime getSeekClarificationStartDate() {
+        return seekClarificationStartDate;
+    }
+
+    public void setSeekClarificationStartDate(LocalDateTime seekClarificationStartDate) {
+        this.seekClarificationStartDate = seekClarificationStartDate;
+    }
+
+    public LocalDateTime getSeekClarificationEndDate() {
+        return seekClarificationEndDate;
+    }
+
+    public void setSeekClarificationEndDate(LocalDateTime seekClarificationEndDate) {
+        this.seekClarificationEndDate = seekClarificationEndDate;
+    }
+
+    public Boolean getPreBidMeeting() {
+        return preBidMeeting;
+    }
+
+    public void setPreBidMeeting(Boolean preBidMeeting) {
+        this.preBidMeeting = preBidMeeting;
+    }
+
+    public String getPreBidMeetingPlace() {
+        return preBidMeetingPlace;
+    }
+
+    public void setPreBidMeetingPlace(String preBidMeetingPlace) {
+        this.preBidMeetingPlace = preBidMeetingPlace;
+    }
+
+    public String getPreBidMeetingAddress() {
+        return preBidMeetingAddress;
+    }
+
+    public void setPreBidMeetingAddress(String preBidMeetingAddress) {
+        this.preBidMeetingAddress = preBidMeetingAddress;
+    }
+
+    public Integer getBidValidityDays() {
+        return bidValidityDays;
+    }
+
+    public void setBidValidityDays(Integer bidValidityDays) {
+        this.bidValidityDays = bidValidityDays;
+    }
+
+    public Integer getDeliveryPeriodDays() {
+        return deliveryPeriodDays;
+    }
+
+    public void setDeliveryPeriodDays(Integer deliveryPeriodDays) {
+        this.deliveryPeriodDays = deliveryPeriodDays;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(Integer pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getBidOpenPlace() {
+        return bidOpenPlace;
+    }
+
+    public void setBidOpenPlace(String bidOpenPlace) {
+        this.bidOpenPlace = bidOpenPlace;
+    }
+
+    public String getInvitingOfficer() {
+        return invitingOfficer;
+    }
+
+    public void setInvitingOfficer(String invitingOfficer) {
+        this.invitingOfficer = invitingOfficer;
+    }
+
+    public String getInvitingOfficerAddress() {
+        return invitingOfficerAddress;
+    }
+
+    public void setInvitingOfficerAddress(String invitingOfficerAddress) {
+        this.invitingOfficerAddress = invitingOfficerAddress;
     }
 
     public IntegrationStatus getStatus() {

@@ -62,6 +62,12 @@ public class PreTenderController {
         return ResponseEntity.ok(Collections.singletonMap("status", "VALID"));
     }
 
+    // the GePNIC tender JSON of this pre-tender, for viewing (nothing is sent)
+    @GetMapping("/{id}/gepnic-json")
+    public ResponseEntity<Map<String, Object>> getGePNICPayload(@PathVariable Long id) {
+        return ResponseEntity.ok(preTenderService.getGePNICPayload(id));
+    }
+
     @PostMapping("/{id}/integration-jobs")
     public ResponseEntity<IntegrationResult> submitIntegrationJob(
             @PathVariable Long id,

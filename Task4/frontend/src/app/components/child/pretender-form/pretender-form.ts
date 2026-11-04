@@ -259,6 +259,19 @@ export class PreTenderFormChildComponent implements OnInit {
       bidSubmissionStartDate: tender.bidSubmissionStartDate,
       bidSubmissionEndDate: tender.bidSubmissionEndDate,
       bidOpenDate: tender.bidOpenDate,
+      // saved values, so that Update does not overwrite them with the form's defaults
+      seekClarificationStartDate: tender.seekClarificationStartDate ?? this.formData.seekClarificationStartDate,
+      seekClarificationEndDate: tender.seekClarificationEndDate ?? this.formData.seekClarificationEndDate,
+      preBidMeeting: tender.preBidMeeting ?? this.formData.preBidMeeting,
+      preBidMeetingPlace: tender.preBidMeetingPlace ?? this.formData.preBidMeetingPlace,
+      preBidMeetingAddress: tender.preBidMeetingAddress ?? this.formData.preBidMeetingAddress,
+      bidValidityDays: tender.bidValidityDays ?? this.formData.bidValidityDays,
+      deliveryPeriodDays: tender.deliveryPeriodDays ?? this.formData.deliveryPeriodDays,
+      location: tender.location ?? this.formData.location,
+      pincode: tender.pincode ?? this.formData.pincode,
+      bidOpenPlace: tender.bidOpenPlace ?? this.formData.bidOpenPlace,
+      invitingOfficer: tender.invitingOfficer ?? this.formData.invitingOfficer,
+      invitingOfficerAddress: tender.invitingOfficerAddress ?? this.formData.invitingOfficerAddress,
       documents: [...(tender.documents || [])],
     };
     this.docFiles.clear();
