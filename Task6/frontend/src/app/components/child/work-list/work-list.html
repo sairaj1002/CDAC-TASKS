@@ -1,0 +1,200 @@
+<div class="pretender-list">
+  <!-- The search box stays closed until the header is clicked (as in the QMS screens) -->
+  <mat-expansion-panel class="search-panel mb-3">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Search in Pre-Tender</mat-panel-title>
+      <mat-panel-description class="justify-content-end">
+        <mat-icon>search</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <form (ngSubmit)="applyFilter()">
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mb-2">
+          <label class="field-label" for="searchFilter">Work Number / Reference / Description</label>
+          <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+            <input matInput id="searchFilter" name="searchFilter" [(ngModel)]="searchFilter" placeholder="Enter search text" />
+          </mat-form-field>
+        </div>
+      </div>
+      <button mat-raised-button color="primary" type="submit" class="me-2">Search</button>
+      <button mat-raised-button type="button" (click)="searchFilter = ''; applyFilter()">Reset</button>
+    </form>
+  </mat-expansion-panel>
+
+    <div class="wamis-scrollable-table">
+      <table mat-table [dataSource]="dataSource" class="wamis-table">
+        <!-- 1. Sr. No. -->
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <!-- 2. Work Number -->
+        <ng-container matColumnDef="workNumber">
+          <th mat-header-cell *matHeaderCellDef>Work Number</th>
+          <td mat-cell *matCellDef="let element" class="wamis-link-cell" (click)="onViewDetails(element)">{{ breakAtSlashes(element.uniqueFileNo || '3/9434/1') }}</td>
+        </ng-container>
+
+        <!-- 3. Work Desc. -->
+        <ng-container matColumnDef="workDesc">
+          <th mat-header-cell *matHeaderCellDef>Work Desc.</th>
+          <td mat-cell *matCellDef="let element" class="wamis-desc-cell" [title]="element.tenderTitle || element.tenderDescription">
+            <span class="wamis-desc-text">{{ element.tenderTitle || element.tenderDescription }}</span>
+          </td>
+        </ng-container>
+
+        <!-- 4. Tender Reference Number -->
+        <ng-container matColumnDef="tenderRefNo">
+          <th mat-header-cell *matHeaderCellDef>Tender Reference Number</th>
+          <td mat-cell *matCellDef="let element">{{ breakAtSlashes(element.tenderReferenceNo) }}</td>
+        </ng-container>
+
+        <!-- 5. Tender Type(procurement) -->
+        <ng-container matColumnDef="tenderType">
+          <th mat-header-cell *matHeaderCellDef>Tender Type (procure&shy;ment)</th>
+          <td mat-cell *matCellDef="let element">{{ element.tenderType }}</td>
+        </ng-container>
+
+        <!-- 6. Tender Category -->
+        <ng-container matColumnDef="tenderCategory">
+          <th mat-header-cell *matHeaderCellDef>Tender Category</th>
+          <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+        </ng-container>
+
+        <!-- 7. Tender Amount(in Rs.) -->
+        <ng-container matColumnDef="tenderAmount">
+          <th mat-header-cell *matHeaderCellDef>Tender Amount (in Rs.)</th>
+          <td mat-cell *matCellDef="let element" class="wamis-nowrap">{{ element.tenderValue | number:'1.0-2' }}</td>
+        </ng-container>
+
+        <!-- 8. View JSON: the tender JSON as it would be sent to GePNIC -->
+        <ng-container matColumnDef="viewJson">
+          <th mat-header-cell *matHeaderCellDef>View JSON</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onViewJson(element)" matTooltip="View the GePNIC JSON of this tender">
+              <mat-icon class="wamis-icon-edit">data_object</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 9. View Pre-tender details (Matches Image 1) -->
+        <ng-container matColumnDef="viewDetails">
+          <th mat-header-cell *matHeaderCellDef>View Pre-tender details</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onViewDetails(element)" matTooltip="View Pre-tender details">
+              <mat-icon class="wamis-icon-edit">remove_red_eye</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 10. Documents: one dialog to upload (protected BOQ, NIT, ...), see and download the tender's documents -->
+        <ng-container matColumnDef="documents">
+          <th mat-header-cell *matHeaderCellDef>Documents</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn doc-count-btn" (click)="openDocuments(element)"
+              matTooltip="Upload, see and download the documents of this tender (protected BOQ, NIT, ...)">
+              <mat-icon class="wamis-icon-edit">folder_open</mat-icon>
+              <span class="doc-count">{{ element.documents?.length || 0 }}</span>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 13. Action Column (Edit, Delete, Check - Matches Image 4) -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="wamis-actions-cell">
+              <!-- Blue Pencil (Edit) -->
+              <button type="button" class="wamis-action-btn" (click)="onEdit(element)" matTooltip="Edit Pre-Tender">
+                <mat-icon class="wamis-icon-edit">edit</mat-icon>
+              </button>
+              <!-- Red Trash Bin (Delete) -->
+              <button type="button" class="wamis-action-btn" (click)="onDelete(element)" matTooltip="Delete Pre-Tender">
+                <mat-icon class="wamis-icon-delete">delete</mat-icon>
+              </button>
+              <!-- Circle Check (Verify/Finalize) -->
+              <button type="button" class="wamis-action-btn" (click)="onFinalize(element)" matTooltip="Finalize Status">
+                <mat-icon class="wamis-icon-circle-check" [class.active]="element.status === 'ACCEPTED'">check_circle</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- 14. Transfer -->
+        <ng-container matColumnDef="transfer">
+          <th mat-header-cell *matHeaderCellDef>Transfer</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onTransfer(element)" matTooltip="Transfer Work">
+              <mat-icon class="wamis-icon-edit">swap_horiz</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 15. Send Pre-Tender Data to GEPNIC -->
+        <ng-container matColumnDef="sendGepnicData">
+          <th mat-header-cell *matHeaderCellDef>Send Pre-Tender Data to GEPNIC</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onSendToGepnic(element)" matTooltip="Click here to send pre-tender details to GEPNIC">
+              <mat-icon class="wamis-icon-edit">adjust</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 16. Upload Files To GEPNIC -->
+        <ng-container matColumnDef="uploadGepnicFiles">
+          <th mat-header-cell *matHeaderCellDef>Upload Files To GEPNIC</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onUploadBoq(element)" matTooltip="Click here to send docs to GEPNIC">
+              <mat-icon class="wamis-icon-edit">cloud_upload</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 17. Send Back -->
+        <ng-container matColumnDef="sendBack">
+          <th mat-header-cell *matHeaderCellDef>Send Back</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onSendBack(element)" matTooltip="Send Back">
+              <mat-icon class="wamis-icon-edit">arrow_back</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 18. Finalize -->
+        <ng-container matColumnDef="finalize">
+          <th mat-header-cell *matHeaderCellDef>Finalize</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onFinalize(element)" matTooltip="Finalize & Lock">
+              <mat-icon class="wamis-icon-edit">lock</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- 19. Audit Details (Matches Image 5) -->
+        <ng-container matColumnDef="auditDetails">
+          <th mat-header-cell *matHeaderCellDef>Audit Details</th>
+          <td mat-cell *matCellDef="let element">
+            <button type="button" class="wamis-action-btn" (click)="onAuditDetails(element)" matTooltip="View Audit Trail">
+              <mat-icon class="wamis-icon-edit">history</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    @if (!loading && !dataSource.filteredData.length) {
+      <div class="no-data">No pre-tenders found.</div>
+    }
+
+  <!-- Refresh icon and paginator side by side in the middle of the page (as in the QMS Item screen) -->
+  <div class="paginator-row">
+    <button mat-icon-button type="button" class="refresh-btn" title="Refresh" aria-label="Refresh"
+      (click)="loadWorks()"><mat-icon>refresh</mat-icon></button>
+    <mat-paginator class="paginator-center" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+      aria-label="Select page of pre-tenders"></mat-paginator>
+  </div>
+</div>
+

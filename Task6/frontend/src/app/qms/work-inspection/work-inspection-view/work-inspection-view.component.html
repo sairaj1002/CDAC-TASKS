@@ -1,0 +1,103 @@
+<div class="inspection-view-wrapper">
+
+  <!-- Section 1: Graded work Details Header -->
+  <div class="mb-3">
+    <div class="section-title mb-2">Graded work Details</div>
+
+    <!-- Row: Select Graded work dropdown + Current Overall Grade box beside it -->
+    <div class="row align-items-start">
+
+      <!-- 1. Dropdown: Select Graded work with Complete Name -->
+      <div class="col-12 col-md-8 col-lg-6 mb-2">
+        <label class="field-label">
+          Select Graded work <span class="required-star">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <mat-select
+            [(ngModel)]="selectedWork"
+            (selectionChange)="onWorkChange()"
+            placeholder="Select Graded Work">
+            <mat-option [value]="null">Select Graded Work</mat-option>
+            <mat-option *ngIf="gradedWorks.length === 0 && !isLoadingWorks" [value]="null" disabled>
+              (No graded works found in database)
+            </mat-option>
+            <mat-option *ngFor="let work of gradedWorks" [value]="work">
+              {{ work.workNumber }} - {{ work.workDescription }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- 2. Box beside dropdown: Current Overall Grade with Disabled theme -->
+      <div class="col-12 col-md-4 col-lg-3 mb-2" *ngIf="selectedWork">
+        <label class="field-label">Current Overall Grade</label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <input
+            matInput
+            class="fw-bold"
+            [class.text-success]="selectedWork.currentGrade === 'Satisfactory'"
+            [class.text-warning]="selectedWork.currentGrade === 'Satisfactory Requiring Improvement'"
+            [class.text-danger]="selectedWork.currentGrade === 'Unsatisfactory'"
+            [value]="selectedWork.currentGrade"
+            disabled>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div *ngIf="isLoadingWorks" class="text-primary small mt-1">
+      Loading graded works...
+    </div>
+  </div>
+
+  <!-- Section 2: Table that appears after selection (Grade Details) -->
+  <div class="mb-4" *ngIf="selectedWork && inspectionDetails">
+    <div class="section-title mb-2">Grade Details</div>
+
+    <div class="table-responsive">
+      <table class="table custom-grid-table mb-0">
+        <thead>
+          <tr>
+            <th style="width: 8%;">Sr.No</th>
+            <th style="width: 14%;">Item No.</th>
+            <th style="width: 53%;">Sub Item for observation</th>
+            <th style="width: 25%;">Awarded Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of inspectionDetails.items; let i = index">
+            <!-- Sr.No -->
+            <td>{{ i + 1 }}</td>
+
+            <!-- Item No. -->
+            <td class="font-weight-bold">
+              <span>Item {{ i + 1 }}</span>
+            </td>
+
+            <!-- Sub Item for observation -->
+            <td>
+              <span>{{ cleanDescription(item.itemDescription) }}</span>
+            </td>
+
+            <!-- Awarded Grade (Latest grading for each item) -->
+            <td>
+              <span class="grade-badge" [ngClass]="getBadgeClass(item.awardedGrade)">
+                {{ formatGradeLabel(item.awardedGrade) }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="inspectionDetails.items.length === 0 && !isLoadingDetails">
+            <td colspan="4" class="text-muted p-3 text-center">
+              No item inspection details found for this work.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="isLoadingDetails" class="text-center py-3 text-primary">
+    Loading checklist items from database...
+  </div>
+
+</div>

@@ -1,0 +1,160 @@
+<div class="aoc-view">
+  <div class="wamis-subbar-left">
+    <div>
+      <h2 class="wamis-section-title">AOC Details by Pre-Tender Creation Date</h2>
+      <div class="json-view-subtitle">{{ data.tenderRefNo }} · {{ data.uniqueFileNo }}</div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <span class="status-chip">{{ data.isInsertedInAoc ? 'INSERTED IN AOC' : 'NOT INSERTED' }}</span>
+      <button type="button" class="wamis-clear-cross" (click)="onClose()" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <div class="component-audit-details-content">
+    <!-- 1. AOC details -->
+    <div class="section-title mb-2">AOC Details</div>
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Unique File Number</span>
+        <div class="detail-value">{{ data.uniqueFileNo || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Reference Number</span>
+        <div class="detail-value">{{ data.tenderRefNo || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Id</span>
+        <div class="detail-value">{{ data.tenderId || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Work Item Id</span>
+        <div class="detail-value">{{ data.workItemId || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Type</span>
+        <div class="detail-value">{{ data.tenderType || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">No. of Bids</span>
+        <div class="detail-value">{{ data.noOfBids ?? '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Published Date</span>
+        <div class="detail-value">{{ data.publishDate || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Contract Date</span>
+        <div class="detail-value">{{ data.contractDate || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Contract No.</span>
+        <div class="detail-value">{{ data.contractNo || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Currency</span>
+        <div class="detail-value">{{ data.currency || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">ORG Id</span>
+        <div class="detail-value">{{ data.orgId || '-' }}</div>
+      </div>
+      <div class="col-12 col-lg-8 detail-item">
+        <span class="detail-label">Organization Name</span>
+        <div class="detail-value detail-value-wrap">{{ data.organizationName || '-' }}</div>
+      </div>
+      <div class="col-12 detail-item">
+        <span class="detail-label">Tender Description</span>
+        <div class="detail-value detail-value-wrap">{{ data.tenderDescription || '-' }}</div>
+      </div>
+      <div class="col-12 detail-item">
+        <span class="detail-label">Remarks</span>
+        <div class="detail-value detail-value-wrap">{{ data.remarks || 'NIL' }}</div>
+      </div>
+    </div>
+
+    <!-- 2. Qualified bidders -->
+    <div class="section-title mb-2">Qualified Bidder Details</div>
+    <div class="table-responsive mb-3">
+      <table class="table wamis-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Qualified Bid Id</th>
+            <th>Qualified Bidder Name</th>
+            <th>Qualified Bid GSTIN</th>
+            <th>Quoted Value (₹)</th>
+            <th>Bid Submitted Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (bidder of data.qualifiedBidders; track bidder.bidId) {
+            <tr>
+              <td>{{ bidder.sNo }}</td>
+              <td>{{ bidder.bidId }}</td>
+              <td class="text-start font-weight-bold">{{ bidder.bidderName }}</td>
+              <td>{{ bidder.gstin }}</td>
+              <td class="wamis-nowrap">{{ bidder.quotedValue | number:'1.0-2' }}</td>
+              <td>{{ bidder.bidSubmittedDate }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="text-muted p-2">No qualified bidders recorded.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. Non-qualified bidders -->
+    <div class="section-title mb-2">Non Qualified Bidder Details</div>
+    <div class="table-responsive mb-3">
+      <table class="table wamis-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Non Qualified Bid Id</th>
+            <th>Non Qualified Bidder Name</th>
+            <th>Non Qualified Bid GSTIN</th>
+            <th>Bid Submitted Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (bidder of data.nonQualifiedBidders; track bidder.bidId) {
+            <tr>
+              <td>{{ bidder.sNo }}</td>
+              <td>{{ bidder.bidId }}</td>
+              <td class="text-start">{{ bidder.bidderName }}</td>
+              <td>{{ bidder.gstin }}</td>
+              <td>{{ bidder.bidSubmittedDate }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="text-muted p-2">No non-qualified bidders recorded.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4. AOC documents (GePNIC spec section 6.8 and addendum 6) -->
+    <div class="section-title mb-2">AOC Files &amp; Schedules</div>
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      @for (doc of data.documents; track doc.docCode) {
+        <button mat-stroked-button color="primary" type="button" (click)="onDownloadDoc(doc)" [title]="doc.fileName">
+          <mat-icon class="me-1">download</mat-icon> {{ doc.docType }}: {{ doc.fileName }}
+        </button>
+      } @empty {
+        <p class="text-muted small">No specific documents attached to this AOC entry.</p>
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="text-end mt-3">
+      <button mat-raised-button color="primary" type="button" class="me-2" [disabled]="data.isInsertedInAoc" (click)="onInsertInAoc()">
+        <mat-icon>save</mat-icon>
+        {{ data.isInsertedInAoc ? 'Already Inserted in AOC' : 'Insert in AOC' }}
+      </button>
+      <button mat-raised-button type="button" (click)="onClose()">Close</button>
+    </div>
+  </div>
+</div>

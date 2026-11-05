@@ -1,0 +1,23 @@
+<div class="json-view">
+  <div class="wamis-subbar-left">
+    <div>
+      <h2 class="wamis-section-title">{{ data.title }}</h2>
+      @if (data.subtitle) {
+        <div class="json-view-subtitle">{{ data.subtitle }}</div>
+      }
+    </div>
+    <button type="button" class="wamis-clear-cross" (click)="onClose()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="component-audit-details-content">
+    <pre class="json-view-text">{{ text }}</pre>
+
+    <button mat-raised-button color="primary" type="button" class="me-2" (click)="onCopy()">
+      <mat-icon>content_copy</mat-icon> Copy
+    </button>
+    <button mat-raised-button type="button" class="me-2" (click)="onDownload()">
+      <mat-icon>download</mat-icon> Download .json
+    </button>
+    <button mat-raised-button type="button" (click)="onClose()">Close</button>
+  </div>
+</div>

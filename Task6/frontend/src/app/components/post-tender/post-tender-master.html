@@ -1,0 +1,77 @@
+<div class="container-fluid p-3">
+  <!-- Page Header and DB Parameter Bar -->
+  <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+    <div class="d-flex align-items-center">
+      <span class="page-title">Post-Tender Details</span>
+    </div>
+
+    <!-- DB Parameter Status and Toggle Panel -->
+    <div class="d-flex align-items-center gap-2">
+      <div class="border rounded px-2 py-1 bg-white shadow-sm d-flex align-items-center gap-3">
+        <span class="text-secondary small fw-semibold">
+          <mat-icon class="align-middle me-1" style="font-size: 16px; width: 16px; height: 16px; color: #022a72;">settings</mat-icon>
+          DB Tab Parameters:
+        </span>
+
+        <!-- Corrigendum Parameter Toggle -->
+        <div class="d-flex align-items-center gap-1">
+          <span class="small" [class.text-primary]="isCorrigendumTabEnabled" [class.text-muted]="!isCorrigendumTabEnabled">
+            Corrigendum:
+          </span>
+          <button mat-button type="button" class="btn btn-sm py-0 px-2"
+            [class.btn-outline-primary]="isCorrigendumTabEnabled"
+            [class.btn-outline-secondary]="!isCorrigendumTabEnabled"
+            (click)="toggleParameter('ENABLE_CORRIGENDUM_TAB')"
+            matTooltip="Click to toggle ENABLE_CORRIGENDUM_TAB in database">
+            {{ isCorrigendumTabEnabled ? 'ON' : 'OFF' }}
+          </button>
+        </div>
+
+        <!-- Negotiation Parameter Toggle -->
+        <div class="d-flex align-items-center gap-1">
+          <span class="small" [class.text-primary]="isNegotiationTabEnabled" [class.text-muted]="!isNegotiationTabEnabled">
+            Negotiation:
+          </span>
+          <button mat-button type="button" class="btn btn-sm py-0 px-2"
+            [class.btn-outline-primary]="isNegotiationTabEnabled"
+            [class.btn-outline-secondary]="!isNegotiationTabEnabled"
+            (click)="toggleParameter('ENABLE_NEGOTIATION_TAB')"
+            matTooltip="Click to toggle ENABLE_NEGOTIATION_TAB in database">
+            {{ isNegotiationTabEnabled ? 'ON' : 'OFF' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Post-Tender Tab Group -->
+  <mat-tab-group animationDuration="0ms" [mat-stretch-tabs]="false" mat-align-tabs="start"
+    [selectedIndex]="selectedTabIndex" (selectedTabChange)="onTabChange($event)">
+
+    <!-- Tab 1: AOC Details (Always Present) -->
+    <mat-tab label="AOC Details">
+      <div class="pt-3">
+        <app-post-tender-view></app-post-tender-view>
+      </div>
+    </mat-tab>
+
+    <!-- Tab 2: Corrigendum (Gated by DB Parameter ENABLE_CORRIGENDUM_TAB) -->
+    @if (isCorrigendumTabEnabled) {
+      <mat-tab label="Corrigendum">
+        <div class="pt-3">
+          <app-post-tender-corrigendum></app-post-tender-corrigendum>
+        </div>
+      </mat-tab>
+    }
+
+    <!-- Tab 3: Negotiation (Gated by DB Parameter ENABLE_NEGOTIATION_TAB) -->
+    @if (isNegotiationTabEnabled) {
+      <mat-tab label="Negotiation">
+        <div class="pt-3">
+          <app-post-tender-negotiation></app-post-tender-negotiation>
+        </div>
+      </mat-tab>
+    }
+  </mat-tab-group>
+</div>
+

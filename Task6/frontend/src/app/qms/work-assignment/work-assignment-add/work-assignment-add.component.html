@@ -1,0 +1,130 @@
+<form [formGroup]="workAssignmentForm">
+
+  <!-- Row 1 -->
+  <div class="row">
+    <!-- District -->
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">{{ 'District' | translate }} <span class="required-star">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="workAssignmentForm.get('district')?.value">
+        <mat-select formControlName="district" placeholder="Select District">
+          @for (district of districtList; track district.id) {
+            <mat-option [value]="district.id">{{ district.name }}</mat-option>
+          }
+        </mat-select>
+        @if (workAssignmentForm.get('district')?.value) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearFilter('district', $event)" title="Clear">✕</button>
+        }
+        @if (workAssignmentForm.get('district')?.hasError('required')) {
+          <mat-error>{{ 'Please select district.' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Division -->
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">{{ 'Division' | translate }} <span class="required-star">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="workAssignmentForm.get('division')?.value">
+        <mat-select formControlName="division" placeholder="Select Division">
+          @for (division of divisionList; track division.id) {
+            <mat-option [value]="division.id">{{ division.name }}</mat-option>
+          }
+        </mat-select>
+        @if (workAssignmentForm.get('division')?.value) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearFilter('division', $event)" title="Clear">✕</button>
+        }
+        @if (workAssignmentForm.get('division')?.hasError('required')) {
+          <mat-error>{{ 'Please select division.' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Work Type -->
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">{{ 'Work Type' | translate }} <span class="required-star">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="workAssignmentForm.get('workType')?.value">
+        <mat-select formControlName="workType" placeholder="Select Work Type">
+          @for (workType of workTypeList; track workType.id) {
+            <mat-option [value]="workType.id">{{ workType.name }}</mat-option>
+          }
+        </mat-select>
+        @if (workAssignmentForm.get('workType')?.value) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearFilter('workType', $event)" title="Clear">✕</button>
+        }
+        @if (workAssignmentForm.get('workType')?.hasError('required')) {
+          <mat-error>{{ 'Please select work type.' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="row">
+    <!-- Work Category -->
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">{{ 'Work Category' | translate }} <span class="required-star">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="workAssignmentForm.get('workCategory')?.value">
+        <mat-select formControlName="workCategory" placeholder="Select Work Category">
+          @for (workCategory of workCategoryList; track workCategory.id) {
+            <mat-option [value]="workCategory.id">{{ workCategory.name }}</mat-option>
+          }
+        </mat-select>
+        @if (workAssignmentForm.get('workCategory')?.value) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearFilter('workCategory', $event)" title="Clear">✕</button>
+        }
+        @if (workAssignmentForm.get('workCategory')?.hasError('required')) {
+          <mat-error>{{ 'Please select work category.' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <label class="field-label">{{ 'Work Description' | translate }}</label>
+      <mat-form-field appearance="outline" class="full-width-field">
+        <input matInput formControlName="workDescription" maxlength="200"
+          placeholder="Enter work description">
+        @if (workAssignmentForm.get('workDescription')?.hasError('maxlength')) {
+          <mat-error>{{ 'Maximum 200 characters are allowed.' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Get works button -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <button mat-raised-button color="primary" type="button" (click)="getWorks()">
+        {{ 'Get Works' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Work details & Allocation section: Instant display -->
+  <div [class.d-none]="!showWorkDetails">
+    <div class="row mb-3">
+      <div class="col-12 col-md-6 col-lg-6">
+        <label class="field-label">{{ 'Work Details' | translate }} <span class="required-star">*</span></label>
+        <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="workAssignmentForm.get('workDetails')?.value">
+          <mat-select formControlName="workDetails" placeholder="Select Work" (selectionChange)="onWorkSelect($event.value)">
+            @for (work of workList; track work.id) {
+              <mat-option [value]="work.id">{{ work.name }}</mat-option>
+            }
+          </mat-select>
+          @if (workAssignmentForm.get('workDetails')?.value) {
+            <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearFilter('workDetails', $event)" title="Clear">✕</button>
+          }
+          @if (workAssignmentForm.get('workDetails')?.hasError('required')) {
+            <mat-error>{{ 'Please select work details.' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- ALLOCATION DETAILS COMPONENT (Re-created fresh on each work selection) -->
+    @if (selectedWorkAllocation) {
+      <div class="mt-2">
+        <app-allocation-details [workDetails]="selectedWorkAllocation"></app-allocation-details>
+      </div>
+    }
+  </div>
+
+</form>

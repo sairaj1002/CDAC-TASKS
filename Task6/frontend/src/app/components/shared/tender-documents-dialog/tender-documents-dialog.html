@@ -1,0 +1,90 @@
+<div class="tender-docs">
+  <div class="wamis-subbar-left">
+    <div>
+      <h2 class="wamis-section-title">{{ data.title }}</h2>
+      <div class="json-view-subtitle">{{ data.tender.tenderReferenceNo }} · {{ data.tender.uniqueFileNo }}</div>
+    </div>
+    <button type="button" class="wamis-clear-cross" (click)="onClose()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="component-audit-details-content">
+    <!-- upload: category, then the files of that category -->
+    <div class="doc-toolbar">
+      <label class="field-label mb-0" for="uploadCategory">Document Category:</label>
+      <mat-form-field appearance="outline" class="doc-category compact-field" subscriptSizing="dynamic">
+        <mat-select id="uploadCategory" [(ngModel)]="uploadCategory" placeholder="Select document category">
+          @for (cat of categories; track cat.code) {
+            <mat-option [value]="cat.code">{{ cat.displayName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <input #fileInput type="file" multiple hidden
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.dxf,.zip,.jpg,.jpeg,.png"
+        (change)="onFilesSelected($event)" />
+      <button mat-raised-button color="primary" type="button" [disabled]="!uploadCategory || uploading" (click)="fileInput.click()">
+        <mat-icon>upload_file</mat-icon> {{ uploading ? 'Uploading...' : 'Upload Files' }}
+      </button>
+    </div>
+
+    <!-- the stored documents -->
+    <div class="doc-list">
+      <div class="doc-list-head">
+        <div class="section-title">Uploaded Documents ({{ shownDocuments.length }})</div>
+        <mat-form-field appearance="outline" class="doc-filter compact-field" subscriptSizing="dynamic">
+          <mat-select [(ngModel)]="showCategory" aria-label="Show documents of">
+            <mat-option [value]="allCategories">All documents ({{ documents.length }})</mat-option>
+            @for (cat of categories; track cat.code) {
+              <mat-option [value]="cat.code">{{ cat.displayName }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (shownDocuments.length) {
+        <div class="table-responsive">
+          <table class="table doc-table">
+            <thead>
+              <tr>
+                <th>Document Name</th>
+                <th>Category</th>
+                <th>Upload Date</th>
+                <th>Size</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (doc of shownDocuments; track doc.id) {
+                <tr>
+                  <td class="doc-name">
+                    <mat-icon [class.doc-pdf]="doc.docMimeType === '.pdf'">{{ doc.docMimeType === '.pdf' ? 'picture_as_pdf' : 'description' }}</mat-icon>
+                    <span>{{ doc.docName }}</span>
+                  </td>
+                  <td><span class="doc-chip">{{ categoryLabel(doc.docCode) }}</span></td>
+                  <td>{{ doc.uploadedAt ? (doc.uploadedAt | date: 'dd/MM/yyyy HH:mm') : '-' }}</td>
+                  <td>{{ formatSize(doc.docSize) }}</td>
+                  <td class="text-end doc-actions">
+                    <button mat-button type="button" class="doc-download" [disabled]="!doc.uploaded"
+                      [title]="doc.uploaded ? 'Download' : 'Only the details of this document are saved, not its file'"
+                      (click)="onDownload(doc)">
+                      <mat-icon>download</mat-icon> Download
+                    </button>
+                    <button mat-icon-button type="button" class="action-delete" title="Remove" aria-label="Remove document"
+                      (click)="onDelete(doc)"><mat-icon>delete</mat-icon></button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="no-data">
+          {{ showCategory ? 'No ' + categoryLabel(showCategory) + ' uploaded yet.' : 'No documents uploaded yet.' }}
+        </div>
+      }
+    </div>
+
+    <div class="mt-3 text-end">
+      <button mat-raised-button type="button" (click)="onClose()">Close</button>
+    </div>
+  </div>
+</div>

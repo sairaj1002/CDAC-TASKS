@@ -1,0 +1,172 @@
+<div class="pretender-list">
+  <!-- Top Panel matching PPTX Slide 48: "Get AOC Info By Pre-tender created date" -->
+  <mat-expansion-panel class="search-panel mb-3" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Get AOC Info By Pre-tender created date</mat-panel-title>
+      <mat-panel-description class="justify-content-end">
+        <mat-icon>cloud_download</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- Specific Instruction from Slide 48 -->
+    <div class="p-2 mb-3 bg-light border-start border-4 border-primary rounded-1">
+      <small class="text-secondary fw-semibold">
+        * Pre-Tender created date should be lesser than current date. Select date and click Get to fetch latest Award of Contract (AOC) records from GePNIC portal.
+      </small>
+    </div>
+
+    <form (ngSubmit)="onGetAocFromGepnic()">
+      <div class="row align-items-center">
+        <!-- Date Picker for AOC Upload Date -->
+        <div class="col-12 col-md-5 col-lg-3 mb-2">
+          <label class="field-label" for="aocUploadDate">AOC Upload Date <span class="required">*</span></label>
+          <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+            <input matInput readonly [matDatepicker]="aocDatePicker" [max]="maxDate"
+              [(ngModel)]="aocUploadDate" name="aocUploadDate" id="aocUploadDate"
+              (click)="aocDatePicker.open()" placeholder="Select AOC Date" required />
+            <mat-datepicker-toggle matIconSuffix [for]="aocDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #aocDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Get Button matching Slide 48 -->
+        <div class="col-auto mb-2 pt-3">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading || !aocUploadDate">
+            <mat-icon class="me-1">sync</mat-icon> Get
+          </button>
+        </div>
+
+        <!-- Quick Search Filter -->
+        <div class="col-12 col-md-5 col-lg-4 mb-2 ms-auto">
+          <label class="field-label" for="searchFilter">Filter by Work No. / Tender Ref / Description</label>
+          <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+            <input matInput id="searchFilter" name="searchFilter" [(ngModel)]="searchFilter"
+              (ngModelChange)="applyFilter()" placeholder="Search in fetched AOC records..." />
+            @if (searchFilter) {
+              <button mat-icon-button matSuffix type="button" class="btn-clear-suffix"
+                (click)="resetFilter(); $event.stopPropagation()" title="Clear">✕</button>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-expansion-panel>
+
+  <!-- Section Title matching PPTX Slide 48 -->
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <div class="wamis-section-title mb-0">AOC Details By Pre-Tender Created Date</div>
+    <span class="badge bg-light text-primary border">Total Records: {{ dataSource.filteredData.length }}</span>
+  </div>
+
+  <!-- Table Section with exact styling constraints -->
+  <div class="wamis-scrollable-table">
+    <table mat-table [dataSource]="dataSource" class="wamis-table">
+      <!-- 1. Sr. No. -->
+      <ng-container matColumnDef="srNo">
+        <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+        <td mat-cell *matCellDef="let element; let i = index">{{ element.id || (i + 1) }}</td>
+      </ng-container>
+
+      <!-- 2. Unique File Number -->
+      <ng-container matColumnDef="uniqueFileNo">
+        <th mat-header-cell *matHeaderCellDef>Unique File Number</th>
+        <td mat-cell *matCellDef="let element" class="wamis-link-cell" (click)="onViewAocDetails(element)"
+          matTooltip="Click to view comprehensive AOC details">
+          {{ breakAtSlashes(element.uniqueFileNo) }}
+        </td>
+      </ng-container>
+
+      <!-- 3. Tender Reference No. -->
+      <ng-container matColumnDef="tenderRefNo">
+        <th mat-header-cell *matHeaderCellDef>Tender Reference No.</th>
+        <td mat-cell *matCellDef="let element">{{ breakAtSlashes(element.tenderRefNo) }}</td>
+      </ng-container>
+
+      <!-- 4. Tender Description -->
+      <ng-container matColumnDef="tenderDesc">
+        <th mat-header-cell *matHeaderCellDef>Tender Description</th>
+        <td mat-cell *matCellDef="let element" class="wamis-desc-cell" [title]="element.tenderDescription">
+          <span class="wamis-desc-text">{{ element.tenderDescription }}</span>
+        </td>
+      </ng-container>
+
+      <!-- 5. Tender Type -->
+      <ng-container matColumnDef="tenderType">
+        <th mat-header-cell *matHeaderCellDef>Tender Type</th>
+        <td mat-cell *matCellDef="let element">{{ element.tenderType }}</td>
+      </ng-container>
+
+      <!-- 6. Publish Date -->
+      <ng-container matColumnDef="publishDate">
+        <th mat-header-cell *matHeaderCellDef>Publish Date</th>
+        <td mat-cell *matCellDef="let element" class="wamis-nowrap">{{ element.publishDate }}</td>
+      </ng-container>
+
+      <!-- 7. View AOC Details (Eye Icon matching Slide 48) -->
+      <ng-container matColumnDef="viewAocDetails">
+        <th mat-header-cell *matHeaderCellDef>View AOC Details</th>
+        <td mat-cell *matCellDef="let element">
+          <button type="button" class="wamis-action-btn" (click)="onViewAocDetails(element)"
+            matTooltip="Click here to view AOC details">
+            <mat-icon class="wamis-icon-edit">remove_red_eye</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- 8. Insert in AOC (Floppy Disk Icon matching Slide 48) -->
+      <ng-container matColumnDef="insertInAoc">
+        <th mat-header-cell *matHeaderCellDef>Insert in AOC</th>
+        <td mat-cell *matCellDef="let element">
+          <button type="button" class="wamis-action-btn" (click)="onInsertInAoc(element)"
+            [disabled]="element.isInsertedInAoc"
+            [matTooltip]="element.isInsertedInAoc ? 'Already inserted in AOC' : 'Click here to insert into AOC Agreement'">
+            <mat-icon [class.text-muted]="element.isInsertedInAoc" [class.wamis-icon-edit]="!element.isInsertedInAoc">
+              {{ element.isInsertedInAoc ? 'task_alt' : 'save' }}
+            </mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- 9. Download AOC Documents (BOQ, LOA, NEGO, TIEBREAK, BOQCHART) -->
+      <ng-container matColumnDef="downloadDocs">
+        <th mat-header-cell *matHeaderCellDef>AOC Documents</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="wamis-docs-download-list">
+            @for (doc of element.documents.slice(0, 3); track doc.docCode) {
+              <a href="javascript:void(0)" (click)="onDownloadDoc(doc, element)" [title]="doc.fileName">
+                {{ doc.docType }} ⤓
+              </a>
+            }
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- 10. Audit Trail -->
+      <ng-container matColumnDef="auditTrail">
+        <th mat-header-cell *matHeaderCellDef>Audit Details</th>
+        <td mat-cell *matCellDef="let element">
+          <button type="button" class="wamis-action-btn" (click)="onAuditDetails(element)"
+            matTooltip="View Audit Trail & Transaction Logs">
+            <mat-icon class="wamis-icon-edit">history</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  @if (!loading && !dataSource.filteredData.length) {
+    <div class="no-data">No AOC records found for the selected criteria.</div>
+  }
+
+  <!-- Paginator and Refresh row side by side in center -->
+  <div class="paginator-row">
+    <button mat-icon-button type="button" class="refresh-btn" title="Refresh" aria-label="Refresh"
+      (click)="loadAocData()"><mat-icon>refresh</mat-icon></button>
+    <mat-paginator class="paginator-center" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+      aria-label="Select page of post-tenders"></mat-paginator>
+  </div>
+</div>
+
