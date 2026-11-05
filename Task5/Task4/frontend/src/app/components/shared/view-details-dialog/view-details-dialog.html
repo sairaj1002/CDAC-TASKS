@@ -1,0 +1,130 @@
+<div class="component-details-panel">
+  <!-- Header matching Screenshot 1 -->
+  <div class="wamis-subbar-left">
+    <h2 class="wamis-section-title">Pre-tender Details</h2>
+    <button type="button" class="wamis-clear-cross" (click)="onClose()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="component-audit-details-content">
+    <!-- 1. Work Item Details Section -->
+    <h3 class="wamis-section-title">Work Item Details</h3>
+    <table class="wamis-table">
+      <tbody>
+        <tr>
+          <td class="wamis-wms-label">Work Number</td>
+          <td>{{ tender.uniqueFileNo || tender.workId || '3/9434/1' }}</td>
+          <td class="wamis-wms-label">Tender Value</td>
+          <td>{{ tender.tenderValue | number:'1.0-2' }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Work Description</td>
+          <td>{{ tender.tenderTitle || tender.tenderDescription }}</td>
+          <td class="wamis-wms-label">PIN Code</td>
+          <td>{{ tender.pincode || '751013' }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Tender Category</td>
+          <td>{{ tender.category || 'Works' }}</td>
+          <td class="wamis-wms-label">Product Category</td>
+          <td>{{ tender.productCategory || '---' }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Bid Validity Days</td>
+          <td>{{ tender.bidValidityDays || 90 }}</td>
+          <td class="wamis-wms-label">Delivery Period Days</td>
+          <td>{{ tender.deliveryPeriodDays || 365 }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Pre Bid Meeting Place</td>
+          <td>{{ tender.preBidMeetingPlace || 'O/o CCE CRWC BBSR' }}</td>
+          <td class="wamis-wms-label">Pre Bid Meeting Address</td>
+          <td>{{ tender.preBidMeetingAddress || 'O/o CCE CRWC BBSR' }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Bid Opening Place</td>
+          <td>{{ tender.bidOpenPlace || '---' }}</td>
+          <td class="wamis-wms-label">Tenderer Class</td>
+          <td>{{ tender.tendererClass || '---' }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Tender Inviting Office</td>
+          <td>{{ tender.invitingOfficerAddress || '---' }}</td>
+          <td class="wamis-wms-label">Tender Inviting Officer</td>
+          <td>{{ tender.invitingOfficer || '---' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Tender Basic Details Section -->
+    <h3 class="wamis-section-title">Tender Basic Details</h3>
+    <table class="wamis-table">
+      <tbody>
+        <tr>
+          <td class="wamis-wms-label">Unique File Number</td>
+          <td>{{ tender.uniqueFileNo }}</td>
+          <td class="wamis-wms-label">Tender Reference Number</td>
+          <td>{{ tender.tenderReferenceNo }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Tender Type</td>
+          <td>{{ tender.tenderType }}</td>
+          <td class="wamis-wms-label">Form of contract</td>
+          <td>{{ tender.formContract }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">No. of Covers</td>
+          <td>{{ tender.coversCount }}</td>
+          <td class="wamis-wms-label">Tender Category</td>
+          <td>{{ tender.category }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 3. Tender Fee Details Section -->
+    <h3 class="wamis-section-title">Tender Fee Details</h3>
+    <table class="wamis-table">
+      <tbody>
+        <tr>
+          <td class="wamis-wms-label">Tender Fee</td>
+          <td>{{ tender.feeAmount | number:'1.0-2' }}</td>
+          <td class="wamis-wms-label">Tender EMD Fee</td>
+          <td>{{ tender.emdAmount | number:'1.0-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Tender Critical Dates Section -->
+    <h3 class="wamis-section-title">Tender Critical Dates</h3>
+    <table class="wamis-table">
+      <tbody>
+        <tr>
+          <td class="wamis-wms-label">Tender Publish Date & Time</td>
+          <td>{{ tender.publishingDate }}</td>
+          <td class="wamis-wms-label">Document Download Start Date & Time</td>
+          <td>{{ tender.docDownloadStartDate }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Seek Clarification Start Date & Time</td>
+          <td>{{ tender.publishingDate }}</td>
+          <td class="wamis-wms-label">Seek Clarification End Date & Time</td>
+          <td>{{ tender.bidSubmissionEndDate }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Bid Sub Start Date & Time</td>
+          <td>{{ tender.bidSubmissionStartDate }}</td>
+          <td class="wamis-wms-label">Bid Sub End Date & Time</td>
+          <td>{{ tender.bidSubmissionEndDate }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Bid Open Date & Time</td>
+          <td>{{ tender.bidOpenDate }}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="wamis-dialog-subtitle">This screen shows the data of Pre-tender entered when user clicks on View Pre-Tender details.</p>
+  </div>
+</div>
+

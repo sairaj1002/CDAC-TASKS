@@ -1,0 +1,168 @@
+<div class="inspection-wrapper">
+
+  <!-- Section 1: Assigned Work Details -->
+  <div class="mb-3">
+    <div class="section-title mb-2">Assigned Work Details</div>
+    
+    <!-- Row 1: Select Assigned Work Dropdown -->
+    <div class="row">
+      <div class="col-12 col-md-8 col-lg-6 mb-2">
+        <label class="field-label">
+          Select Assigned Work <span class="required-star">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <mat-select
+            [(ngModel)]="selectedWork"
+            (selectionChange)="onWorkChange()"
+            placeholder="Select Assigned Work">
+            <mat-option [value]="null">-- Select Assigned Work --</mat-option>
+            <mat-option *ngIf="assignedWorks.length === 0" [value]="null" disabled>
+              (No allocated works found in database)
+            </mat-option>
+            <mat-option *ngFor="let work of assignedWorks" [value]="work">
+              {{ work.workNumber }} - {{ work.workDescription }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Row 2: Detail Boxes (Visible only after selection) -->
+    <div class="row" *ngIf="selectedWork">
+      
+      <!-- Division Office -->
+      <div class="col-12 col-md-6 col-lg-4 mb-2">
+        <label class="field-label">Division Office</label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <input matInput [value]="selectedWork.divisionOffice" disabled>
+        </mat-form-field>
+      </div>
+
+      <!-- Work Type -->
+      <div class="col-12 col-md-6 col-lg-4 mb-2">
+        <label class="field-label">Work Type</label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <input matInput [value]="selectedWork.workType" disabled>
+        </mat-form-field>
+      </div>
+
+      <!-- Work Number -->
+      <div class="col-12 col-md-6 col-lg-4 mb-2">
+        <label class="field-label">Work Number</label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <input matInput [value]="selectedWork.workNumber" disabled>
+        </mat-form-field>
+      </div>
+
+      <!-- Work Description -->
+      <div class="col-12 col-md-6 col-lg-6 mb-2">
+        <label class="field-label">Work Description</label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <input matInput [value]="selectedWork.workDescription" disabled>
+        </mat-form-field>
+      </div>
+
+      <!-- Date Assigned -->
+      <div class="col-12 col-md-6 col-lg-3 mb-2">
+        <label class="field-label">Date Assigned</label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <input matInput [value]="selectedWork.dateAssigned" disabled>
+        </mat-form-field>
+      </div>
+
+      <!-- Current Grade -->
+      <div class="col-12 col-md-6 col-lg-3 mb-2">
+        <label class="field-label">Current Grade</label>
+        <mat-form-field appearance="outline" class="full-width-field">
+          <input
+            matInput
+            class="fw-bold"
+            [class.text-success]="selectedWork.currentGrade === 'Satisfactory'"
+            [class.text-warning]="selectedWork.currentGrade === 'Satisfactory Requiring Improvement'"
+            [class.text-danger]="selectedWork.currentGrade === 'Unsatisfactory'"
+            [value]="selectedWork.currentGrade"
+            disabled>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Success Calculation Alert Banner (Appears after Overall Grade Calculation) -->
+  <div *ngIf="isGradeCalculated && selectedWork" class="alert-calc-success">
+    Work Grade Calculated Successfully. Overall Work Grade: <strong>{{ calculatedGradeResult }}</strong>.
+  </div>
+
+  <!-- Section 2: Grade Details (Checklist Items Table - Only appears after work is selected) -->
+  <div class="mb-4" *ngIf="selectedWork">
+    <div class="section-title mb-2">Grade Details</div>
+    
+    <div class="table-responsive">
+      <table class="table custom-grid-table mb-0">
+        <thead>
+          <tr>
+            <th style="width: 8%;">Sr.No</th>
+            <th style="width: 14%;">Item No.</th>
+            <th style="width: 53%;">Sub Item for observation</th>
+            <th style="width: 25%;">Awarded Grade*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of gradeItems; let i = index">
+            <!-- Sr.No -->
+            <td>{{ i + 1 }}</td>
+
+            <!-- Item No. -->
+            <td class="font-weight-bold">
+              <span>Item {{ i + 1 }}</span>
+            </td>
+
+            <!-- Sub Item for observation -->
+            <td>
+              <span>{{ cleanDescription(item.itemDescription) }}</span>
+            </td>
+
+            <!-- Awarded Grade* (All 4 grades available for all items) -->
+            <td>
+              <select
+                class="form-select form-select-sm grade-select"
+                [(ngModel)]="item.grade">
+                <option *ngFor="let opt of getAvailableGrades()" [value]="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </td>
+          </tr>
+          <tr *ngIf="gradeItems.length === 0 && !isLoading">
+            <td colspan="4" class="text-muted p-3 text-center">
+              No checklist items found in the database for {{ selectedWork.workType }}.
+            </td>
+          </tr>
+          <tr *ngIf="isLoading">
+            <td colspan="4" class="text-primary p-3 text-center">
+              Loading checklist items from database...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Action Buttons Toolbar (Only appears after work is selected) -->
+  <div class="action-buttons-row" *ngIf="selectedWork">
+    <button type="button" class="btn-action" (click)="saveGrades()">
+      Save Grades &#x2714;
+    </button>
+    <button type="button" class="btn-action" (click)="calculateGrade()">
+      Calculate Overall Grade &#x2714;
+    </button>
+    <button type="button" class="btn-action" (click)="clearGrades()">
+      Reset Grades &#x21ba;
+    </button>
+    <button type="button" class="btn-action" (click)="goBack()">
+      Back
+    </button>
+  </div>
+
+</div>

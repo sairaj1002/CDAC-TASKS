@@ -1,0 +1,148 @@
+<div class="p-3 wamis-dialog-card">
+  <!-- Close Button -->
+  <button type="button" class="wamis-dialog-close-btn" (click)="onClose()" title="Close" aria-label="Close">✕</button>
+
+  <!-- Title matching PPTX Slide 49 -->
+  <h2 class="text-start mb-3" style="font-size: 1.15rem; font-weight: 600; color: #180085;">
+    AOC Details by Pre-Tender Creation Date
+  </h2>
+
+  <!-- 1. AOC Details Section -->
+  <div class="text-start wamis-section-title">AOC Details</div>
+  <div class="table-responsive mb-3">
+    <table class="table wamis-table">
+      <tbody>
+        <tr>
+          <td class="wamis-wms-label">Unique File Number</td>
+          <td class="text-start">{{ data.uniqueFileNo }}</td>
+          <td class="wamis-wms-label">Tender Id</td>
+          <td class="text-start">{{ data.tenderId }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Tender Reference Number</td>
+          <td class="text-start">{{ data.tenderRefNo }}</td>
+          <td class="wamis-wms-label">Work Item Id</td>
+          <td class="text-start">{{ data.workItemId }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Tender Description</td>
+          <td class="text-start" colspan="3">{{ data.tenderDescription }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Tender Type</td>
+          <td class="text-start">{{ data.tenderType }}</td>
+          <td class="wamis-wms-label">No. of Bids</td>
+          <td class="text-start">{{ data.noOfBids }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Published Date</td>
+          <td class="text-start">{{ data.publishDate }}</td>
+          <td class="wamis-wms-label">Contract Date</td>
+          <td class="text-start">{{ data.contractDate }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Contract No.</td>
+          <td class="text-start">{{ data.contractNo }}</td>
+          <td class="wamis-wms-label">Currency</td>
+          <td class="text-start">{{ data.currency }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">ORG Id</td>
+          <td class="text-start">{{ data.orgId }}</td>
+          <td class="wamis-wms-label">Organization Name</td>
+          <td class="text-start">{{ data.organizationName }}</td>
+        </tr>
+        <tr>
+          <td class="wamis-wms-label">Remarks</td>
+          <td class="text-start" colspan="3">{{ data.remarks || 'NIL' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2. Qualified Bidder Details matching PPTX Slide 49 -->
+  <div class="text-start wamis-section-title">Qualified Bidder Details</div>
+  <div class="table-responsive mb-3">
+    <table class="table wamis-table">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Qualified Bid Id</th>
+          <th>Qualified Bidder Name</th>
+          <th>Qualified Bid GSTIN</th>
+          <th>Quoted Value (₹)</th>
+          <th>Bid Submitted Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (bidder of data.qualifiedBidders; track bidder.bidId) {
+          <tr>
+            <td>{{ bidder.sNo }}</td>
+            <td>{{ bidder.bidId }}</td>
+            <td class="text-start font-weight-bold">{{ bidder.bidderName }}</td>
+            <td>{{ bidder.gstin }}</td>
+            <td class="wamis-nowrap">{{ bidder.quotedValue | number:'1.0-2' }}</td>
+            <td>{{ bidder.bidSubmittedDate }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="text-muted p-2">No qualified bidders recorded.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. Non Qualified Bidder Details matching PPTX Slide 49 -->
+  <div class="text-start wamis-section-title">Non Qualified Bidder Details</div>
+  <div class="table-responsive mb-3">
+    <table class="table wamis-table">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Non Qualified Bid Id</th>
+          <th>Non Qualified Bidder Name</th>
+          <th>Non Qualified Bid GSTIN</th>
+          <th>Bid Submitted Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (bidder of data.nonQualifiedBidders; track bidder.bidId) {
+          <tr>
+            <td>{{ bidder.sNo }}</td>
+            <td>{{ bidder.bidId }}</td>
+            <td class="text-start">{{ bidder.bidderName }}</td>
+            <td>{{ bidder.gstin }}</td>
+            <td>{{ bidder.bidSubmittedDate }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="text-muted p-2">No non-qualified bidders recorded.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. AOC Document Downloads (Section 6.8 & Addendum 6 of GePNIC Spec) -->
+  <div class="text-start wamis-section-title">AOC Files & Schedules</div>
+  <div class="d-flex flex-wrap gap-2 mb-3">
+    @for (doc of data.documents; track doc.docCode) {
+      <button mat-stroked-button color="primary" type="button" (click)="onDownloadDoc(doc)" [title]="doc.fileName">
+        <mat-icon class="me-1">download</mat-icon> {{ doc.docType }}: {{ doc.fileName }}
+      </button>
+    } @empty {
+      <p class="text-muted small">No specific documents attached to this AOC entry.</p>
+    }
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
+    <button mat-raised-button color="primary" type="button" [disabled]="data.isInsertedInAoc" (click)="onInsertInAoc()">
+      <mat-icon class="me-1">save</mat-icon>
+      {{ data.isInsertedInAoc ? 'Already Inserted in AOC' : 'Insert in AOC' }}
+    </button>
+    <button mat-raised-button type="button" (click)="onClose()">Close</button>
+  </div>
+</div>
+

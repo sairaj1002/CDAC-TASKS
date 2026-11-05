@@ -1,0 +1,86 @@
+<form [formGroup]="viewForm">
+
+  <!-- Top Selection: Work Details Dropdown (Only Allocated Works) -->
+  <div class="row mb-3">
+    <div class="col-12 col-md-8 col-lg-6">
+      <label class="field-label">{{ 'Work Details' | translate }} <span class="required-star">*</span></label>
+      <mat-form-field appearance="outline" class="full-width-field" [class.has-value]="viewForm.get('workDetails')?.value">
+        <mat-select formControlName="workDetails" placeholder="Select Work" (selectionChange)="onWorkSelect($event.value)">
+          @for (work of allocatedWorks; track work.id) {
+            <mat-option [value]="work.id">{{ work.name }}</mat-option>
+          }
+        </mat-select>
+        @if (viewForm.get('workDetails')?.value) {
+          <button mat-icon-button matSuffix type="button" class="btn-clear-suffix" (click)="clearWork($event)" title="Clear">✕</button>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Read-Only Allocation Table (Appears when work is selected) -->
+  <div class="allocation-wrapper" [class.d-none]="!selectedWorkId">
+    
+    <!-- Simple Section Title -->
+    <div class="section-title mb-2">Allocation Details</div>
+
+    <!-- Table Card -->
+    <div class="allocation-card">
+      @if (allocations.length > 0) {
+        <div class="table-responsive">
+          <table class="table allocation-table">
+            <thead>
+              <tr>
+                <th class="col-sr">Sr. No.</th>
+                <th class="col-field">Approval Level</th>
+                <th class="col-field">Designation</th>
+                <th class="col-field">Office</th>
+                <th class="col-field">User</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of allocations; track row.srNo; let i = $index) {
+                <tr>
+                  <td class="text-center font-weight-bold">{{ i + 1 }}</td>
+                  
+                  <!-- Approval Level Box -->
+                  <td>
+                    <div class="custom-value-box" [title]="row.approvalLevel || ''">
+                      <span class="box-value-text">{{ row.approvalLevel || '-' }}</span>
+                    </div>
+                  </td>
+
+                  <!-- Designation Box -->
+                  <td>
+                    <div class="custom-value-box" [title]="row.designationName || ''">
+                      <span class="box-value-text">{{ row.designationName || '-' }}</span>
+                    </div>
+                  </td>
+
+                  <!-- Office Box -->
+                  <td>
+                    <div class="custom-value-box" [title]="row.officeName || ''">
+                      <span class="box-value-text">{{ row.officeName || '-' }}</span>
+                    </div>
+                  </td>
+
+                  <!-- User Box -->
+                  <td>
+                    <div class="custom-value-box" [title]="row.userName || ''">
+                      <span class="box-value-text">{{ row.userName || '-' }}</span>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="empty-state">
+          No allocation records found for this work.
+        </div>
+      }
+    </div>
+
+  </div>
+
+</form>

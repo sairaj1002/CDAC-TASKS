@@ -1,0 +1,55 @@
+<div class="audit-details-dialog">
+  <!-- Dialog Header matching Screenshot 5 -->
+  <div class="wamis-subbar-left">
+    <h2 class="audit-details-title">Audit Details</h2>
+    <button type="button" class="wamis-clear-cross" (click)="onClose()" aria-label="Close">✕</button>
+  </div>
+
+  <div class="component-audit-details-content">
+    <div class="component-audit-details-table-wrapper">
+      <table mat-table [dataSource]="dataSource" class="component-audit-details-table">
+        <!-- Remark Column -->
+        <ng-container matColumnDef="remark">
+          <th mat-header-cell *matHeaderCellDef>Remark</th>
+          <td mat-cell *matCellDef="let row">{{ row.remark || row.sanitizedMessage }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.name || row.actor }}</td>
+        </ng-container>
+
+        <!-- Employee Name Column -->
+        <ng-container matColumnDef="employeeName">
+          <th mat-header-cell *matHeaderCellDef>Employee Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.employeeName }}</td>
+        </ng-container>
+
+        <!-- Designation Column -->
+        <ng-container matColumnDef="designation">
+          <th mat-header-cell *matHeaderCellDef>Designation</th>
+          <td mat-cell *matCellDef="let row">{{ row.designation }}</td>
+        </ng-container>
+
+        <!-- Timestamp Column -->
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+          <td mat-cell *matCellDef="let row">{{ row.timestamp || row.eventTimestamp }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <!-- Paginator matching Screenshot 5 -->
+    <mat-paginator
+      [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Select page of audit events"
+    ></mat-paginator>
+  </div>
+</div>
+

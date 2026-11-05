@@ -1,0 +1,12 @@
+<router-outlet></router-outlet>
+
+<!-- Full-screen loader while the backend is busy -->
+@if (loadingService.loading()) {
+  <div class="wamis-loader" role="status" aria-label="Loading">
+    <div class="wamis-loader-dots">
+      @for (d of [0, 1, 2, 3, 4, 5, 6, 7]; track d) {
+        <span [style.--i]="d"></span>
+      }
+    </div>
+  </div>
+}

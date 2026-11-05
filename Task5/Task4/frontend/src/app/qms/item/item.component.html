@@ -1,0 +1,180 @@
+<div class="container-fluid p-3">
+  <span class="page-title">Item</span>
+
+  <mat-tab-group animationDuration="0ms" [mat-stretch-tabs]="false" mat-align-tabs="start"
+    [selectedIndex]="groupIndex" (selectedIndexChange)="onGroupIndexChange($event)">
+    @if (can('add')) {
+    <mat-tab label="Add">
+      <form class="pt-3" [formGroup]="itemForm" (ngSubmit)="save()">
+
+        <div class="row">
+
+          <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <label class="field-label" for="itemCode">Item Code <span class="required">*</span></label>
+            <mat-form-field appearance="outline" class="full-width-field">
+              <input matInput id="itemCode" formControlName="itemCode" maxlength="50" placeholder="Enter item code">
+              @if (itemForm.get('itemCode')?.hasError('required')) {
+                <mat-error>Please enter item code.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <label class="field-label" for="itemDescription">Item Description <span class="required">*</span></label>
+            <mat-form-field appearance="outline" class="full-width-field">
+              <input matInput id="itemDescription" formControlName="itemDescription" maxlength="500" placeholder="Enter item description">
+              @if (itemForm.get('itemDescription')?.hasError('required')) {
+                <mat-error>Please enter item description.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <label class="field-label">Work Type <span class="required">*</span></label>
+            <mat-form-field appearance="outline" class="full-width-field">
+              <mat-select formControlName="workTypeId" placeholder="Select work type">
+                @for (workType of workTypeList; track workType.id) {
+                  <mat-option [value]="workType.id">{{ workType.name }}</mat-option>
+                }
+              </mat-select>
+              @if (itemForm.get('workTypeId')?.hasError('required')) {
+                <mat-error>Please select work type.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+                  <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <label class="field-label">Item Purpose <span class="required">*</span></label>
+            <mat-form-field appearance="outline" class="full-width-field">
+              <mat-select formControlName="itemPurpose" placeholder="Select item purpose">
+                @for (purpose of purposeList; track purpose.value) {
+                  <mat-option [value]="purpose.value">{{ purpose.label }}</mat-option>
+                }
+              </mat-select>
+              @if (itemForm.get('itemPurpose')?.hasError('required')) {
+                <mat-error>Please select item purpose.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" class="me-2" [disabled]="isSaving">
+          {{ editingItemId === undefined ? 'Save' : 'Update' }}
+        </button>
+        @if (editingItemId !== undefined) {
+          <button mat-raised-button type="button" (click)="resetForm()">Cancel</button>
+        }
+      </form>
+    </mat-tab>
+    }
+    @if (can('view')) {
+    <mat-tab label="View">
+      <div class="pt-3">
+        <!-- The search box stays closed until the header is clicked -->
+        <mat-expansion-panel class="search-panel mb-3">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Search in Item</mat-panel-title>
+            <mat-panel-description class="justify-content-end">
+              <mat-icon>search</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="searchForm" (ngSubmit)="search()">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <label class="field-label" for="searchItemCode">Item Code</label>
+                <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+                  <input matInput id="searchItemCode" formControlName="itemCode" placeholder="Enter item code">
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <label class="field-label">Status</label>
+                <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+                  <mat-select formControlName="status" placeholder="Select status">
+                    @for (status of statusList; track status) {
+                      <mat-option [value]="status">{{ status }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <button mat-raised-button color="primary" type="submit" class="me-2">Search</button>
+            <button mat-raised-button type="button" (click)="resetSearch()">Reset</button>
+          </form>
+        </mat-expansion-panel>
+
+        <table mat-table [dataSource]="itemList" class="item-table">
+          <ng-container matColumnDef="srNo">
+            <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+            <td mat-cell *matCellDef="let item; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="itemCode">
+            <th mat-header-cell *matHeaderCellDef>Item Code</th>
+            <td mat-cell *matCellDef="let item">{{ item.itemCode }}</td>
+          </ng-container>
+          <ng-container matColumnDef="itemDescription">
+            <th mat-header-cell *matHeaderCellDef>Item Description</th>
+            <td mat-cell *matCellDef="let item">{{ item.itemDescription }}</td>
+          </ng-container>
+          <ng-container matColumnDef="workTypeName">
+            <th mat-header-cell *matHeaderCellDef>Work Type</th>
+            <td mat-cell *matCellDef="let item">{{ item.workTypeName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="itemPurpose">
+            <th mat-header-cell *matHeaderCellDef>Item Purpose</th>
+            <td mat-cell *matCellDef="let item">{{ item.itemPurpose === 'G' ? 'Grade' : 'Photo Upload' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let item">{{ item.status }}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+            <td mat-cell *matCellDef="let item" class="text-center actions-cell">
+              @if (canModify(item)) {
+                @if (can('edit')) {
+                <button mat-icon-button type="button" class="action-edit" title="Edit" aria-label="Edit"
+                  (click)="edit(item)"><mat-icon>edit</mat-icon></button>
+                }
+                @if (can('delete')) {
+                <button mat-icon-button type="button" class="action-delete" title="Delete" aria-label="Delete"
+                  (click)="delete(item)"><mat-icon>delete</mat-icon></button>
+                }
+                @if (can('approve')) {
+                <button mat-icon-button type="button" class="action-approve" title="Approve" aria-label="Approve"
+                  (click)="approve(item)"><mat-icon>check_circle</mat-icon></button>
+                }
+              } @else if (item.status === 'APPROVED') {
+                <mat-icon class="action-locked" title="Approved, cannot be edited">close</mat-icon>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="audit">
+            <th mat-header-cell *matHeaderCellDef class="text-center">Audit Details</th>
+            <td mat-cell *matCellDef="let item" class="text-center">
+              <button mat-icon-button type="button" class="audit-icon" title="Audit Details" aria-label="Audit Details"
+                (click)="showAudit(item)"><mat-icon>check</mat-icon></button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        @if (!itemList.length) {
+          <div class="no-data">No items found.</div>
+        }
+        <!-- The server sends one page at a time; page changes call the server again -->
+        <!-- The refresh icon reloads the list with the search that is applied, so items added meanwhile appear -->
+        <div class="paginator-row">
+          <button mat-icon-button type="button" class="refresh-btn" title="Refresh" aria-label="Refresh"
+            (click)="loadItems()"><mat-icon>refresh</mat-icon></button>
+          <mat-paginator class="paginator-center" [length]="totalCount" [pageIndex]="pageIndex" [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons (page)="onPageChange($event)">
+          </mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+    }
+  </mat-tab-group>
+</div>

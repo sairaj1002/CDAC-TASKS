@@ -1,0 +1,71 @@
+<div class="shell">
+
+  <header class="header-space">
+    <a class="home-link" tabindex="0" title="Home" (click)="goHome()" (keydown.enter)="goHome()">
+      <mat-icon class="logo-icon" fontSet="material-icons-outlined">account_balance</mat-icon>
+      <h4 class="example-app-name">WORKS &amp; ACCOUNTS MANAGEMENT SYSTEM , CENTRE FOR DEVELOPMENT OF ADVANCED COMPUTING</h4>
+    </a>
+    <span class="example-spacer"></span>
+    <em class="material-icons custom-mat-icon">language</em>
+  </header>
+
+  <div class="nav-toolbar">
+    <button type="button" class="menu-btn" aria-label="Toggle menu" (click)="isSidebarVisible = !isSidebarVisible">
+      <em class="material-icons">menu</em>
+    </button>
+    <span class="title-center">{{ officeName }}</span>
+    <span class="example-spacer"></span>
+    <div class="circle">{{ profile }}</div>
+  </div>
+
+  <div class="body">
+    @if (isSidebarVisible) {
+      <div class="left-section">
+        <nav class="navigation" aria-label="module">
+          @for (module of modules; track module.moduleCode) {
+            <a class="nav-item" tabindex="0" [ngClass]="{'active-menu': selectedModule === module}"
+              (click)="toggleSubMenu(module)" (keydown.enter)="toggleSubMenu(module)">
+              <mat-icon fontSet="material-icons-outlined">folder</mat-icon>
+              <span>{{ module.name }}</span>
+            </a>
+          }
+        </nav>
+      </div>
+
+      @if (selectedModule) {
+        <div class="right-section" [ngClass]="{'hidden': !isRightSectionVisible}">
+          <div class="side-menu">
+            <div class="menu-title">{{ selectedModule.name }}
+              <mat-icon class="right-icon" (click)="isRightSectionVisible = false">chevron_left</mat-icon>
+            </div>
+            <nav class="menu-items" aria-label="submodule">
+              @for (subm of selectedModule.submodules; track subm.name) {
+                <mat-expansion-panel class="mat-elevation-z0 expansion-panel-body">
+                  <mat-expansion-panel-header class="custom-header vertical-menu-align"
+                    [collapsedHeight]="'40px'" [expandedHeight]="'40px'">
+                    <mat-panel-title>{{ subm.name }}</mat-panel-title>
+                  </mat-expansion-panel-header>
+                  @for (fun of subm.functions; track fun.path) {
+                    <div class="function-item" tabindex="0" [class.function-disabled]="fun.disabled"
+                      [attr.aria-disabled]="fun.disabled || null" [title]="fun.disabled ? 'Not available yet' : ''"
+                      (click)="showFunction(fun)" (keydown.enter)="showFunction(fun)">{{ fun.name }}</div>
+                  }
+                </mat-expansion-panel>
+              }
+            </nav>
+          </div>
+        </div>
+      }
+    }
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <footer class="toolbar">
+    <span class="footer">© 2023 Designed and Developed by C-DAC Pune</span>
+    <span class="footer">Version : {{ version }}</span>
+  </footer>
+
+</div>

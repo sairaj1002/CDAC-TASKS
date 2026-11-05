@@ -1,0 +1,141 @@
+<div class="pretender-list">
+  <!-- Search & Pull Panel -->
+  <mat-expansion-panel class="search-panel mb-3" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Pull Corrigendum Details by Published Date</mat-panel-title>
+      <mat-panel-description class="justify-content-end">
+        <mat-icon>announcement</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="p-2 mb-3 bg-light border-start border-4 border-info rounded-1">
+      <small class="text-secondary fw-semibold">
+        Corrigenda published on GePNIC (date extensions, technical amendments, BOQ updates) can be synchronized by published date.
+      </small>
+    </div>
+
+    <form (ngSubmit)="onPullFromGepnic()">
+      <div class="row align-items-center">
+        <!-- Date Picker for Published Date -->
+        <div class="col-12 col-md-5 col-lg-3 mb-2">
+          <label class="field-label" for="corrPubDate">Published Date <span class="required">*</span></label>
+          <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+            <input matInput readonly [matDatepicker]="corrPicker" [max]="maxDate"
+              [(ngModel)]="publishedDate" name="publishedDate" id="corrPubDate"
+              (click)="corrPicker.open()" placeholder="Select Date" required />
+            <mat-datepicker-toggle matIconSuffix [for]="corrPicker"></mat-datepicker-toggle>
+            <mat-datepicker #corrPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Pull Button -->
+        <div class="col-auto mb-2 pt-3">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading || !publishedDate">
+            <mat-icon class="me-1">sync</mat-icon> Pull Corrigendum
+          </button>
+        </div>
+
+        <!-- Filter Input -->
+        <div class="col-12 col-md-5 col-lg-4 mb-2 ms-auto">
+          <label class="field-label" for="corrFilter">Filter by Corrigendum Ref / Tender / Desc</label>
+          <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+            <input matInput id="corrFilter" name="corrFilter" [(ngModel)]="searchFilter"
+              (ngModelChange)="applyFilter()" placeholder="Search corrigenda..." />
+            @if (searchFilter) {
+              <button mat-icon-button matSuffix type="button" class="btn-clear-suffix"
+                (click)="resetFilter(); $event.stopPropagation()" title="Clear">✕</button>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-expansion-panel>
+
+  <!-- Title -->
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <div class="wamis-section-title mb-0">Corrigendum Records</div>
+    <span class="badge bg-light text-primary border">Total Corrigenda: {{ dataSource.filteredData.length }}</span>
+  </div>
+
+  <!-- Table -->
+  <div class="wamis-scrollable-table">
+    <table mat-table [dataSource]="dataSource" class="wamis-table">
+      <!-- 1. Sr. No. -->
+      <ng-container matColumnDef="srNo">
+        <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+        <td mat-cell *matCellDef="let element; let i = index">{{ element.id || (i + 1) }}</td>
+      </ng-container>
+
+      <!-- 2. Corrigendum Ref -->
+      <ng-container matColumnDef="corrigendumRef">
+        <th mat-header-cell *matHeaderCellDef>Corrigendum Ref.</th>
+        <td mat-cell *matCellDef="let element" class="fw-semibold text-primary">{{ element.corrigendumRef }}</td>
+      </ng-container>
+
+      <!-- 3. Tender Ref No -->
+      <ng-container matColumnDef="tenderRefNo">
+        <th mat-header-cell *matHeaderCellDef>Tender Reference No.</th>
+        <td mat-cell *matCellDef="let element">{{ element.tenderRefNo }}</td>
+      </ng-container>
+
+      <!-- 4. Corrigendum Type -->
+      <ng-container matColumnDef="corrigendumType">
+        <th mat-header-cell *matHeaderCellDef>Corrigendum Type</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge bg-secondary-subtle text-secondary-emphasis border">{{ element.corrigendumType }}</span>
+        </td>
+      </ng-container>
+
+      <!-- 5. Published Date -->
+      <ng-container matColumnDef="publishedDate">
+        <th mat-header-cell *matHeaderCellDef>Published Date</th>
+        <td mat-cell *matCellDef="let element" class="wamis-nowrap">{{ element.publishedDate }}</td>
+      </ng-container>
+
+      <!-- 6. Description -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description & Remarks</th>
+        <td mat-cell *matCellDef="let element" class="wamis-desc-cell" [title]="element.description">
+          <span class="wamis-desc-text">{{ element.description }}</span>
+        </td>
+      </ng-container>
+
+      <!-- 7. Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge" [class.bg-success]="element.status === 'APPLIED'" [class.bg-primary]="element.status === 'PUBLISHED'">
+            {{ element.status }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- 8. Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Document</th>
+        <td mat-cell *matCellDef="let element">
+          <button type="button" class="wamis-action-btn" (click)="onDownloadDoc(element)"
+            [matTooltip]="'Download ' + (element.docName || 'Corrigendum Document')">
+            <mat-icon class="wamis-icon-edit">download</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  @if (!loading && !dataSource.filteredData.length) {
+    <div class="no-data">No corrigenda found.</div>
+  }
+
+  <!-- Paginator -->
+  <div class="paginator-row">
+    <button mat-icon-button type="button" class="refresh-btn" title="Refresh" aria-label="Refresh"
+      (click)="loadCorrigenda()"><mat-icon>refresh</mat-icon></button>
+    <mat-paginator class="paginator-center" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+      aria-label="Select page of corrigenda"></mat-paginator>
+  </div>
+</div>
+

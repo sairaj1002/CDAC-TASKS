@@ -1,0 +1,144 @@
+<div class="pretender-list">
+  <!-- Top Info Panel -->
+  <mat-expansion-panel class="search-panel mb-3" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>L1 Bidder Negotiation & Concession Registry</mat-panel-title>
+      <mat-panel-description class="justify-content-end">
+        <mat-icon>handshake</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="p-2 mb-3 bg-light border-start border-4 border-warning rounded-1">
+      <small class="text-secondary fw-semibold">
+        Post-Tender commercial negotiations conducted with qualified L1 bidders. Concessions, revised rates, and NEGO documents are tracked and linked directly to the contract awarding process.
+      </small>
+    </div>
+
+    <div class="row align-items-center">
+      <div class="col-12 col-md-6 mb-2">
+        <label class="field-label" for="negoFilter">Filter by Work No. / Tender Ref / Bidder</label>
+        <mat-form-field appearance="outline" class="full-width-field compact-field" subscriptSizing="dynamic">
+          <input matInput id="negoFilter" name="negoFilter" [(ngModel)]="searchFilter"
+            (ngModelChange)="applyFilter()" placeholder="Search negotiations..." />
+          @if (searchFilter) {
+            <button mat-icon-button matSuffix type="button" class="btn-clear-suffix"
+              (click)="resetFilter(); $event.stopPropagation()" title="Clear">✕</button>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <!-- Title -->
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <div class="wamis-section-title mb-0">Negotiation Records & Rate Adjustments</div>
+    <span class="badge bg-light text-primary border">Total Records: {{ dataSource.filteredData.length }}</span>
+  </div>
+
+  <!-- Table -->
+  <div class="wamis-scrollable-table">
+    <table mat-table [dataSource]="dataSource" class="wamis-table">
+      <!-- 1. Sr. No. -->
+      <ng-container matColumnDef="srNo">
+        <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+        <td mat-cell *matCellDef="let element; let i = index">{{ element.id || (i + 1) }}</td>
+      </ng-container>
+
+      <!-- 2. Work Number -->
+      <ng-container matColumnDef="workNumber">
+        <th mat-header-cell *matHeaderCellDef>Work Number</th>
+        <td mat-cell *matCellDef="let element" class="fw-semibold">{{ element.workNumber }}</td>
+      </ng-container>
+
+      <!-- 3. Tender Ref No -->
+      <ng-container matColumnDef="tenderRefNo">
+        <th mat-header-cell *matHeaderCellDef>Tender Reference No.</th>
+        <td mat-cell *matCellDef="let element">{{ element.tenderRefNo }}</td>
+      </ng-container>
+
+      <!-- 4. L1 Bidder Name -->
+      <ng-container matColumnDef="l1BidderName">
+        <th mat-header-cell *matHeaderCellDef>L1 Bidder Name</th>
+        <td mat-cell *matCellDef="let element" class="text-start fw-bold">{{ element.l1BidderName }}</td>
+      </ng-container>
+
+      <!-- 5. Original Quoted Value -->
+      <ng-container matColumnDef="originalQuotedValue">
+        <th mat-header-cell *matHeaderCellDef>Original Quoted (₹)</th>
+        <td mat-cell *matCellDef="let element" class="wamis-nowrap text-secondary">
+          {{ element.originalQuotedValue | number:'1.0-2' }}
+        </td>
+      </ng-container>
+
+      <!-- 6. Negotiated Value -->
+      <ng-container matColumnDef="negotiatedValue">
+        <th mat-header-cell *matHeaderCellDef>Negotiated Value (₹)</th>
+        <td mat-cell *matCellDef="let element" class="wamis-nowrap fw-bold text-success">
+          {{ element.negotiatedValue | number:'1.0-2' }}
+        </td>
+      </ng-container>
+
+      <!-- 7. Savings Percent -->
+      <ng-container matColumnDef="savingsPercent">
+        <th mat-header-cell *matHeaderCellDef>Savings %</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge bg-success-subtle text-success border">
+            {{ element.savingsPercent }}%
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- 8. Negotiation Date -->
+      <ng-container matColumnDef="negotiationDate">
+        <th mat-header-cell *matHeaderCellDef>Negotiation Date</th>
+        <td mat-cell *matCellDef="let element" class="wamis-nowrap">{{ element.negotiationDate }}</td>
+      </ng-container>
+
+      <!-- 9. Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="badge" [class.bg-success]="element.status === 'APPROVED'" [class.bg-warning]="element.status === 'PENDING'">
+            {{ element.status }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- 10. Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="wamis-actions-cell">
+            <!-- Download NEGO Document -->
+            <button type="button" class="wamis-action-btn" (click)="onDownloadNegoDoc(element)"
+              [matTooltip]="'Download NEGO Document: ' + (element.negoDocName || 'Negotiation Minutes')">
+              <mat-icon class="wamis-icon-edit">description</mat-icon>
+            </button>
+            <!-- Check / Approve -->
+            <button type="button" class="wamis-action-btn" (click)="onApprove(element)"
+              [disabled]="element.status === 'APPROVED'"
+              matTooltip="Approve & Finalize Negotiation">
+              <mat-icon class="wamis-icon-circle-check" [class.active]="element.status === 'APPROVED'">check_circle</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  @if (!loading && !dataSource.filteredData.length) {
+    <div class="no-data">No negotiation records found.</div>
+  }
+
+  <!-- Paginator -->
+  <div class="paginator-row">
+    <button mat-icon-button type="button" class="refresh-btn" title="Refresh" aria-label="Refresh"
+      (click)="loadNegotiations()"><mat-icon>refresh</mat-icon></button>
+    <mat-paginator class="paginator-center" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+      aria-label="Select page of negotiations"></mat-paginator>
+  </div>
+</div>
+

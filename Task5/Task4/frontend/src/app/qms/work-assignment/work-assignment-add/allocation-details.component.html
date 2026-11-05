@@ -1,0 +1,108 @@
+<div class="allocation-wrapper">
+
+  <!-- Simple Section Title -->
+  <div class="section-title mb-2">Allocation Details</div>
+
+  <div class="allocation-card">
+    <form [formGroup]="allocationForm">
+      <div class="table-responsive">
+        <table class="table allocation-table">
+          <thead>
+            <tr>
+              <th class="col-sr">Sr. No.</th>
+              <th class="col-field">Approval Level <span class="required">*</span></th>
+              <th class="col-field">Designation <span class="required">*</span></th>
+              <th class="col-field">Office <span class="required">*</span></th>
+              <th class="col-field">User <span class="required">*</span></th>
+            </tr>
+          </thead>
+          <tbody formArrayName="rows">
+            @for (row of rows.controls; track $index; let i = $index) {
+              <tr [formGroupName]="i">
+                
+                <!-- Sr. No. -->
+                <td class="text-center align-middle font-weight-bold">
+                  {{ i + 1 }}
+                </td>
+
+                <!-- Approval Level -->
+                <td>
+                  <div class="custom-select-box"
+                    [class.has-value]="row.get('approvalLevel')?.value"
+                    [class.has-error]="row.get('approvalLevel')?.invalid && row.get('approvalLevel')?.touched">
+                    <mat-select formControlName="approvalLevel" placeholder="Select Approval Level">
+                      @for (level of approvalLevels; track level) {
+                        <mat-option [value]="level">{{ level }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (row.get('approvalLevel')?.value) {
+                      <button type="button" class="btn-clear" (click)="clearField(i, 'approvalLevel', $event)" title="Clear">✕</button>
+                    }
+                  </div>
+                </td>
+
+                <!-- Designation -->
+                <td>
+                  <div class="custom-select-box"
+                    [class.has-value]="row.get('designation')?.value"
+                    [class.has-error]="row.get('designation')?.invalid && row.get('designation')?.touched">
+                    <mat-select formControlName="designation" placeholder="Select Designation" (selectionChange)="onDesignationOrOfficeChange(i)">
+                      @for (desig of designations; track desig.id) {
+                        <mat-option [value]="desig.id">{{ desig.name }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (row.get('designation')?.value) {
+                      <button type="button" class="btn-clear" (click)="clearField(i, 'designation', $event)" title="Clear">✕</button>
+                    }
+                  </div>
+                </td>
+
+                <!-- Office -->
+                <td>
+                  <div class="custom-select-box"
+                    [class.has-value]="row.get('office')?.value"
+                    [class.has-error]="row.get('office')?.invalid && row.get('office')?.touched">
+                    <mat-select formControlName="office" placeholder="Select Office" (selectionChange)="onDesignationOrOfficeChange(i)">
+                      @for (off of offices; track off.id) {
+                        <mat-option [value]="off.id">{{ off.name }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (row.get('office')?.value) {
+                      <button type="button" class="btn-clear" (click)="clearField(i, 'office', $event)" title="Clear">✕</button>
+                    }
+                  </div>
+                </td>
+
+                <!-- User (Filtered by both Designation and Office) -->
+                <td>
+                  <div class="custom-select-box"
+                    [class.has-value]="row.get('user')?.value"
+                    [class.has-error]="row.get('user')?.invalid && row.get('user')?.touched">
+                    <mat-select formControlName="user" placeholder="Select User">
+                      @for (u of (usersByRow[i] || []); track u.id) {
+                        <mat-option [value]="u.id">{{ u.name }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (row.get('user')?.value) {
+                      <button type="button" class="btn-clear" (click)="clearField(i, 'user', $event)" title="Clear">✕</button>
+                    }
+                  </div>
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Action Footer: Save Button -->
+      <div class="action-footer-row mt-3">
+        <button mat-raised-button color="primary" class="btn-save" (click)="onSave(); $event.preventDefault()">
+          Save
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
