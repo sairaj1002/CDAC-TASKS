@@ -214,6 +214,51 @@
       showFirstLastButtons
       aria-label="Select page of works"
     ></mat-paginator>
+
+    <!-- Pre Tender Details (Procurement) BOQ Upload Section directly matching Screenshot 2 -->
+    <div class="component-details-panel" *ngIf="selectedRowForBoq">
+      <div class="wamis-topbar">
+        <span class="wamis-topbar-title">Pre Tender Details (Procurement)</span>
+      </div>
+      <div class="component-audit-details-content">
+        <p class="wamis-dialog-subtitle">
+          Fields marked with an asterisk <span class="required">*</span> are required.
+        </p>
+        <div class="wamis-wms-form-grid">
+          <div class="wamis-wms-field">
+            <label class="wamis-wms-label">
+              Upload Protected BOQ File <span class="required">*</span>
+            </label>
+            <div class="component-search-controls">
+              <input
+                type="file"
+                (change)="onBoqFileSelected($event)"
+                accept=".xls,.xlsx"
+                aria-label="Upload Protected BOQ File"
+              />
+            </div>
+            <span class="wamis-wms-counter">{{ boqFileName }}</span>
+          </div>
+        </div>
+        <div class="wamis-form-actions-bar">
+          <button
+            type="button"
+            class="wamis-btn-save"
+            (click)="saveBoqFile()"
+            [disabled]="!boqFile || boqUploading"
+          >
+            {{ boqUploading ? 'Saving...' : 'Save' }}
+          </button>
+          <button
+            type="button"
+            class="wamis-btn-reset"
+            (click)="cancelBoqUpload()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

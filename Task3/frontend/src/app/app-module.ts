@@ -34,8 +34,8 @@ import { WamisMasterComponent } from './components/master/wamis-master';
 // Child Components
 import { WorkListChildComponent } from './components/child/work-list/work-list';
 import { PreTenderFormChildComponent } from './components/child/pretender-form/pretender-form';
-import { DropdownMasterChildComponent } from './components/child/dropdown-master/dropdown-master';
-import { TransactionAuditChildComponent } from './components/child/transaction-audit/transaction-audit';
+import { GepnicConfigComponent } from './components/child/gepnic-config/gepnic-config';
+import { GepnicTenderConfigComponent } from './components/child/gepnic-tender-config/gepnic-tender-config';
 
 // Shared Dialog & Feedback Components
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog';
@@ -56,8 +56,8 @@ import { CustomSnackbarComponent } from './components/shared/custom-snackbar/cus
     // Children
     WorkListChildComponent,
     PreTenderFormChildComponent,
-    DropdownMasterChildComponent,
-    TransactionAuditChildComponent,
+    GepnicConfigComponent,
+    GepnicTenderConfigComponent,
     // Shared
     ConfirmDialogComponent,
     ViewDetailsDialogComponent,

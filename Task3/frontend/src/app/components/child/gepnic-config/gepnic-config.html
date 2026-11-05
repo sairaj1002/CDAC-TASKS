@@ -1,0 +1,191 @@
+<div class="wamis-subwork-container">
+  <!-- Breadcrumb matching Image 1 -->
+  <div class="wamis-topbar">
+    <span class="wamis-topbar-title">You are here / Configuration / GEPNIC Configuration</span>
+  </div>
+
+  <p class="wamis-dialog-subtitle">
+    [Best viewed in Internet Explorer 8.0+, Mozilla Firefox 36+, Google Chrome 37+]
+  </p>
+
+  <!-- 1. GEPNIC Configuration Table Card (Matches Image 1) -->
+  <div class="wamis-card">
+    <div class="wamis-card-title">
+      <span>GEPNIC Configuration</span>
+    </div>
+
+    <div class="wamis-scrollable-table">
+      <table class="wamis-table">
+        <thead>
+          <tr>
+            <th>Sr. No.</th>
+            <th>Office Name</th>
+            <th>Unique User ID</th>
+            <th>Status</th>
+            <th>Created Date</th>
+            <th>Modified Date</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of configs">
+            <td>{{ row.srNo }}</td>
+            <td>{{ row.officeName }}</td>
+            <td>{{ row.uniqueUserId }}</td>
+            <td>
+              <span class="wamis-status-chip wamis-status-success">
+                {{ row.status }}
+              </span>
+            </td>
+            <td>{{ row.createdDate }}</td>
+            <td>{{ row.modifiedDate }}</td>
+            <td>
+              <div class="wamis-actions-cell">
+                <button
+                  type="button"
+                  class="wamis-action-btn"
+                  (click)="onEditRow(row)"
+                  matTooltip="Edit GEPNIC Configuration"
+                >
+                  <mat-icon class="wamis-icon-edit">edit</mat-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. Edit GEPNIC Configuration Card (Matches Image 1) -->
+  <div class="wamis-card">
+    <div class="wamis-card-title">
+      <span>Edit GEPNIC Configuration</span>
+    </div>
+
+    <form (ngSubmit)="onUpdate()">
+      <div class="wamis-wms-form-grid">
+        <!-- Office Name (Simple readonly input) -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Office Name</label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  [value]="editData.officeName"
+                  name="officeName"
+                  placeholder="Office Name"
+                  readonly
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unique User ID -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Unique User ID <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  [(ngModel)]="editData.uniqueUserId"
+                  name="uniqueUserId"
+                  placeholder="Enter Unique User ID"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <span class="wamis-date-hint">GEPNIC provided Unique User ID</span>
+          </div>
+        </div>
+
+        <!-- Pre-Tender Encryption Key -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Pre-Tender Encryption Key <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  [(ngModel)]="editData.preTenderEncryptionKey"
+                  name="preTenderKey"
+                  placeholder="Encryption key for Pre-Tender data"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <span class="wamis-date-hint">Encryption key for Pre-Tender data</span>
+          </div>
+        </div>
+
+        <!-- Post-Tender Encryption Key -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Post-Tender Encryption Key <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  [(ngModel)]="editData.postTenderEncryptionKey"
+                  name="postTenderKey"
+                  placeholder="Encryption key for Post-Tender data"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <span class="wamis-date-hint">Encryption key for Post-Tender data</span>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Status <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <mat-select [(ngModel)]="editData.status" name="status" required>
+                  <mat-option value="Active">Active</mat-option>
+                  <mat-option value="Inactive">Inactive</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons matching Image 1 (Update, Cancel) -->
+      <div class="wamis-form-actions-bar">
+        <button
+          type="submit"
+          class="wamis-btn-save"
+          [disabled]="updating"
+        >
+          <mat-icon class="wamis-action-icon">save</mat-icon>
+          Update
+        </button>
+        <button
+          type="button"
+          class="wamis-btn-reset"
+          (click)="onCancel()"
+        >
+          <mat-icon class="wamis-action-icon">close</mat-icon>
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

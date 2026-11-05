@@ -49,5 +49,12 @@ export class GePNICService {
       `${APP_CONSTANTS.API_BASE_URL}${APP_CONSTANTS.ENDPOINTS.GEPNIC_CONFIG}`
     );
   }
+
+  updateConfiguration(updates: any): Observable<{ [key: string]: any }> {
+    return this.http.put<{ [key: string]: any }>(
+      `${APP_CONSTANTS.API_BASE_URL}${APP_CONSTANTS.ENDPOINTS.GEPNIC_CONFIG}`,
+      updates
+    );
+  }
 }
 

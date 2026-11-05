@@ -51,6 +51,10 @@ export interface PreTenderResponseForm {
   tendererClass?: string;
   invitingOfficer: string;
   invitingOfficerAddress: string;
+  allowItemwiseEvaluation?: boolean;
+  allowMultiCurrencyForBoq?: boolean;
+  allowMultiCurrencyForFee?: boolean;
+  automaticEvaluation?: boolean;
   status: string;
   documents: PreTenderDocumentForm[];
   createdBy?: string;
@@ -94,6 +98,10 @@ export interface PreTenderForm {
   tendererClass?: string;
   invitingOfficer: string;
   invitingOfficerAddress: string;
+  allowItemwiseEvaluation?: boolean;
+  allowMultiCurrencyForBoq?: boolean;
+  allowMultiCurrencyForFee?: boolean;
+  automaticEvaluation?: boolean;
   documents: PreTenderDocumentForm[];
 }
 

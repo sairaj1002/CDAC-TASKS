@@ -1,11 +1,12 @@
 <aside class="wamis-sidebar-wrapper">
+  <!-- 1. Deep Blue Vertical Rail (Matches Left Rail in Uploaded Screenshot) -->
   <div class="wamis-sidebar-rail">
     <div class="wamis-rail-items">
       <div
-        *ngFor="let item of navItems"
+        *ngFor="let item of railItems"
         class="wamis-rail-item"
-        [class.active]="activeTab === item.id"
-        (click)="selectNav(item.id)"
+        [class.active]="activeRailId === item.id"
+        (click)="selectRail(item)"
         [matTooltip]="item.label"
         matTooltipPosition="right"
       >
@@ -14,5 +15,122 @@
       </div>
     </div>
   </div>
-</aside>
 
+  <!-- 2. WMS Second Menu Drawer (Matches Uploaded Screenshot & User Requirement) -->
+  <div class="wamis-second-menu-v3" *ngIf="isSecondMenuOpen && activeRailId === 'wms'">
+    <div class="wamis-drawer-header-v3">
+      <span class="wamis-drawer-title-v3">WMS</span>
+      <button type="button" class="wamis-drawer-collapse-btn" (click)="toggleSecondMenu()" matTooltip="Collapse Drawer">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+    </div>
+
+    <div class="wamis-drawer-body-v3">
+      <!-- A. Master -> GEPNIC Configuration, GEPNIC Tender Configuration -->
+      <div class="wamis-accordion-group">
+        <div class="wamis-accordion-header" (click)="toggleSection('master')">
+          <span class="wamis-accordion-title">Master</span>
+          <mat-icon class="wamis-accordion-chevron">
+            {{ expandedSections['master'] ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
+        </div>
+        <ul class="wamis-accordion-items" *ngIf="expandedSections['master']">
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="wamis-accordion-subitem"
+              [class.active]="activeSubMenu === 'gepnic-config'"
+              (click)="selectSubMenu('gepnic-config')"
+            >
+              GEPNIC Configuration
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="wamis-accordion-subitem"
+              [class.active]="activeSubMenu === 'gepnic-tender-config'"
+              (click)="selectSubMenu('gepnic-tender-config')"
+            >
+              GEPNIC Tender Configuration
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- B. Works -> Work Details, Sub Work Details -->
+      <div class="wamis-accordion-group">
+        <div class="wamis-accordion-header" (click)="toggleSection('works')">
+          <span class="wamis-accordion-title">Works</span>
+          <mat-icon class="wamis-accordion-chevron">
+            {{ expandedSections['works'] ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
+        </div>
+        <ul class="wamis-accordion-items" *ngIf="expandedSections['works']">
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="wamis-accordion-subitem"
+              [class.active]="activeSubMenu === 'work-details'"
+              (click)="selectSubMenu('work-details')"
+            >
+              Work Details
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="wamis-accordion-subitem"
+              [class.active]="activeSubMenu === 'sub-work-details'"
+              (click)="selectSubMenu('sub-work-details')"
+            >
+              Sub Work Details
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- C. Tender Details -> Pre Tender (Active), Post Tender, Awarding -->
+      <div class="wamis-accordion-group">
+        <div class="wamis-accordion-header" (click)="toggleSection('tenderDetails')">
+          <span class="wamis-accordion-title">Tender Details</span>
+          <mat-icon class="wamis-accordion-chevron">
+            {{ expandedSections['tenderDetails'] ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
+        </div>
+        <ul class="wamis-accordion-items" *ngIf="expandedSections['tenderDetails']">
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="wamis-accordion-subitem"
+              [class.active]="activeSubMenu === 'pretender'"
+              (click)="selectSubMenu('pretender')"
+            >
+              Pre Tender
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="wamis-accordion-subitem"
+              [class.active]="activeSubMenu === 'posttender'"
+              (click)="selectSubMenu('posttender')"
+            >
+              Post Tender
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              class="wamis-accordion-subitem"
+              [class.active]="activeSubMenu === 'awarding'"
+              (click)="selectSubMenu('awarding')"
+            >
+              Awarding
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</aside>

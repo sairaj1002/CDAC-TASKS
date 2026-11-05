@@ -12,6 +12,7 @@ import in.gov.wamis.integration.common.IntegrationResult;
 import in.gov.wamis.integration.common.PortalRequest;
 import in.gov.wamis.integration.common.PortalResponse;
 import in.gov.wamis.integration.common.ProcurementPortal;
+import in.gov.wamis.integration.gepnic.mapper.WamisToGePNICMapper;
 import in.gov.wamis.integration.registry.PortalAdapterRegistry;
 import in.gov.wamis.integration.transaction.entity.IntegrationTransaction;
 import in.gov.wamis.integration.transaction.service.IntegrationTransactionService;
@@ -25,7 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service coordinating WAMIS PreTender business workflows,
@@ -42,19 +46,22 @@ public class PreTenderService {
     private final IntegrationTransactionService transactionService;
     private final SecurityContextHelper securityContextHelper;
     private final MasterDataService masterDataService;
+    private final WamisToGePNICMapper toGePNICMapper;
 
     public PreTenderService(PreTenderRepository preTenderRepository,
                              PreTenderValidator preTenderValidator,
                              PortalAdapterRegistry adapterRegistry,
                              IntegrationTransactionService transactionService,
                              SecurityContextHelper securityContextHelper,
-                             MasterDataService masterDataService) {
+                             MasterDataService masterDataService,
+                             WamisToGePNICMapper toGePNICMapper) {
         this.preTenderRepository = preTenderRepository;
         this.preTenderValidator = preTenderValidator;
         this.adapterRegistry = adapterRegistry;
         this.transactionService = transactionService;
         this.securityContextHelper = securityContextHelper;
         this.masterDataService = masterDataService;
+        this.toGePNICMapper = toGePNICMapper;
     }
 
     // runs once startup (including the master data scripts) has finished
@@ -165,6 +172,17 @@ public class PreTenderService {
         PreTender pt = preTenderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PreTender", id));
         preTenderValidator.validate(pt);
+    }
+
+    /**
+     * The tender JSON exactly as it would be sent to GePNIC (same mapper as the submission), for viewing only:
+     * nothing is validated, encrypted or sent.
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Object> getGePNICPayload(Long id) {
+        PreTender pt = preTenderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("PreTender", id));
+        return toGePNICMapper.mapToSchemaMap(pt);
     }
 
     @Transactional
@@ -350,18 +368,35 @@ public class PreTenderService {
         pt.setBidSubmissionEndDate(form.getBidSubmissionEndDate());
         pt.setBidOpenDate(form.getBidOpenDate());
 
+        // The form lists the documents the tender should have, by docUniqueId: existing ones are kept (with their
+        // uploaded files) and updated, new ones added, and those no longer listed removed. Adding every listed
+        // document again duplicated the documents on each update.
         if (form.getDocuments() != null) {
+            Set<Long> listed = form.getDocuments().stream().map(PreTenderDocumentForm::getDocUniqueId).collect(Collectors.toSet());
+            pt.getDocuments().removeIf(doc -> !listed.contains(doc.getDocUniqueId()));
             for (PreTenderDocumentForm docForm : form.getDocuments()) {
-                PreTenderDocument doc = new PreTenderDocument(
-                        docForm.getDocUniqueId(),
-                        docForm.getDocCode(),
-                        docForm.getDocName(),
-                        docForm.getDocDescription(),
-                        docForm.getDocMimeType(),
-                        docForm.getDocSize(),
-                        docForm.getDocPriority()
-                );
-                pt.addDocument(doc);
+                PreTenderDocument doc = pt.getDocuments().stream()
+                        .filter(d -> d.getDocUniqueId().equals(docForm.getDocUniqueId()))
+                        .findFirst()
+                        .orElse(null);
+                if (doc == null) {
+                    pt.addDocument(new PreTenderDocument(
+                            docForm.getDocUniqueId(),
+                            docForm.getDocCode(),
+                            docForm.getDocName(),
+                            docForm.getDocDescription(),
+                            docForm.getDocMimeType(),
+                            docForm.getDocSize(),
+                            docForm.getDocPriority()
+                    ));
+                } else {
+                    doc.setDocCode(docForm.getDocCode());
+                    doc.setDocName(docForm.getDocName());
+                    doc.setDocDescription(docForm.getDocDescription());
+                    doc.setDocMimeType(docForm.getDocMimeType());
+                    doc.setDocSize(docForm.getDocSize());
+                    doc.setDocPriority(docForm.getDocPriority());
+                }
             }
         }
     }

@@ -1,0 +1,253 @@
+<div class="wamis-subwork-container">
+  <!-- Breadcrumb -->
+  <div class="wamis-topbar">
+    <span class="wamis-topbar-title">You are here / Configuration / GEPNIC Tender Configuration</span>
+  </div>
+
+  <p class="wamis-dialog-subtitle">
+    Configure portal URLs, organizational mappings, and tender evaluation rules for GePNIC integration.
+  </p>
+
+  <!-- 1. GEPNIC Tender Configuration Table Card -->
+  <div class="wamis-card">
+    <div class="wamis-card-title">
+      <span>GEPNIC Tender Configuration</span>
+    </div>
+
+    <div class="wamis-scrollable-table">
+      <table class="wamis-table">
+        <thead>
+          <tr>
+            <th>Sr. No.</th>
+            <th>Portal Name</th>
+            <th>Tender Category</th>
+            <th>Endpoint Base URL</th>
+            <th>Org ID</th>
+            <th>Office ID</th>
+            <th>Status</th>
+            <th>Modified Date</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of configs">
+            <td>{{ row.srNo }}</td>
+            <td>{{ row.portalName }}</td>
+            <td>{{ row.tenderCategory }}</td>
+            <td>{{ row.baseUrl }}</td>
+            <td>{{ row.orgId }}</td>
+            <td>{{ row.officeId }}</td>
+            <td>
+              <span class="wamis-status-chip wamis-status-success">
+                {{ row.status }}
+              </span>
+            </td>
+            <td>{{ row.modifiedDate }}</td>
+            <td>
+              <div class="wamis-actions-cell">
+                <button
+                  type="button"
+                  class="wamis-action-btn"
+                  (click)="onEditRow(row)"
+                  matTooltip="Edit GEPNIC Tender Configuration"
+                >
+                  <mat-icon class="wamis-icon-edit">edit</mat-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. Edit GEPNIC Tender Configuration Card -->
+  <div class="wamis-card">
+    <div class="wamis-card-title">
+      <span>Edit GEPNIC Tender Configuration</span>
+    </div>
+
+    <form (ngSubmit)="onUpdate()">
+      <div class="wamis-wms-form-grid">
+        <!-- Portal Name (Read-only simple input) -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Portal Name</label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  [value]="editData.portalName"
+                  name="portalName"
+                  placeholder="Portal Name"
+                  readonly
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tender Category -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Tender Category <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <mat-select [(ngModel)]="editData.tenderCategory" name="tenderCategory" required>
+                  <mat-option value="Works">Works</mat-option>
+                  <mat-option value="Goods">Goods</mat-option>
+                  <mat-option value="Services">Services</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Endpoint Base URL -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Endpoint Base URL <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  [(ngModel)]="editData.baseUrl"
+                  name="baseUrl"
+                  placeholder="https://demoeproc.nic.in/nicgep/app"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <span class="wamis-date-hint">GePNIC NIC portal endpoint address</span>
+          </div>
+        </div>
+
+        <!-- Organization ID -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Organization ID <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="editData.orgId"
+                  name="orgId"
+                  placeholder="2297"
+                  required
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Office ID -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Office ID <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="editData.officeId"
+                  name="officeId"
+                  placeholder="10"
+                  required
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default Bid Validity Days -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Default Bid Validity (Days)</label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="editData.bidValidityDays"
+                  name="bidValidityDays"
+                  placeholder="90"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default Delivery Period Days -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Default Delivery Period (Days)</label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="editData.deliveryPeriodDays"
+                  name="deliveryPeriodDays"
+                  placeholder="365"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="wamis-wms-col">
+          <div class="wamis-wms-field">
+            <div class="wamis-wms-field-header">
+              <label class="wamis-wms-label">Status <span class="required">*</span></label>
+            </div>
+            <div class="wamis-wms-input-wrap">
+              <mat-form-field appearance="outline" class="wamis-material-field">
+                <mat-select [(ngModel)]="editData.status" name="status" required>
+                  <mat-option value="Active">Active</mat-option>
+                  <mat-option value="Inactive">Inactive</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons (Update, Cancel) -->
+      <div class="wamis-form-actions-bar">
+        <button
+          type="submit"
+          class="wamis-btn-save"
+          [disabled]="updating"
+        >
+          <mat-icon class="wamis-action-icon">save</mat-icon>
+          Update
+        </button>
+        <button
+          type="button"
+          class="wamis-btn-reset"
+          (click)="onCancel()"
+        >
+          <mat-icon class="wamis-action-icon">close</mat-icon>
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

@@ -67,7 +67,8 @@ class SecurityServicesTest {
         GePNICEnvelopeForm envelope = encryptionService.buildEnvelope(originalJson);
 
         // Corrupt the ciphertext slightly
-        String corruptedData = "A" + envelope.getEncryptData().substring(1);
+        char first = envelope.getEncryptData().charAt(0);
+        String corruptedData = (first == 'A' ? "B" : "A") + envelope.getEncryptData().substring(1);
 
         assertThrows(IntegrationException.class, () ->
                 decryptionService.decryptEnvelope(corruptedData, envelope.getEncryptKey())

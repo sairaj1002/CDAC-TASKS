@@ -1,5 +1,20 @@
 import { APP_CONSTANTS } from '../constants/app.constants';
 
+/** A document of a saved Pre-Tender, as listed in the documents dialog (GET /pre-tenders/{id}/documents). */
+export interface PreTenderDocumentResponse {
+  id: number;
+  docUniqueId: number;
+  docCode: string;
+  docName: string;
+  docDescription?: string;
+  docMimeType: string;
+  docSize: number;
+  docPriority: number;
+  // true when the file itself is stored and can be downloaded
+  uploaded: boolean;
+  uploadedAt?: string;
+}
+
 /** A main work (WMS > Work and Sub Work > Work Details). */
 export interface WorkDetail {
   id: number;

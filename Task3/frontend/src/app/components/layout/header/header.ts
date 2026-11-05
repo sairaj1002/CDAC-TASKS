@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { APP_CONSTANTS } from '../../../common/constants/app.constants';
 
 @Component({
   selector: 'app-wamis-header',
@@ -7,16 +6,16 @@ import { APP_CONSTANTS } from '../../../common/constants/app.constants';
   templateUrl: './header.html',
 })
 export class WamisHeaderComponent {
-  appName = APP_CONSTANTS.APP_NAME;
-  appFullName = APP_CONSTANTS.APP_FULL_NAME;
-  activeDivision = 'O/o CCE CRWC BBSR';
+  appFullName = 'WORKS & ACCOUNTS MANAGEMENT SYSTEM , CENTRE FOR DEVELOPMENT OF ADVANCED COMPUTING';
+  activeDivision = 'TEST DIVISION OFFICE';
   showDivisionDropdown = false;
+  avatarText = 'VKJ';
 
   divisions = [
+    'TEST DIVISION OFFICE',
     'O/o CCE CRWC BBSR',
     'Division Office Pune',
     'Division Office Mumbai',
-    'Division Office Nagpur',
   ];
 
   @Output() toggleSidebar = new EventEmitter<void>();
@@ -29,5 +28,9 @@ export class WamisHeaderComponent {
     this.activeDivision = div;
     this.showDivisionDropdown = false;
   }
-}
 
+  clearDivision(event: MouseEvent): void {
+    event.stopPropagation();
+    this.activeDivision = 'TEST DIVISION OFFICE';
+  }
+}

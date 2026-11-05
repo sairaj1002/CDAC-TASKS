@@ -7,13 +7,13 @@ import { Component } from '@angular/core';
 })
 export class App {
   sidebarVisible = true;
-  activeTab = 0;
+  activeSubMenu = 'pretender';
 
   toggleSidebar(): void {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  onTabSelected(tabIndex: any): void {
-    this.activeTab = typeof tabIndex === 'number' ? tabIndex : (tabIndex?.detail ?? 0);
+  onSubMenuSelected(menuId: string): void {
+    this.activeSubMenu = menuId;
   }
 }

@@ -1,4 +1,4 @@
-<!-- 1. Master Top Government & C-DAC Banner matching Screenshot 2 -->
+<!-- Master Top Government Banner matching Uploaded Image -->
 <header class="wamis-topbar">
   <div class="wamis-topbar-left">
     <div class="wamis-emblem">
@@ -10,19 +10,13 @@
   </div>
 
   <div class="wamis-topbar-right">
-    <button type="button" class="wamis-topbar-btn" matTooltip="Notifications" aria-label="Notifications">
-      <mat-icon>notifications</mat-icon>
+    <button type="button" class="wamis-topbar-btn" matTooltip="Language & Region" aria-label="Language">
+      <mat-icon>language</mat-icon>
     </button>
-    <button type="button" class="wamis-topbar-btn" matTooltip="System Health & GePNIC Config" aria-label="Configuration">
-      <mat-icon>settings</mat-icon>
-    </button>
-    <div class="wamis-avatar-circle" matTooltip="Logged in as Executive Engineer" aria-label="User Avatar">
-      EE
-    </div>
   </div>
 </header>
 
-<!-- 2. Sub-Header Bar with Division Office Pill matching Screenshot 2 -->
+<!-- Sub-Header Bar with Division Office Pill & VKJ Avatar matching Uploaded Image -->
 <div class="wamis-subbar">
   <div class="wamis-subbar-left">
     <button type="button" class="wamis-hamburger-btn" (click)="toggleSidebar.emit()" aria-label="Toggle Menu">
@@ -32,7 +26,7 @@
     <div class="wamis-division-container">
       <div class="wamis-division-pill" (click)="toggleDropdown()">
         <span class="wamis-division-name">{{ activeDivision }}</span>
-        <span class="wamis-clear-cross">▾</span>
+        <span class="wamis-clear-cross" (click)="clearDivision($event)">✕</span>
       </div>
 
       <div class="wamis-division-dropdown" *ngIf="showDivisionDropdown">
@@ -47,5 +41,10 @@
       </div>
     </div>
   </div>
-</div>
 
+  <div class="wamis-subbar-right">
+    <div class="wamis-avatar-circle" matTooltip="User Profile - Vaishali Kuldeep Jaiswal (EE)" aria-label="User Avatar">
+      {{ avatarText }}
+    </div>
+  </div>
+</div>

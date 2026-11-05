@@ -10,6 +10,11 @@ import { ViewDetailsDialogComponent } from '../../shared/view-details-dialog/vie
 import { AuditDetailsDialogComponent } from '../../shared/audit-details-dialog/audit-details-dialog';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog';
 import { UploadBoqDialogComponent } from '../../shared/upload-boq-dialog/upload-boq-dialog';
+import { JsonViewDialogComponent, JsonViewDialogData } from '../../shared/json-view-dialog/json-view-dialog';
+import {
+  TenderDocumentsDialogComponent,
+  TenderDocumentsDialogData,
+} from '../../shared/tender-documents-dialog/tender-documents-dialog';
 
 @Component({
   selector: 'app-work-list',
@@ -61,11 +66,11 @@ export class WorkListChildComponent implements OnInit {
   }
 
   onViewDetails(row: PreTenderResponseForm): void {
-    this.dialog.open(ViewDetailsDialogComponent, {
-      data: row,
-      width: '900px',
-      panelClass: 'component-details-panel',
-    });
+    this.dialog
+      .open(ViewDetailsDialogComponent, { data: row, width: '1000px', maxWidth: '95vw' })
+      .afterClosed()
+      // documents may have been added or removed from the details screen
+      .subscribe(() => this.loadWorks());
   }
 
   onUploadBoq(row: PreTenderResponseForm): void {
@@ -171,12 +176,36 @@ export class WorkListChildComponent implements OnInit {
     });
   }
 
-  onDownloadXml(row: PreTenderResponseForm): void {
-    this.notificationService.showInfo(`Downloading canonical XML specification for ${row.tenderReferenceNo}...`);
+  /** Opens the tender JSON exactly as it would be sent to GePNIC (built by the backend; nothing is sent). */
+  onViewJson(row: PreTenderResponseForm): void {
+    this.preTenderService.getGePNICJson(row.id).subscribe({
+      next: (json) => {
+        const data: JsonViewDialogData = {
+          title: 'GePNIC Tender JSON',
+          subtitle: `${row.tenderReferenceNo} · ${row.uniqueFileNo}`,
+          fileName: `gepnic-tender-${(row.tenderReferenceNo || String(row.id)).replace(/[^A-Za-z0-9_-]+/g, '_')}.json`,
+          json,
+        };
+        this.dialog.open(JsonViewDialogComponent, { data, width: '900px', maxWidth: '95vw' });
+      },
+      error: (err) => {
+        this.notificationService.showError('Could not build the GePNIC JSON: ' + (err.error?.message || err.message));
+      },
+    });
   }
 
-  onDownloadDoc(docType: string, row: PreTenderResponseForm): void {
-    this.notificationService.showInfo(`Downloading ${docType} for work ${row.uniqueFileNo}...`);
+  /** The documents dialog of a tender: upload (protected BOQ, NIT, ...), see and download its documents. */
+  openDocuments(row: PreTenderResponseForm): void {
+    const data: TenderDocumentsDialogData = { tender: row, title: 'Pre-Tender Documents' };
+    this.dialog
+      .open(TenderDocumentsDialogComponent, { data, width: '960px', maxWidth: '95vw' })
+      .afterClosed()
+      .subscribe((changed) => {
+        // the document count in the list changes after an upload or a removal
+        if (changed) {
+          this.loadWorks();
+        }
+      });
   }
 
   onTransfer(row: PreTenderResponseForm): void {

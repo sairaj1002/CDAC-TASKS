@@ -701,6 +701,11 @@ app-home {
 .doc-download {
   color: #022a72 !important;
 
+  // a document whose file is not stored cannot be downloaded: shown greyed out
+  &:disabled {
+    color: rgba(0, 0, 0, 0.38) !important;
+  }
+
   .mat-icon {
     font-size: 18px;
     width: 18px;
@@ -712,6 +717,96 @@ app-home {
 .doc-actions .action-delete {
   --mat-icon-button-icon-color: #d32f2f;
   color: #d32f2f;
+}
+
+// The details and documents dialogs can be taller than the screen; the dialog surface does not scroll
+// (QMS dialog style), so their content does, below the fixed title
+.tender-view,
+.tender-docs {
+  .component-audit-details-content {
+    max-height: calc(90vh - 80px);
+    overflow-y: auto;
+  }
+}
+
+// View Pre-tender details: read-only values under their labels (as the QMS read-only boxes)
+.tender-view {
+  .section-title {
+    margin-top: 0.5rem;
+  }
+}
+
+.detail-item {
+  margin-bottom: 0.75rem;
+}
+
+.detail-label {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: #022a72;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.detail-value {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #f1f3f5;
+  color: #343a40;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// long texts (work description, address) wrap instead of being cut off
+.detail-value-wrap {
+  white-space: normal;
+}
+
+.status-chip {
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: #e1f6fb;
+  color: #022a72;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+// documents dialog: title of the list with its "show" filter on the right
+.doc-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  .doc-filter {
+    width: 280px;
+  }
+}
+
+// list column: folder icon with the number of documents of the tender
+.doc-count-btn {
+  border-radius: 12px !important;
+  padding: 3px 6px !important;
+}
+
+.doc-count {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #e1f6fb;
+  color: #022a72;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 18px;
 }
 
 .doc-note {
@@ -1017,6 +1112,28 @@ app-home {
 
 .component-audit-details-content {
   padding: 16px;
+}
+
+// JSON viewer dialog (View JSON column): the formatted JSON in a scrollable box
+.json-view-subtitle {
+  margin-top: 2px;
+  color: #505050;
+  font-size: 0.85rem;
+}
+
+.json-view-text {
+  max-height: 60vh;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  overflow: auto;
+  border: 1px solid #dde6f0;
+  border-radius: 4px;
+  background: #f8fafc;
+  color: #1e293b;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  white-space: pre;
 }
 
 .component-audit-details-table-wrapper {

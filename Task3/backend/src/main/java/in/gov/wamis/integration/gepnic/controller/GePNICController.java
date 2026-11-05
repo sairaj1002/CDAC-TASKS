@@ -209,5 +209,22 @@ public class GePNICController {
         config.put("keyId", properties.getKeyId());
         return ResponseEntity.ok(config);
     }
+
+    @PutMapping("/configuration")
+    public ResponseEntity<Map<String, Object>> updateConfiguration(@RequestBody Map<String, Object> updates) {
+        if (updates.containsKey("uniqueUserId") && updates.get("uniqueUserId") != null) {
+            properties.setUniqueUserId(String.valueOf(updates.get("uniqueUserId")));
+        }
+        if (updates.containsKey("baseUrl") && updates.get("baseUrl") != null) {
+            properties.setBaseUrl(String.valueOf(updates.get("baseUrl")));
+        }
+        if (updates.containsKey("environment") && updates.get("environment") != null) {
+            properties.setEnvironment(String.valueOf(updates.get("environment")));
+        }
+        if (updates.containsKey("enabled") && updates.get("enabled") != null) {
+            properties.setEnabled(Boolean.parseBoolean(String.valueOf(updates.get("enabled"))));
+        }
+        return getConfiguration();
+    }
 }
 

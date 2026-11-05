@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { APP_CONSTANTS } from '../../../common/constants/app.constants';
 
 @Component({
   selector: 'app-wamis-footer',
@@ -7,8 +6,6 @@ import { APP_CONSTANTS } from '../../../common/constants/app.constants';
   templateUrl: './footer.html',
 })
 export class WamisFooterComponent {
-  org = APP_CONSTANTS.ORGANIZATION;
-  dept = APP_CONSTANTS.DEPARTMENT;
-  module = APP_CONSTANTS.MODULE_NAME;
+  copyright = '© 2026 Designed and Developed by C-DAC Pune';
+  versionInfo = 'Version : 1.0.35+26.10.13 (Updated on 29.10.2026)';
 }
-

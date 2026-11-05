@@ -1,130 +1,202 @@
-<div class="component-details-panel">
-  <!-- Header matching Screenshot 1 -->
+<div class="tender-view">
   <div class="wamis-subbar-left">
-    <h2 class="wamis-section-title">Pre-tender Details</h2>
-    <button type="button" class="wamis-clear-cross" (click)="onClose()" aria-label="Close">✕</button>
+    <div>
+      <h2 class="wamis-section-title">Pre-Tender Details</h2>
+      <div class="json-view-subtitle">{{ tender.tenderReferenceNo }} · {{ tender.uniqueFileNo }}</div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <span class="status-chip">{{ tender.status || '-' }}</span>
+      <button type="button" class="wamis-clear-cross" (click)="onClose()" aria-label="Close">✕</button>
+    </div>
   </div>
 
   <div class="component-audit-details-content">
-    <!-- 1. Work Item Details Section -->
-    <h3 class="wamis-section-title">Work Item Details</h3>
-    <table class="wamis-table">
-      <tbody>
-        <tr>
-          <td class="wamis-wms-label">Work Number</td>
-          <td>{{ tender.uniqueFileNo || tender.workId || '3/9434/1' }}</td>
-          <td class="wamis-wms-label">Tender Value</td>
-          <td>{{ tender.tenderValue | number:'1.0-2' }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Work Description</td>
-          <td>{{ tender.tenderTitle || tender.tenderDescription }}</td>
-          <td class="wamis-wms-label">PIN Code</td>
-          <td>{{ tender.pincode || '751013' }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Tender Category</td>
-          <td>{{ tender.category || 'Works' }}</td>
-          <td class="wamis-wms-label">Product Category</td>
-          <td>{{ tender.productCategory || '---' }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Bid Validity Days</td>
-          <td>{{ tender.bidValidityDays || 90 }}</td>
-          <td class="wamis-wms-label">Delivery Period Days</td>
-          <td>{{ tender.deliveryPeriodDays || 365 }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Pre Bid Meeting Place</td>
-          <td>{{ tender.preBidMeetingPlace || 'O/o CCE CRWC BBSR' }}</td>
-          <td class="wamis-wms-label">Pre Bid Meeting Address</td>
-          <td>{{ tender.preBidMeetingAddress || 'O/o CCE CRWC BBSR' }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Bid Opening Place</td>
-          <td>{{ tender.bidOpenPlace || '---' }}</td>
-          <td class="wamis-wms-label">Tenderer Class</td>
-          <td>{{ tender.tendererClass || '---' }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Tender Inviting Office</td>
-          <td>{{ tender.invitingOfficerAddress || '---' }}</td>
-          <td class="wamis-wms-label">Tender Inviting Officer</td>
-          <td>{{ tender.invitingOfficer || '---' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Basic details -->
+    <div class="section-title mb-2">Tender Basic Details</div>
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Unique File Number</span>
+        <div class="detail-value">{{ tender.uniqueFileNo || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Reference Number</span>
+        <div class="detail-value">{{ tender.tenderReferenceNo || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Type</span>
+        <div class="detail-value">{{ tender.tenderType || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Form of Contract</span>
+        <div class="detail-value">{{ tender.formContract || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Category</span>
+        <div class="detail-value">{{ tender.category || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Product Category</span>
+        <div class="detail-value">{{ tender.productCategory || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">No. of Covers</span>
+        <div class="detail-value">{{ tender.coversCount ?? '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Bid Openers</span>
+        <div class="detail-value">{{ tender.bidOpeners || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tenderer Class</span>
+        <div class="detail-value">{{ tender.tendererClass || '-' }}</div>
+      </div>
+    </div>
 
-    <!-- 2. Tender Basic Details Section -->
-    <h3 class="wamis-section-title">Tender Basic Details</h3>
-    <table class="wamis-table">
-      <tbody>
-        <tr>
-          <td class="wamis-wms-label">Unique File Number</td>
-          <td>{{ tender.uniqueFileNo }}</td>
-          <td class="wamis-wms-label">Tender Reference Number</td>
-          <td>{{ tender.tenderReferenceNo }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Tender Type</td>
-          <td>{{ tender.tenderType }}</td>
-          <td class="wamis-wms-label">Form of contract</td>
-          <td>{{ tender.formContract }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">No. of Covers</td>
-          <td>{{ tender.coversCount }}</td>
-          <td class="wamis-wms-label">Tender Category</td>
-          <td>{{ tender.category }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Work item -->
+    <div class="section-title mb-2">Work Item Details</div>
+    <div class="row">
+      <div class="col-12 col-lg-8 detail-item">
+        <span class="detail-label">Work Description</span>
+        <div class="detail-value detail-value-wrap">{{ tender.tenderTitle || tender.tenderDescription || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Location</span>
+        <div class="detail-value">{{ tender.location || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">PIN Code</span>
+        <div class="detail-value">{{ tender.pincode || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Bid Validity (days)</span>
+        <div class="detail-value">{{ tender.bidValidityDays ?? '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Delivery Period (days)</span>
+        <div class="detail-value">{{ tender.deliveryPeriodDays ?? '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Bid Opening Place</span>
+        <div class="detail-value">{{ tender.bidOpenPlace || '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Pre-Bid Meeting</span>
+        <div class="detail-value">{{ tender.preBidMeeting ? 'Yes' : 'No' }}</div>
+      </div>
+      @if (tender.preBidMeeting) {
+        <div class="col-12 col-md-6 col-lg-4 detail-item">
+          <span class="detail-label">Pre-Bid Meeting Place</span>
+          <div class="detail-value">{{ tender.preBidMeetingPlace || '-' }}</div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 detail-item">
+          <span class="detail-label">Pre-Bid Meeting Address</span>
+          <div class="detail-value">{{ tender.preBidMeetingAddress || '-' }}</div>
+        </div>
+      }
+    </div>
 
-    <!-- 3. Tender Fee Details Section -->
-    <h3 class="wamis-section-title">Tender Fee Details</h3>
-    <table class="wamis-table">
-      <tbody>
-        <tr>
-          <td class="wamis-wms-label">Tender Fee</td>
-          <td>{{ tender.feeAmount | number:'1.0-2' }}</td>
-          <td class="wamis-wms-label">Tender EMD Fee</td>
-          <td>{{ tender.emdAmount | number:'1.0-2' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Fees -->
+    <div class="section-title mb-2">Value and Fees</div>
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Estimated Value (₹)</span>
+        <div class="detail-value">{{ tender.tenderValue != null ? (tender.tenderValue | number: '1.0-2') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Fee (₹)</span>
+        <div class="detail-value">{{ tender.feeAmount != null ? (tender.feeAmount | number: '1.0-2') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">EMD Fee (₹)</span>
+        <div class="detail-value">{{ tender.emdAmount != null ? (tender.emdAmount | number: '1.0-2') : '-' }}</div>
+      </div>
+    </div>
 
-    <!-- 4. Tender Critical Dates Section -->
-    <h3 class="wamis-section-title">Tender Critical Dates</h3>
-    <table class="wamis-table">
-      <tbody>
-        <tr>
-          <td class="wamis-wms-label">Tender Publish Date & Time</td>
-          <td>{{ tender.publishingDate }}</td>
-          <td class="wamis-wms-label">Document Download Start Date & Time</td>
-          <td>{{ tender.docDownloadStartDate }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Seek Clarification Start Date & Time</td>
-          <td>{{ tender.publishingDate }}</td>
-          <td class="wamis-wms-label">Seek Clarification End Date & Time</td>
-          <td>{{ tender.bidSubmissionEndDate }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Bid Sub Start Date & Time</td>
-          <td>{{ tender.bidSubmissionStartDate }}</td>
-          <td class="wamis-wms-label">Bid Sub End Date & Time</td>
-          <td>{{ tender.bidSubmissionEndDate }}</td>
-        </tr>
-        <tr>
-          <td class="wamis-wms-label">Bid Open Date & Time</td>
-          <td>{{ tender.bidOpenDate }}</td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Dates, in the order of the tender -->
+    <div class="section-title mb-2">Critical Dates</div>
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Publishing Date &amp; Time</span>
+        <div class="detail-value">{{ tender.publishingDate ? (tender.publishingDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Document Download Start</span>
+        <div class="detail-value">{{ tender.docDownloadStartDate ? (tender.docDownloadStartDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Seek Clarification Start</span>
+        <div class="detail-value">{{ tender.seekClarificationStartDate ? (tender.seekClarificationStartDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Seek Clarification End</span>
+        <div class="detail-value">{{ tender.seekClarificationEndDate ? (tender.seekClarificationEndDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Bid Submission Start</span>
+        <div class="detail-value">{{ tender.bidSubmissionStartDate ? (tender.bidSubmissionStartDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Bid Submission End</span>
+        <div class="detail-value">{{ tender.bidSubmissionEndDate ? (tender.bidSubmissionEndDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Bid Opening</span>
+        <div class="detail-value">{{ tender.bidOpenDate ? (tender.bidOpenDate | date: 'dd/MM/yyyy HH:mm') : '-' }}</div>
+      </div>
+    </div>
 
-    <p class="wamis-dialog-subtitle">This screen shows the data of Pre-tender entered when user clicks on View Pre-Tender details.</p>
+    <!-- Inviting officer -->
+    <div class="section-title mb-2">Inviting Officer</div>
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-4 detail-item">
+        <span class="detail-label">Tender Inviting Officer</span>
+        <div class="detail-value">{{ tender.invitingOfficer || '-' }}</div>
+      </div>
+      <div class="col-12 col-lg-8 detail-item">
+        <span class="detail-label">Tender Inviting Office Address</span>
+        <div class="detail-value detail-value-wrap">{{ tender.invitingOfficerAddress || '-' }}</div>
+      </div>
+    </div>
+
+    <!-- Documents, with the documents dialog to upload and download -->
+    <div class="doc-list-head">
+      <div class="section-title">Documents ({{ documents.length }})</div>
+      <button mat-raised-button color="primary" type="button" (click)="openDocuments()">
+        <mat-icon>folder_open</mat-icon> Open Documents
+      </button>
+    </div>
+    @if (documents.length) {
+      <div class="table-responsive">
+        <table class="table doc-table">
+          <thead>
+            <tr>
+              <th>Document Name</th>
+              <th>Category</th>
+              <th>Size</th>
+              <th>File</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (doc of documents; track doc.id) {
+              <tr>
+                <td class="doc-name">
+                  <mat-icon [class.doc-pdf]="doc.docMimeType === '.pdf'">{{ doc.docMimeType === '.pdf' ? 'picture_as_pdf' : 'description' }}</mat-icon>
+                  <span>{{ doc.docName }}</span>
+                </td>
+                <td><span class="doc-chip">{{ doc.docDescription || doc.docCode }}</span></td>
+                <td>{{ formatSize(doc.docSize) }}</td>
+                <td>{{ doc.uploaded ? 'Uploaded' : 'Details only' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else if (documentsLoaded) {
+      <div class="no-data">No documents attached to this tender.</div>
+    }
+
+    <div class="mt-3 text-end">
+      <button mat-raised-button type="button" (click)="onClose()">Close</button>
+    </div>
   </div>
 </div>
-

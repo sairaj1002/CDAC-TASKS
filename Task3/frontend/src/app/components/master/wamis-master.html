@@ -1,46 +1,25 @@
 <div class="wamis-subwork-container">
-  <!-- Master Navigation Tabs matching Authentic WAMIS UI -->
-  <nav class="wamis-primary-tabs" aria-label="Main Navigation">
-    <button
-      *ngFor="let tab of tabs"
-      type="button"
-      class="wamis-primary-tab"
-      [class.active]="activeTabIndex === tab.id"
-      (click)="selectTab(tab.id)"
-    >
-      <mat-icon>{{ tab.icon }}</mat-icon>
-      {{ tab.label }}
-    </button>
-  </nav>
+  <!-- 1. Active WMS Module: Pre Tender Screen -->
+  <div *ngIf="activeSubMenu === 'pretender' || activeSubMenu === 'sub-work-details'">
+    <app-pretender-form></app-pretender-form>
+  </div>
 
-  <!-- Child Component Views (Enterprise Master-Child Architecture) -->
-  <section class="wamis-view-container">
-    <!-- View 0: List of Works (Matches Image 2 & 6) -->
-    <div *ngIf="activeTabIndex === 0">
-      <app-work-list
-        (navigateToForm)="onNavigateToForm()"
-        (editPreTender)="onEditPreTender($event)"
-      ></app-work-list>
-    </div>
+  <!-- 2. Master Module: GEPNIC Configuration (Matches Image 1) -->
+  <div *ngIf="activeSubMenu === 'gepnic-config'">
+    <app-gepnic-config></app-gepnic-config>
+  </div>
 
-    <!-- View 1: Pre-Tender Entry Form -->
-    <div *ngIf="activeTabIndex === 1">
-      <app-pretender-form
-        [editingTender]="selectedTenderForEdit"
-        (formSubmitted)="onFormSubmitted()"
-        (formCancelled)="onFormCancelled()"
-      ></app-pretender-form>
-    </div>
+  <!-- 3. Master Module: GEPNIC Tender Configuration -->
+  <div *ngIf="activeSubMenu === 'gepnic-tender-config'">
+    <app-gepnic-tender-config></app-gepnic-tender-config>
+  </div>
 
-    <!-- View 2: Master Dropdowns Management -->
-    <div *ngIf="activeTabIndex === 2">
-      <app-dropdown-master></app-dropdown-master>
+  <!-- Fallback/Placeholder for other WMS Submenus -->
+  <div *ngIf="activeSubMenu !== 'pretender' && activeSubMenu !== 'sub-work-details' && activeSubMenu !== 'gepnic-config' && activeSubMenu !== 'gepnic-tender-config'" class="component-details-panel">
+    <div class="wamis-tab-placeholder">
+      <h3 class="wamis-section-title">{{ activeSubMenu | uppercase }}</h3>
+      <p class="wamis-note">This section is part of the WMS module. Switch to "Pre Tender" or "GEPNIC Configuration" in the sidebar to view active pages.</p>
     </div>
-
-    <!-- View 3: GePNIC Integration Jobs & Immutable Audit Log -->
-    <div *ngIf="activeTabIndex === 3">
-      <app-transaction-audit></app-transaction-audit>
-    </div>
-  </section>
+  </div>
 </div>
 
